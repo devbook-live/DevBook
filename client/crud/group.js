@@ -3,10 +3,13 @@ import db from '../../firebase/initFirebase';
 const groupsRef = db.collection('groups');
 
 const getGroupsByUserId = (userId) => {
-  groupsRef.where(`users.${userId}`, "==", true)
+  groupsRef.where(`users.${userId}`, '==', true)
     .get()
     .then(querySnapshot => {
-      return querySnapshot.data();
+      querySnapshot.forEach(doc => {
+        console.log(doc.id, ' => ', doc.data())
+      })
+      return querySnapshot;
     })
     .catch(err => {
       console.log('Error getting documents: ', err);
@@ -14,24 +17,21 @@ const getGroupsByUserId = (userId) => {
 };
 
 const getGroupById = (groupId) => {
-  groupsRef.where("id", "==", groupId)
+  groupsRef.where('id', '==', groupId)
     .get()
     .then(querySnapshot => {
-      return querySnapshot.data();
+      querySnapshot.forEach(doc => {
+        console.log(doc.id, ' => ', doc.data())
+      })
+      return querySnapshot;
     })
     .catch(err => {
       console.log('Error getting documents: ', err);
     });
 };
 
-const addGroup = (id, name, snippets, users, documents) => {
-  groupsRef.doc(name).set({
-    id,
-    name,
-    snippets,
-    users,
-    documents,
-  })
+const addGroup = (name, bodyObj) => {
+  groupsRef.doc(name).set(bodyObj)
     .then(() => {
       console.log('Document successfully written!');
     })
@@ -40,14 +40,9 @@ const addGroup = (id, name, snippets, users, documents) => {
     });
 };
 
-const updateGroup = (id, name, snippets, users, documents) => {
-  return groupsRef.doc(name).set({
-    id,
-    name,
-    snippets,
-    users,
-    documents,
-  })
+
+const updateGroup = (name, bodyObj) => {
+  return groupsRef.doc(name).set(bodyObj)
     .then(() => {
       console.log('Document successfully updated!');
     })
@@ -56,8 +51,9 @@ const updateGroup = (id, name, snippets, users, documents) => {
     });
 };
 
-const deleteGroup = (id) => {
-  groupsRef.doc(id).delete()
+// delete doc, need to provide doc name, not doc name
+const deleteGroup = (name) => {
+  groupsRef.doc(name).delete()
     .then(() => {
       console.log('Document successfully deleted!');
     })
