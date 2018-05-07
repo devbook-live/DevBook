@@ -2,12 +2,17 @@ import React, { Component } from 'react';
 
 import { Navbar } from './components';
 import Routes from './routes';
-import initFirebase from '../firebase/initFirebase';
+import db from '../firebase/initFirebase';
+
 
 export default class App extends Component {
   componentDidMount() {
-    const app = initFirebase();
-    console.log('initialized app: ', app);
+
+  //   db.collection("users").get().then((querySnapshot) => {
+  //     querySnapshot.forEach((doc) => {
+  //         console.log(doc.data().last);
+  //     });
+  // });
   }
 
   render() {
