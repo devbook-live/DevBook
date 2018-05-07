@@ -44,10 +44,10 @@ const snippetById = (id) => {
     });
 };
 
-// find all snippets for a particular user
-const snippetsByUser = (userId) => {
+// "snippets by field" helper function:
+const snippetsByField = (fieldName, fieldId) => {
   return db.collection('snippets')
-    .where(`users.${userId}`, '==', true)
+    .where(fieldName + '.' + fieldId, '==', true)
     .get()
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -61,7 +61,13 @@ const snippetsByUser = (userId) => {
     });
 };
 
+
+// find all snippets for a particular user
+const snippetsByUser = userId => snippetsByField('users', userId);
+
+
 // find all snippets for a particular group
+
 
 // find all snippets for a particular document
 
