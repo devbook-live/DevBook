@@ -8,13 +8,14 @@ const createSnippet = (
   authors, // user or users who have authored this snippet: { user1: true, user5: true, ... }
   authorGroups = null, // any groups authors tie to snippet: { group2: true, group10: true, ... }
 ) => {
-  return db.collection('snippets').add({
-    text,
-    language,
-    document: doc,
-    users: authors,
-    groups: authorGroups,
-  })
+  return db.collection('snippets')
+    .add({
+      text,
+      language,
+      document: doc,
+      users: authors,
+      groups: authorGroups,
+    })
     .then((docRef) => {
       console.log('Document written with ID: ', docRef.id);
       return docRef;
@@ -26,7 +27,9 @@ const createSnippet = (
 
 // find a single snippet (by id)
 const snippetById = (id) => {
-  return db.collection('snippets').doc(id).get()
+  return db.collection('snippets')
+    .doc(id)
+    .get()
     .then((snippet) => {
       if (snippet.exists) {
         console.log('Snippet data:', snippet.data());
@@ -42,6 +45,21 @@ const snippetById = (id) => {
 };
 
 // find all snippets for a particular user
+const snippetsByUser = (userId) => {
+  return db.collection('snippets')
+    .where(`users.${userId}`, '==', true)
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, ' => ', doc.data());
+      });
+      return querySnapshot;
+    })
+    .catch((error) => {
+      console.log('Error getting snippets:', error);
+    });
+};
 
 // find all snippets for a particular group
 
@@ -59,4 +77,5 @@ const snippetById = (id) => {
 module.exports = {
   createSnippet,
   snippetById,
+  snippetsByUser,
 };
