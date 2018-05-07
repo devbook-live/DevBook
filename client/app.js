@@ -13,6 +13,18 @@ export default class App extends Component {
   //         console.log(doc.data().last);
   //     });
   // });
+
+  var citiesRef = db.collection("cities");
+
+  citiesRef.doc("SF").set({
+    name: "San Francisco", state: "CA", country: "USA",
+    capital: false, population: 860000 });
+
+    db.collection("cities").get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+          console.log("SF:", doc.data());
+      });
+  });
   }
 
   render() {
