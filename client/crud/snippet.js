@@ -61,19 +61,47 @@ const snippetsByField = (fieldName, fieldId) => {
     });
 };
 
-
 // find all snippets for a particular user
 const snippetsByUser = userId => snippetsByField('users', userId);
 
-
 // find all snippets for a particular group
-
+const snippetsByGroup = groupId => snippetsByField('groups', groupId);
 
 // find all snippets for a particular document
+const snippetsByDoc = docId => snippetsByField('documents', docId);
 
 // find all snippets for a particular language
+const snippetsByLang = (language) => {
+  return db.collection('snippets')
+    .where('language', '==', language)
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, ' => ', doc.data());
+      });
+      return querySnapshot;
+    })
+    .catch((error) => {
+      console.log('Error getting snippets:', error);
+    });
+};
 
 // find all snippets ever (should be limited to admins only!)
+const allSnippets = () => {
+  return db.collection('snippets')
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, ' => ', doc.data());
+      });
+      return querySnapshot;
+    })
+    .catch((error) => {
+      console.log('Error getting snippets:', error);
+    });
+};
 
 // update a snippet
 
@@ -84,4 +112,8 @@ module.exports = {
   createSnippet,
   snippetById,
   snippetsByUser,
+  snippetsByGroup,
+  snippetsByDoc,
+  snippetsByLang,
+  allSnippets,
 };
