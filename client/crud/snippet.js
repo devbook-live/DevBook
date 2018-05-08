@@ -87,7 +87,7 @@ const snippetsByLang = (language) => {
     });
 };
 
-// find all snippets ever (should be limited to admins only!)
+// find all snippets ever
 const allSnippets = () => {
   return db.collection('snippets')
     .get()
@@ -251,6 +251,13 @@ const removeSnippetDoc = (snippetId, docId) => {
 };
 
 // delete a snippet
+const deleteSnippet = (snippetId) => {
+  db.collection('snippets')
+    .doc(snippetId)
+    .delete()
+    .then(() => console.log('Snippet successfully deleted!'))
+    .catch(error => console.error('Error removing snippet: ', error));
+};
 
 
 module.exports = {
@@ -273,5 +280,8 @@ module.exports = {
   addSnippetDoc,
   removeSnippetDoc,
   // D
-
+  deleteSnippet,
 };
+
+
+// the above does not cover adding and removing snippet ids from their *associated* objects.
