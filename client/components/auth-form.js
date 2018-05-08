@@ -5,31 +5,37 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
 import { auth } from '../store';
+import { addUserFunction } from '../crud/user';
 
-// <TextField
-//       hintText="Hint Text"
-//       floatingLabelText="Fixed Floating Label Text"
-//       floatingLabelFixed={true}
-//     />
+<TextField
+      name="password"
+      hintText="Password"
+      floatingLabelText="Password"
+      floatingLabelFixed
+      type="password"
+    />
 
 /**
  * COMPONENT
  */
 const AuthForm = (props) => {
-  const {name, displayName, handleSubmit, error} = props
+  const { name, displayName, handleSubmit, error } = props;
 
   return (
     <div>
       <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="email"><small>Email</small></label>
-          <input name="email" type="text" />
-        </div>
+        <TextField
+          name="email"
+          floatingLabelText="Email"
+          floatingLabelFixed
+        />
         <br />
-        <div>
-          <label htmlFor="password"><small>Password</small></label>
-          <input name="password" type="password" />
-        </div>
+        <TextField
+          name="password"
+          hintText="Password"
+          floatingLabelFixed
+          type="password"
+        />
         <div>
           <button type="submit">{displayName}</button>
         </div>
@@ -39,10 +45,10 @@ const AuthForm = (props) => {
         href="/auth/google"
         target="_blank"
         label="Login with Google"
-        style={ styles.button }
+        style={styles.button}
         icon={<FontIcon className="muidocs-icon-custom-github" />}
         backgroundColor="#0D47A1"
-        labelColor="white"
+        labelColor="#ffffff"
       />
       <RaisedButton
         href="/auth/github"
@@ -51,17 +57,16 @@ const AuthForm = (props) => {
         style={ styles.button }
         icon={<FontIcon className="muidocs-icon-custom-github" />}
         backgroundColor="#EF6C00"
-        labelColor="white"
+        labelColor="#ffffff"
       />
     </div>
-  )
-}
+  );
+};
 
 // Styles
 const styles = {
   button: {
     margin: 12,
-    backgroundColor: "#42A5F5",
   },
   exampleImageInput: {
     cursor: 'pointer',
@@ -86,29 +91,34 @@ const mapLogin = (state) => {
   return {
     name: 'login',
     displayName: 'Login',
-    error: state.user.error
-  }
-}
+    error: state.user.error,
+  };
+};
 
 const mapSignup = (state) => {
   return {
     name: 'signup',
     displayName: 'Sign Up',
-    error: state.user.error
-  }
-}
+    error: state.user.error,
+  };
+};
 
 const mapDispatch = (dispatch) => {
   return {
-    handleSubmit (evt) {
-      evt.preventDefault()
-      const formName = evt.target.name
-      const email = evt.target.email.value
-      const password = evt.target.password.value
-      dispatch(auth(email, password, formName))
-    }
-  }
-}
+    handleSubmit(evt) {
+      evt.preventDefault();
+      const formName = evt.target.name;
+      const email = evt.target.email.value;
+      const password = evt.target.password.value;
+      console.log(formName);
+      if (formName === 'signup') {
+        console.log('got here');
+        addUserFunction({ email, password });
+      }
+      // dispatch(auth(email, password, formName));
+    },
+  };
+};
 
 export const Login = connect(mapLogin, mapDispatch)(AuthForm)
 export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
@@ -120,5 +130,5 @@ AuthForm.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  error: PropTypes.object
-}
+  error: PropTypes.object,
+};
