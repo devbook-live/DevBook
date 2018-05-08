@@ -18,7 +18,7 @@ const getGroupsByUserId = (userId) => {
 };
 
 const getGroupById = (groupId) => {
-  groupsRef.where('id', '==', groupId)
+  return groupsRef.where('id', '==', groupId)
     .get()
     .then(querySnapshot => {
       querySnapshot.forEach(doc => {
@@ -32,13 +32,13 @@ const getGroupById = (groupId) => {
 };
 
 const addGroup = (name, bodyObj) => {
-  groupsRef.doc(name).set(bodyObj)
-    .then(() => {
-      console.log('Document successfully written!');
-    })
-    .catch((err) => {
-      console.log('Error writing document: ', err);
-    });
+  return groupsRef.doc(name).set(bodyObj);
+    // .then(() => {
+    //   console.log('Document successfully written!');
+    // })
+    // .catch((err) => {
+    //   console.log('Error writing document: ', err);
+    // });
 };
 
 
