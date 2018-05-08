@@ -1,7 +1,16 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import PropTypes from 'prop-types'
-import {auth} from '../store'
+import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
+import TextField from 'material-ui/TextField';
+import { auth } from '../store';
+
+// <TextField
+//       hintText="Hint Text"
+//       floatingLabelText="Fixed Floating Label Text"
+//       floatingLabelFixed={true}
+//     />
 
 /**
  * COMPONENT
@@ -16,6 +25,7 @@ const AuthForm = (props) => {
           <label htmlFor="email"><small>Email</small></label>
           <input name="email" type="text" />
         </div>
+        <br />
         <div>
           <label htmlFor="password"><small>Password</small></label>
           <input name="password" type="password" />
@@ -25,10 +35,45 @@ const AuthForm = (props) => {
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <a href="/auth/google">{displayName} with Google</a>
+      <RaisedButton
+        href="/auth/google"
+        target="_blank"
+        label="Login with Google"
+        style={ styles.button }
+        icon={<FontIcon className="muidocs-icon-custom-github" />}
+        backgroundColor="#0D47A1"
+        labelColor="white"
+      />
+      <RaisedButton
+        href="/auth/github"
+        target="_blank"
+        label="Login with GitHub"
+        style={ styles.button }
+        icon={<FontIcon className="muidocs-icon-custom-github" />}
+        backgroundColor="#EF6C00"
+        labelColor="white"
+      />
     </div>
   )
 }
+
+// Styles
+const styles = {
+  button: {
+    margin: 12,
+    backgroundColor: "#42A5F5",
+  },
+  exampleImageInput: {
+    cursor: 'pointer',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    width: '100%',
+    opacity: 0,
+  },
+};
 
 /**
  * CONTAINER
