@@ -44,9 +44,6 @@ class CreateGroup extends Component {
 
   handleCreateGroup() {
     const name = this.state.name;
-    // const body = {
-    //   users: this.state.users,
-    // };
     const users = {};
     this.state.users.map(user => {
       users[user.id] = user.name;
