@@ -3,7 +3,6 @@ import { Card, CardText, CardActions } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import * as firebase from 'firebase';
-import { fetchAllUsersFunction, fetchUserFunction, deleteUserFunction, updateUserFunction, addUserFunction } from '../crud/user';
 
 class Snippet extends Component {
   constructor() {
