@@ -101,6 +101,7 @@ class CreateGroup extends Component {
         <TextField
           id="group-name"
           floatingLabelText="Group Name"
+          errorText="This field is required."
           onChange={this.handleChange}
         /><br />
 
