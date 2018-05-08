@@ -1,9 +1,10 @@
-import db from '../../firebase/initFirebase';
+//import db from '../../firebase/initFirebase';
+const db = require('../../firebase/initFirebase');
 
 const groupsRef = db.collection('groups');
 
 const getGroupsByUserId = (userId) => {
-  groupsRef.where(`users.${userId}`, '==', true)
+  return groupsRef.where(`users.${userId}`, '==', true)
     .get()
     .then(querySnapshot => {
       querySnapshot.forEach(doc => {
