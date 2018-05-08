@@ -22,7 +22,7 @@ const { assert } = chai;
 describe('Cloud Functions', () => {
   let myFunctions;
 
-  describe('addtestName', () => {
+  describe('addGroup', () => {
     before(() => {
       mockfirestore = new firebasemock.MockFirestore();
       mockfirestore.autoFlush();
