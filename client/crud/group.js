@@ -1,4 +1,3 @@
-//import db from '../../firebase/initFirebase';
 const db = require('../../firebase/initFirebase');
 
 const groupsRef = db.collection('groups');
@@ -6,13 +5,13 @@ const groupsRef = db.collection('groups');
 const getGroupsByUserId = (userId) => {
   return groupsRef.where(`users.${userId}`, '==', true)
     .get()
-    .then(querySnapshot => {
-      querySnapshot.forEach(doc => {
-        console.log(doc.id, ' => ', doc.data())
-      })
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data());
+      });
       return querySnapshot;
     })
-    .catch(err => {
+    .catch((err) => {
       console.log('Error getting documents: ', err);
     });
 };
@@ -20,25 +19,19 @@ const getGroupsByUserId = (userId) => {
 const getGroupById = (groupId) => {
   return groupsRef.where('id', '==', groupId)
     .get()
-    .then(querySnapshot => {
-      querySnapshot.forEach(doc => {
-        console.log(doc.id, ' => ', doc.data())
-      })
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data());
+      });
       return querySnapshot;
     })
-    .catch(err => {
+    .catch((err) => {
       console.log('Error getting documents: ', err);
     });
 };
 
 const addGroup = (name, bodyObj) => {
   return groupsRef.doc(name).set(bodyObj);
-    // .then(() => {
-    //   console.log('Document successfully written!');
-    // })
-    // .catch((err) => {
-    //   console.log('Error writing document: ', err);
-    // });
 };
 
 
