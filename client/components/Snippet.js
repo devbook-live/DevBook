@@ -17,12 +17,24 @@ class Snippet extends Component {
   }
 
   runCode() {
+    //promise.resolve can't catch this error if there is one.
+    //Bluebird.try
+    /*or new Promise((resolve, reject) => {
+      try {
+        eval(this.state.value)
+        resolve()
+      }
+      catch {
+        reject()
+      }
+    })*/
     Promise.resolve(eval(this.state.value))
       .then(result => this.setState({ result }))
       .catch(err => console.error('Error running code: ', err));
   }
 
   saveCode() {
+    //be aware of firebase versus firestore
     const codesRef = firebase.database().ref('codes');
     codesRef.push({
       name: 'anonymous',
