@@ -32,7 +32,15 @@ class CreateGroup extends Component {
   }
 
   handleAddUser() {
-    this.setState({ users: [...this.state.users, this.state.chosenUser] });
+    const userIds = [];
+    this.state.users.forEach(user => userIds.push(user.id));
+    if (userIds.includes(this.state.chosenUser.id)){
+      alert(`${this.state.chosenUser.name} is already selected!`);
+    }
+    else {
+      this.setState({ users: [...this.state.users, this.state.chosenUser] });
+    }
+    this.refs['autocomplete'].setState({searchText: ''})
   }
 
   handleRequestDelete(key) {
@@ -42,7 +50,8 @@ class CreateGroup extends Component {
     this.setState({ users: this.users });
   }
 
-  handleCreateGroup() {
+  handleCreateGroup(event) {
+    event.preventDefault();
     const name = this.state.name;
     const users = {};
     this.state.users.map(user => {
@@ -92,6 +101,7 @@ class CreateGroup extends Component {
         <TextField
           id="group-name"
           floatingLabelText="Group Name"
+          errorText="This field is required."
           onChange={this.handleChange}
         /><br />
 
@@ -99,6 +109,7 @@ class CreateGroup extends Component {
           {this.state.users.map(this.renderChip, this)}
         </div>
         <AutoComplete
+          ref={`autocomplete`}
           floatingLabelText="User Name"
           filter={AutoComplete.fuzzyFilter}
           dataSource={fakeUsers}
