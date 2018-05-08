@@ -3,6 +3,7 @@ import { Card, CardText, CardActions } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import * as firebase from 'firebase';
+import { fetchAllUsersFunction, fetchUserFunction, deleteUserFunction, updateUserFunction, addUserFunction } from '../crud/user';
 
 class Snippet extends Component {
   constructor() {
@@ -59,7 +60,7 @@ class Snippet extends Component {
           <RaisedButton
             label="Run Code"
             primary
-            onClick={event => {
+            onClick={(event) => {
               event.preventDefault();
               this.runCode();
             }}
@@ -67,7 +68,7 @@ class Snippet extends Component {
           <RaisedButton
             label="Save"
             primary
-            onClick={event => {
+            onClick={(event) => {
               event.preventDefault();
               this.saveCode();
             }}
