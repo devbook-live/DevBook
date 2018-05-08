@@ -59,7 +59,7 @@ class Snippet extends Component {
           <RaisedButton
             label="Run Code"
             primary
-            onClick={event => {
+            onClick={(event) => {
               event.preventDefault();
               this.runCode();
             }}
@@ -67,7 +67,7 @@ class Snippet extends Component {
           <RaisedButton
             label="Save"
             primary
-            onClick={event => {
+            onClick={(event) => {
               event.preventDefault();
               this.saveCode();
             }}
