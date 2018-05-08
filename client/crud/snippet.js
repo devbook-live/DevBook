@@ -1,3 +1,28 @@
+/*
+CRUD for Snippets
+
+// Create ops:
+createSnippet
+// Read ops:
+snippetById
+snippetsByUser
+snippetsByGroup
+snippetsByDoc
+snippetsByLang
+allSnippets
+// Update ops:
+updateSnippetText
+updateSnippetLang
+addSnippetAuthor
+removeSnippetAuthor
+addSnippetGroup
+removeSnippetGroup
+addSnippetDoc
+removeSnippetDoc
+// Delete ops:
+deleteSnippet
+*/
+
 import db from '../../firebase/initFirebase';
 
 // create a snippet
@@ -152,9 +177,9 @@ const fieldObjRemove = (snippet, fieldToUpdate, valueToUpdate) => {
 
 const updateSnippetObjectFieldCallback = (
   snippet,
-  actionType,
   fieldToUpdate,
   valueToUpdate,
+  actionType,
 ) => {
   // returns a newFieldObj or throws an error
   if (!snippet.exists) throw new ReferenceError('Snippet does not exist.');
@@ -174,6 +199,7 @@ const updateSnippetObjectField = (snippetId, fieldToUpdate, valueToUpdate, actio
     // This code may get re-run multiple times if there are conflicts.
     return transaction.get(snippetRef).then((snippet) => {
       const newFieldObj = updateSnippetObjectFieldCallback(snippet, fieldToUpdate, valueToUpdate, actionType);
+      console.log('NEW FIELD OBJ:', newFieldObj);
       return transaction.update(snippetRef, { [fieldToUpdate]: newFieldObj });
     });
   })
