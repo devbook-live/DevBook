@@ -11,7 +11,7 @@ const { auth } = require('../../firebase/initFirebase');
  * COMPONENT
  */
 class AuthForm extends Component {
-
+  // This changes the state of formName by forcing a rerender when the component didnt change
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.match.url.slice(1) !== prevState.formName) {
       return { formName: nextProps.match.url.slice(1) };
