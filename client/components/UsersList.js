@@ -19,18 +19,18 @@ class UsersList extends Component {
   }
 
   componentDidMount() {
-    const { groupId } = this.props;
-    const gatherUsers = [];
-    db.collection('groups').doc(groupId).get()
-      .then(doc => doc.data().users)
-      .then(users => Object.keys(users))
-      .then((usersId) => {
-        return Promise.all(usersId.map((userId) => {
-          return db.collection('users').doc(userId).get()
-            .then(user => user.data());
-        }));
-      })
+    this.gatherUsers()
       .then(usersInfo => this.setState({ usersInfo }));
+  }
+
+  async gatherUsers() {
+    const { groupId } = this.props;
+    const doc = await db.collection('groups').doc(groupId).get();
+    const userIds = Object.keys(doc.data().users);
+    const users = await Promise.all(userIds.map(userId => db.collection('users').doc(userId).get()));
+    const usersInfo = users.map(user => user.data());
+
+    return usersInfo;
   }
 
   render() {

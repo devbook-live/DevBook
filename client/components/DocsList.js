@@ -19,18 +19,18 @@ class DocsList extends Component {
   }
 
   componentDidMount() {
-    const { groupId } = this.props;
-    const gatherDocs = [];
-    db.collection('groups').doc(groupId).get()
-      .then(doc => doc.data().documents)
-      .then(documents => Object.keys(documents))
-      .then((docsId) => {
-        return Promise.all(docsId.map((docId) => {
-          return db.collection('documents').doc(docId).get()
-            .then(doc => doc.data());
-        }));
-      })
+    this.gatherDocs()
       .then(docsInfo => this.setState({ docsInfo }));
+  }
+
+  async gatherDocs() {
+    const { groupId } = this.props;
+    const doc = await db.collection('groups').doc(groupId).get();
+    const docIds = Object.keys(doc.data().documents);
+    const docs = await Promise.all(docIds.map(docId => db.collection('documents').doc(docId).get()));
+    const docsInfo = docs.map(doc2 => doc2.data());
+
+    return docsInfo;
   }
 
   render() {
