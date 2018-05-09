@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
-import { auth } from '../store';
+// import { auth } from '../store';
 import { addUserFunction } from '../crud/user';
+
+const { auth } = require('../../firebase/initFirebase');
 
 <TextField
       name="password"
@@ -27,23 +29,23 @@ const AuthForm = (props) => {
         <TextField
           name="email"
           floatingLabelText="Email"
-          floatingLabelFixed
         />
         <br />
         <TextField
           name="password"
-          hintText="Password"
-          floatingLabelFixed
+          floatingLabelText="Password"
           type="password"
         />
         <div>
-          <button type="submit">{displayName}</button>
+          <RaisedButton label={displayName} type="submit" primary />
         </div>
+        {/* <button type="submit">{displayName}</button> */}
+
         {error && error.response && <div> {error.response.data} </div>}
       </form>
+      <RaisedButton label={displayName} type="submit" primary />
       <RaisedButton
         href="/auth/google"
-        target="_blank"
         label="Login with Google"
         style={styles.button}
         icon={<FontIcon className="muidocs-icon-custom-github" />}
@@ -52,7 +54,6 @@ const AuthForm = (props) => {
       />
       <RaisedButton
         href="/auth/github"
-        target="_blank"
         label="Login with GitHub"
         style={ styles.button }
         icon={<FontIcon className="muidocs-icon-custom-github" />}

@@ -23,7 +23,7 @@ removeSnippetDoc
 deleteSnippet
 */
 
-import db from '../../firebase/initFirebase';
+import { db } from '../../firebase/initFirebase';
 
 // create a snippet
 const createSnippet = (

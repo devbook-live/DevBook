@@ -2,7 +2,8 @@
 This module initializes a firebase 'app' instance.
 */
 const firebase = require('firebase');
-require("firebase/firestore");
+require('firebase/firestore');
+// require('firebase/auth');
 
 
 // // Initialize Firebase:
@@ -14,12 +15,12 @@ require("firebase/firestore");
 
 // Initialize Firebase
 const config = {
-  apiKey: "AIzaSyA3Gjq9-4MuPFauhHzk6pGAjoQMC4I4dz0",
-  authDomain: "codesnippets-c9eee.firebaseapp.com",
-  databaseURL: "https://codesnippets-c9eee.firebaseio.com",
-  projectId: "codesnippets-c9eee",
-  storageBucket: "codesnippets-c9eee.appspot.com",
-  messagingSenderId: "846625889305"
+  apiKey: 'AIzaSyA3Gjq9-4MuPFauhHzk6pGAjoQMC4I4dz0',
+  authDomain: 'codesnippets-c9eee.firebaseapp.com',
+  databaseURL: 'https://codesnippets-c9eee.firebaseio.com',
+  projectId: 'codesnippets-c9eee',
+  storageBucket: 'codesnippets-c9eee.appspot.com',
+  messagingSenderId: '846625889305',
 };
 firebase.initializeApp(config);
 
@@ -29,7 +30,13 @@ If the above options show up as undefined when firebase gets initialized (the re
 */
 
 // Initialize Cloud Firestore through Firebase
-var db = firebase.firestore();
+const db = firebase.firestore();
+// console.log('AUTH: ', firebase.auth);
+// const auth = firebase.auth();
+
 
 // export default db;
-module.exports = db;
+module.exports = {
+  db,
+  // auth,
+};
