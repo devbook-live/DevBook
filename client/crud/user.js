@@ -1,5 +1,5 @@
 const db = require('../../firebase/initFirebase');
-require('firebase/firestore');
+require('firebase/firestore'); //is this needed?
 
 // Add a user to the database
 export const addUserFunction = (userObj) => {
