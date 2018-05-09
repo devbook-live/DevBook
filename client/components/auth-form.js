@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -104,6 +106,7 @@ const mapSignup = (state) => {
   };
 };
 
+// With login, can access current user with auth.currentUser (currentUser.uid = user id)
 const mapDispatch = (dispatch) => {
   return {
     handleSubmit(evt) {
@@ -111,12 +114,14 @@ const mapDispatch = (dispatch) => {
       const formName = evt.target.name;
       const email = evt.target.email.value;
       const password = evt.target.password.value;
-      console.log(formName);
-      if (formName === 'signup') {
-        console.log('got here');
-        addUserFunction({ email, password });
-      }
-      // dispatch(auth(email, password, formName));
+
+      const loginFunc = async (email, password) => {
+        if (formName === 'signup') {
+          await auth.createUserWithEmailAndPassword(email, password);
+        }
+        await auth.signInWithEmailAndPassword(email, password);
+      };
+      loginFunc(email, password).catch(err => console.error(err));
     },
   };
 };

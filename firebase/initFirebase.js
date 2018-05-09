@@ -1,9 +1,9 @@
 /*
 This module initializes a firebase 'app' instance.
 */
-const firebase = require('firebase');
+const firebase = require('firebase/app');
 require('firebase/firestore');
-// require('firebase/auth');
+require('firebase/auth');
 
 
 // // Initialize Firebase:
@@ -24,19 +24,15 @@ const config = {
 };
 firebase.initializeApp(config);
 
-
 /*
 If the above options show up as undefined when firebase gets initialized (the resulting app object is currently console-logged), hard-code them in above (but don't commit that to github!). We'll figure out what's going on eventually...
 */
 
 // Initialize Cloud Firestore through Firebase
 const db = firebase.firestore();
-// console.log('AUTH: ', firebase.auth);
-// const auth = firebase.auth();
+const auth = firebase.auth();
 
-
-// export default db;
 module.exports = {
   db,
-  // auth,
+  auth,
 };
