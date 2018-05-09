@@ -40,6 +40,7 @@ const createSnippet = (
       document: doc,
       users: authors,
       groups: authorGroups,
+      status: 'dormant', // can also be 'running', or something else
     })
     .then((docRef) => {
       console.log('Document written with ID: ', docRef.id);
@@ -276,6 +277,11 @@ const removeSnippetDoc = (snippetId, docId) => {
   );
 };
 
+// toggle whether or not a snippet has a status of "running"
+const changeSnippetStatus = (snippetId, newStatus) => updateSnippet(snippetId, 'status', newStatus);
+const markSnippetAsRunning = id => changeSnippetStatus(id, 'running');
+const markSnippetAsDormant = id => changeSnippetStatus(id, 'dormant');
+
 // delete a snippet
 const deleteSnippet = (snippetId) => {
   db.collection('snippets')
@@ -305,6 +311,8 @@ module.exports = {
   removeSnippetGroup,
   addSnippetDoc,
   removeSnippetDoc,
+  markSnippetAsRunning,
+  markSnippetAsDormant,
   // D
   deleteSnippet,
 };
