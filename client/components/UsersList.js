@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {List, ListItem} from 'material-ui/List';
+import React, { Component } from 'react';
+import { List, ListItem } from 'material-ui/List';
 import ContentInbox from 'material-ui/svg-icons/content/inbox';
 import ActionGrade from 'material-ui/svg-icons/action/grade';
 import ContentSend from 'material-ui/svg-icons/content/send';
@@ -19,37 +19,33 @@ class UsersList extends Component {
   }
 
   componentDidMount() {
-    const groupId = this.props.groupId;
-    let gatherUsers = [];
-    const usersId = db.collection("groups").doc(groupId).get()
-    .then(doc => doc.data().users)
-    .then(users => Object.keys(users))
-    .then(usersId => {
-      return Promise.all(usersId.map(userId => {
-        return db.collection("users").doc(userId).get()
-          .then(user => gatherUsers.push(user.data()))
-      }))
-    })
-    .then(() => this.setState({ usersInfo: gatherUsers }));
+    const { groupId } = this.props;
+    const gatherUsers = [];
+    db.collection('groups').doc(groupId).get()
+      .then(doc => doc.data().users)
+      .then(users => Object.keys(users))
+      .then((usersId) => {
+        return Promise.all(usersId.map((userId) => {
+          return db.collection('users').doc(userId).get()
+            .then(user => user.data());
+        }));
+      })
+      .then(() => this.setState({ usersInfo: gatherUsers }));
   }
 
   render() {
-    const usersInfo = this.state.usersInfo;
+    const { usersInfo } = this.state;
     return (
       <div>
-        <List>
+       <List>
           <Subheader>Users</Subheader>
           {
-            usersInfo.map(user => {
-              return (
-                <ListItem primaryText={user.name}/>
-              )
-            })
+            usersInfo.map(user => <ListItem primaryText={user.name} />)
           }
         </List>
       </div>
-    )
+    );
   }
-};
+}
 
 export default UsersList;
