@@ -30,14 +30,14 @@ class UsersList extends Component {
             .then(user => user.data());
         }));
       })
-      .then(() => this.setState({ usersInfo: gatherUsers }));
+      .then(usersInfo => this.setState({ usersInfo }));
   }
 
   render() {
     const { usersInfo } = this.state;
     return (
       <div>
-       <List>
+        <List>
           <Subheader>Users</Subheader>
           {
             usersInfo.map(user => <ListItem primaryText={user.name} />)
