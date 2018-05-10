@@ -7,7 +7,7 @@ import ContentDrafts from 'material-ui/svg-icons/content/drafts';
 import Divider from 'material-ui/Divider';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 import Subheader from 'material-ui/Subheader';
-import db from '../../firebase/initFirebase';
+import { db } from '../../firebase/initFirebase';
 
 
 class DocsList extends Component {
@@ -19,18 +19,21 @@ class DocsList extends Component {
   }
 
   componentDidMount() {
-    this.gatherDocs()
-      .then(docsInfo => this.setState({ docsInfo }));
+    const { groupId } = this.props;
+    this.unsubscribe = db.collection('groups').doc(groupId)
+      .onSnapshot((doc) => {
+        this.onSnapshotCallback(doc).catch(err => console.error(err));
+      });
   }
 
-  async gatherDocs() {
-    const { groupId } = this.props;
-    const doc = await db.collection('groups').doc(groupId).get();
-    const docIds = Object.keys(doc.data().documents);
-    const docs = await Promise.all(docIds.map(docId => db.collection('documents').doc(docId).get()));
-    const docsInfo = docs.map(doc2 => doc2.data());
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
-    return docsInfo;
+  async onSnapshotCallback(doc) {
+    const docIds = Object.keys(doc.data().documents);
+    const docsInfo = (await Promise.all(docIds.map(docId => db.collection('documents').doc(docId).get()))).map(curDoc => curDoc.data());
+    this.setState({ docsInfo });
   }
 
   render() {
@@ -41,7 +44,7 @@ class DocsList extends Component {
         <List>
           <Subheader>Documents</Subheader>
           {
-            docsInfo.map(doc => <ListItem primaryText={doc.name} />)
+            docsInfo.map(doc => <ListItem key={doc.id} primaryText={doc.name} />)
           }
         </List>
       </div>

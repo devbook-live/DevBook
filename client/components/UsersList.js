@@ -7,7 +7,7 @@ import ContentDrafts from 'material-ui/svg-icons/content/drafts';
 import Divider from 'material-ui/Divider';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 import Subheader from 'material-ui/Subheader';
-import db from '../../firebase/initFirebase';
+import { db } from '../../firebase/initFirebase';
 
 
 class UsersList extends Component {
@@ -18,6 +18,7 @@ class UsersList extends Component {
     };
   }
 
+  /*
   componentDidMount() {
     this.gatherUsers()
       .then(usersInfo => this.setState({ usersInfo }));
@@ -27,10 +28,28 @@ class UsersList extends Component {
     const { groupId } = this.props;
     const doc = await db.collection('groups').doc(groupId).get();
     const userIds = Object.keys(doc.data().users);
-    const users = await Promise.all(userIds.map(userId => db.collection('users').doc(userId).get()));
     const usersInfo = users.map(user => user.data());
 
     return usersInfo;
+  }
+  */
+
+  componentDidMount() {
+    const { groupId } = this.props;
+    this.unsubscribe = db.collection('groups').doc(groupId)
+      .onSnapshot((doc) => {
+        this.onSnapshotCallback(doc).catch(err => console.error(err));
+      });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  async onSnapshotCallback(doc) {
+    const userIds = Object.keys(doc.data().users);
+    const usersInfo = (await Promise.all(userIds.map(userId => db.collection('users').doc(userId).get()))).map(user => user.data());
+    this.setState({ usersInfo });
   }
 
   render() {
@@ -40,7 +59,7 @@ class UsersList extends Component {
         <List>
           <Subheader>Users</Subheader>
           {
-            usersInfo.map(user => <ListItem primaryText={user.name} />)
+            usersInfo.map(user => <ListItem key={user.id} primaryText={user.name} />)
           }
         </List>
       </div>
