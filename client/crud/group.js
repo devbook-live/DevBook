@@ -1,4 +1,4 @@
-const db = require('../../firebase/initFirebase');
+import { db } from '../../firebase/initFirebase';
 
 const groupsRef = db.collection('groups');
 

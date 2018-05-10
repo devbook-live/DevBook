@@ -1,34 +1,117 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import PropTypes from 'prop-types'
-import {auth} from '../store'
+/* eslint-disable no-shadow */
+
+import React, { Component } from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
+import TextField from 'material-ui/TextField';
+
+const { auth } = require('../../firebase/initFirebase');
 
 /**
  * COMPONENT
  */
-const AuthForm = (props) => {
-  const {name, displayName, handleSubmit, error} = props
+class AuthForm extends Component {
+  // This changes the state of formName by forcing a rerender when the component didnt change
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.match.url.slice(1) !== prevState.formName) {
+      return { formName: nextProps.match.url.slice(1) };
+    }
+    return null;
+  }
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="email"><small>Email</small></label>
-          <input name="email" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password"><small>Password</small></label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      <a href="/auth/google">{displayName} with Google</a>
-    </div>
-  )
+  constructor(props) {
+    super(props);
+    this.state = {
+      formName: this.props.match.url.slice(1),
+      email: '',
+      password: '',
+    };
+
+    // binding this
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    event.preventDefault();
+    const { name, value } = event.target;
+    const change = {};
+    change[name] = value;
+    this.setState(change);
+  }
+
+  // With login, can access current user with auth.currentUser (currentUser.uid = user id)
+  handleSubmit = (evt) => {
+    evt.preventDefault();
+    const { formName } = this.state;
+    const email = evt.target.email.value;
+    const password = evt.target.password.value;
+
+    const loginFunc = async (email, password) => {
+      // only creates user if it's the signup form
+      if (formName === 'signup') {
+        await auth.createUserWithEmailAndPassword(email, password);
+      }
+      // always runs sign in on either login or signup form
+      await auth.signInWithEmailAndPassword(email, password);
+    };
+    loginFunc(email, password).catch(err => console.error(err));
+  }
+
+
+  render() {
+    const { formName, email, password } = this.state;
+
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit} name={this.name}>
+          <TextField
+            name="email"
+            floatingLabelText="Email"
+            onChange={this.handleChange}
+            value={email}
+          />
+          <br />
+          <TextField
+            name="password"
+            floatingLabelText="Password"
+            type="password"
+            onChange={this.handleChange}
+            value={password}
+          />
+          <RaisedButton label={formName} type="submit" primary />
+          {this.state.error && this.state.error.response && <div> {this.state.error.response.data} </div>}
+        </form>
+        {/* styled what the broken button in the form should look like
+        <RaisedButton
+          onClick={this.handleSubmit}
+          label={formName}
+          type="submit"
+          primary
+        /> */}
+        <RaisedButton
+          href="/auth/google"
+          label="Login with Google"
+          style={{ margin: 12 }}
+          icon={<FontIcon className="muidocs-icon-custom-github" />}
+          backgroundColor="#0D47A1"
+          labelColor="#ffffff"
+        />
+        <RaisedButton
+          href="/auth/github"
+          label="Login with GitHub"
+          style={{ margin: 12 }}
+          icon={<FontIcon className="muidocs-icon-custom-github" />}
+          backgroundColor="#EF6C00"
+          labelColor="#ffffff"
+        />
+      </div>
+    );
+  }
 }
+
+export const Login = AuthForm;
+export const Signup = AuthForm;
 
 /**
  * CONTAINER
@@ -37,43 +120,3 @@ const AuthForm = (props) => {
  *   function, and share the same Component. This is a good example of how we
  *   can stay DRY with interfaces that are very similar to each other!
  */
-const mapLogin = (state) => {
-  return {
-    name: 'login',
-    displayName: 'Login',
-    error: state.user.error
-  }
-}
-
-const mapSignup = (state) => {
-  return {
-    name: 'signup',
-    displayName: 'Sign Up',
-    error: state.user.error
-  }
-}
-
-const mapDispatch = (dispatch) => {
-  return {
-    handleSubmit (evt) {
-      evt.preventDefault()
-      const formName = evt.target.name
-      const email = evt.target.email.value
-      const password = evt.target.password.value
-      dispatch(auth(email, password, formName))
-    }
-  }
-}
-
-export const Login = connect(mapLogin, mapDispatch)(AuthForm)
-export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
-
-/**
- * PROP TYPES
- */
-AuthForm.propTypes = {
-  name: PropTypes.string.isRequired,
-  displayName: PropTypes.string.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  error: PropTypes.object
-}
