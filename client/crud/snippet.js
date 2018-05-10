@@ -10,6 +10,7 @@ snippetsByGroup
 snippetsByDoc
 snippetsByLang
 allSnippets
+snippetOutputListener
 // Update ops:
 updateSnippetText
 updateSnippetLang
@@ -27,7 +28,7 @@ import db from '../../firebase/initFirebase';
 
 // create a snippet
 const createSnippet = (
-  text,
+  input,
   language,
   doc, // foreign key for the document that includes this snippet
   authors, // user or users who have authored this snippet: { user1: true, user5: true, ... }
@@ -35,12 +36,13 @@ const createSnippet = (
 ) => {
   return db.collection('snippets')
     .add({
-      text,
+      input,
       language,
       document: doc,
       users: authors,
       groups: authorGroups,
-      status: 'dormant', // can also be 'running', or something else
+      running: false,
+      output: null,
     })
     .then((docRef) => {
       console.log('Document written with ID: ', docRef.id);
@@ -127,6 +129,12 @@ const allSnippets = () => {
     .catch((error) => {
       console.log('Error getting snippets:', error);
     });
+};
+
+const snippetOutputListener = (snippetId) => {
+  return db.collection('snippets')
+    .doc(snippetId)
+    .onSnapshot(doc => doc.data().output); // output will be null, or...an obj?
 };
 
 // "update snippet" helper function:
@@ -278,9 +286,9 @@ const removeSnippetDoc = (snippetId, docId) => {
 };
 
 // toggle whether or not a snippet has a status of "running"
-const changeSnippetStatus = (snippetId, newStatus) => updateSnippet(snippetId, 'status', newStatus);
-const markSnippetAsRunning = id => changeSnippetStatus(id, 'running');
-const markSnippetAsDormant = id => changeSnippetStatus(id, 'dormant');
+const changeSnippetRunningStatus = (snippetId, newStatus) => updateSnippet(snippetId, 'running', newStatus);
+const markSnippetAsRunning = id => changeSnippetRunningStatus(id, true);
+const markSnippetAsDormant = id => changeSnippetRunningStatus(id, false);
 
 // delete a snippet
 const deleteSnippet = (snippetId) => {
@@ -302,6 +310,7 @@ module.exports = {
   snippetsByDoc,
   snippetsByLang,
   allSnippets,
+  snippetOutputListener,
   // U
   updateSnippetText,
   updateSnippetLang,
