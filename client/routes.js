@@ -32,14 +32,14 @@ const Routes = () => (
     </Switch>
 
     <Switch>
-      <Route path="/users" component={AllUsers} /> {/* all users ever */}
-      <Route path="/users/:userId" component={SingleUser} /> {/* this user */}
+      <Route exact path="/users" component={AllUsers} /> {/* all users ever */}
+      <Route exact path="/users/:userId" component={SingleUser} /> {/* this user */}
       <Route path="/users/:userId/groups" component={AllGroups} /> {/* filtered by who's in this user */}
       <Route path="/users/:userId/notebooks" component={AllNotebooks} /> {/* all notebooks for this user */}
     </Switch>
 
     <Switch>
-      <Route path="/notebooks" component={AllNotebooks} /> {/* created by anyone, ever */}
+      <Route exact path="/notebooks" component={AllNotebooks} /> {/* created by anyone, ever */}
       <Route path="/notebooks/:notebookId" component={SingleNotebook} /> {/* this notebook */}
     </Switch>
 
