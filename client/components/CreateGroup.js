@@ -6,8 +6,6 @@ import Avatar from 'material-ui/Avatar';
 import RaisedButton from 'material-ui/RaisedButton';
 import { getGroupsByUserId, getGroupById, addGroup, updateGroup, deleteGroup } from '../crud/group';
 
-
-
 class CreateGroup extends Component {
   constructor() {
     super();

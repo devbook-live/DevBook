@@ -17,3 +17,4 @@ export { default as SingleUser } from './SingleUser';
 export { default as AllNotebooks } from './AllNotebooks';
 export { default as SingleNotebook } from './SingleNotebook';
 export { default as CreateGroup } from './CreateGroup';
+export { default as GroupHome } from './GroupHome';
