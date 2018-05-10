@@ -1,5 +1,4 @@
-const db = require('../../firebase/initFirebase');
-require('firebase/firestore');
+const { db } = require('../../firebase/initFirebase');
 
 // Add a user to the database
 export const addUserFunction = (userObj) => {
