@@ -80,8 +80,6 @@ class AuthForm extends Component {
             value={password}
           />
           <RaisedButton label={formName} type="submit" primary />
-          {/* <button type="submit">{displayName}</button> */}
-
           {this.state.error && this.state.error.response && <div> {this.state.error.response.data} </div>}
         </form>
         {/* styled what the broken button in the form should look like
