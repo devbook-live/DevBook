@@ -3,53 +3,34 @@ import { Card, CardText, CardActions } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import * as firebase from 'firebase';
+import runCode from '../codeRunFlow';
+import { addDocClient } from '../crud/document';
 
 class Snippet extends Component {
   constructor() {
     super();
     this.state = {
-      value: 'function(){ return "Hello, world!" }',
+      code: 'function(){ return "Hello, world!" }',
       result: '',
     };
-
-    this.runCode = this.runCode.bind(this);
-    this.saveCode = this.saveCode.bind(this);
-  }
-
-  runCode() {
-    Promise.resolve(eval(this.state.value))
-      .then(result => this.setState({ result }))
-      .catch(err => console.error('Error running code: ', err));
-  }
-
-  saveCode() {
-    const codesRef = firebase.database().ref('codes');
-    codesRef.push({
-      name: 'anonymous',
-      text: this.state.value,
-    });
   }
 
   render() {
+    const { code } = this.state;
     return (
       <Card>
-        {/* <CardText>
-          Firepad goes here.
-        </CardText>
-        <div id="firepad-container"></div> */}
-
         <CodeMirror
-          value={this.state.value}
+          code={code}
           options={{
             mode: 'javascript',
             theme: 'material',
             lineNumbers: true,
           }}
-          onBeforeChange={(editor, data, value) => {
-            this.setState({ value });
+          onBeforeChange={(editor, data, code) => {
+            this.setState({ code });
           }}
-          onChange={(editor, data, value) => {
-            console.log('state changed: ', value);
+          onChange={(editor, data, code) => {
+            console.log('state changed: ', code);
             console.log('editor: ', editor);
             console.log('data: ', data);
           }}
@@ -61,17 +42,17 @@ class Snippet extends Component {
             primary
             onClick={(event) => {
               event.preventDefault();
-              this.runCode();
+              runCode();
             }}
           />
-          <RaisedButton
+          {/* <RaisedButton
             label="Save"
             primary
             onClick={(event) => {
               event.preventDefault();
-              this.saveCode();
+              //this.saveCode();
             }}
-          />
+          /> */}
         </CardActions>
         <h1>{this.state.result}</h1>
       </Card>
