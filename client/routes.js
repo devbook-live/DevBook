@@ -1,69 +1,62 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {withRouter, Route, Switch} from 'react-router-dom'
-import PropTypes from 'prop-types'
-import {Login, Signup, UserHome, CodeSnippet, CreateGroup} from './components'
-import {me} from './store'
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import {
+  Login,
+  Signup,
+  AllGroups,
+  SingleGroup,
+  AllUsers,
+  SingleUser,
+  AllNotebooks,
+  SingleNotebook,
+  CreateGroup,
+} from './components';
 
 /**
  * COMPONENT
  */
-class Routes extends Component {
-  componentDidMount () {
-    this.props.loadInitialData()
-  }
+const Routes = () => (
+  <Switch>
+    {/* Routes placed here are available to all visitors */}
+    <Switch>
+      <Route path="/login" component={Login} />
+      <Route path="/signup" component={Signup} />
+    </Switch>
 
-  render () {
-    const {isLoggedIn} = this.props
+    <Switch>
+      <Route exact path="/groups" component={AllGroups} /> {/* all groups ever */}
+      <Route exact path="/groups/:groupId" component={SingleGroup} /> {/* this group */}
+      <Route path="/groups/:groupId/users" component={AllUsers} /> {/* filtered by who's in this group */}
+      <Route path="/groups/:groupId/notebooks" component={AllNotebooks} /> {/* all notebooks for this group */}
+      <Route path="/groups/new" component={CreateGroup} />
+    </Switch>
 
-    return (
-      <Switch>
-        {/* Routes placed here are available to all visitors */}
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/testSnippet" component={CodeSnippet} />
-        <Route path="/CreateGroup" component={CreateGroup} />
-        {
-          isLoggedIn &&
-            <Switch>
-              {/* Routes placed here are only available after logging in */}
-              <Route path="/home" component={UserHome} />
-            </Switch>
-        }
-        {/* Displays our Login component as a fallback */}
-        <Route component={Login} />
-      </Switch>
-    )
-  }
-}
+    <Switch>
+      <Route exact path="/users" component={AllUsers} /> {/* all users ever */}
+      <Route exact path="/users/:userId" component={SingleUser} /> {/* this user */}
+      <Route path="/users/:userId/groups" component={AllGroups} /> {/* filtered by who's in this user */}
+      <Route path="/users/:userId/notebooks" component={AllNotebooks} /> {/* all notebooks for this user */}
+    </Switch>
 
-/**
- * CONTAINER
- */
-const mapState = (state) => {
-  return {
-    // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
-    // Otherwise, state.user will be an empty object, and state.user.id will be falsey
-    isLoggedIn: !!state.user.id
-  }
-}
+    <Switch>
+      <Route exact path="/notebooks" component={AllNotebooks} /> {/* created by anyone, ever */}
+      <Route path="/notebooks/:notebookId" component={SingleNotebook} /> {/* this notebook */}
+    </Switch>
 
-const mapDispatch = (dispatch) => {
-  return {
-    loadInitialData () {
-      dispatch(me())
+
+    {
+      /*
+      web security standing questions:
+        - what routes can an anonymous user not access?
+        - what routes can a logged-in, non-admin user not access?
+        - should group editing be limited to only some logged-in users?
+        - how can we prevent the malicious creation of an admin user in firestore? (see firestore db "rules")
+      */
     }
-  }
-}
 
-// The `withRouter` wrapper makes sure that updates are not blocked
-// when the url changes
-export default withRouter(connect(mapState, mapDispatch)(Routes))
+    {/* Displays our Login component as a fallback */}
+    <Route component={SingleNotebook} /> {/* empty notebook */}
+  </Switch>
+);
 
-/**
- * PROP TYPES
- */
-Routes.propTypes = {
-  loadInitialData: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired
-}
+export default Routes;
