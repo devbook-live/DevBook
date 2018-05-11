@@ -44,12 +44,14 @@ export default class Navbar extends Component {
   render() {
     return (
       <div>
-        <h1>SNIPPETS</h1>
+        <h1>DevBook()</h1>
         <nav>
           {this.state.isLoggedIn ? (
             <div>
               {/* The navbar will show these links after you log in */}
               <Link to="/home">Home</Link>
+              <Link to="/groups">Groups</Link>
+              <Link to="/testSnippet">Notebooks</Link>
               <Link onClick={this.logout} to="/login">Logout</Link>
             </div>
           ) : (
@@ -59,7 +61,6 @@ export default class Navbar extends Component {
               <Link to="/signup">Sign Up</Link>
               <Link to="/testSnippet">Example Snippet</Link>
               <Link to="/CreateGroup">CreateGroup</Link>
-              <Link onClick={this.logout} to="/login">Logout</Link>
             </div>
           )}
         </nav>

@@ -23,7 +23,7 @@ deleteDoc
 /// (What would this do to associated snippets? Remove all of them, probably. Which would mean we would need to update users and groups accordingly for *both* doc and its snippets. Some sort of "cascade" method.)
 */
 
-import db from '../../firebase/initFirebase';
+import { db } from '../../firebase/initFirebase';
 import { createEntity, entityById, entityByField, allEntities,
   updateEntityField, deleteEntity, garbageCollectEntityField } from './utils';
 
