@@ -11,6 +11,7 @@ snippetsByDoc
 snippetsByLang
 allSnippets
 snippetOutputListener
+checkSnippetRunningStatus
 // Update ops:
 updateSnippetText
 updateSnippetLang

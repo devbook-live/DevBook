@@ -7,6 +7,8 @@
 
 export { default as Navbar } from './navbar';
 export { default as CodeSnippet } from './Snippet';
+export { default as CodeOutput } from './Output';
+export { default as NotebookFooter } from './NotebookFooter';
 
 // components for which there are routes:
 export { Login, Signup } from './auth-form';
