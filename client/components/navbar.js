@@ -6,52 +6,42 @@ import { logout } from '../store';
 const { auth } = require('../../firebase/initFirebase');
 
 export default class Navbar extends Component {
-  // setting logged in user to pass to components as props.
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   // console.log('NEXT PROPSSSS: ', nextProps);
-  //   // console.log('PREV STATEEEE: ', prevState);
-  //   return (
-  //     auth.onAuthStateChanged((user) => {
-  //       if (user.email) {
-  //         console.log('GOTTTT HEEERRREEE', user.email);
-  //         return { isLoggedIn: true };
-  //       }
-  //       return null;
-  //     })
-  //   );
-  // }
-
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false,
+      isLoggedIn: false, // boolean, able to access user off auth.currentUser
     };
   }
 
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log('GOTTTT HEEERRREEE', user.email);
+        // if there is a user logged in, change state of isLoggedIn to true
         this.setState({ isLoggedIn: true });
       } else {
+        // no user, set state of isLoggedIn to false
         this.setState({ isLoggedIn: false });
       }
     });
   }
 
+  componentWillUnmount() {
+    // auth.onAuthStateChanged returns the unsubscribe function for the listener
+    const unsubscribe = auth.onAuthStateChanged(() => {});
+    unsubscribe(); // invoke the returned unsubscribe function
+  }
+
   logout() {
     auth.signOut().then(() => {
-      // Sign-out successful.
+      // Sign-out successful
       console.log('Sign-out successful: ', auth.currentUser);
     }, (error) => {
-      // An error happened.
+      // Log the error
       console.error(error);
     });
   }
 
   render() {
-    console.log('STATEEEE: ', this.state);
-    console.log('LOGGED IN: ', this.state.isLoggedIn);
     return (
       <div>
         <h1>SNIPPETS</h1>
@@ -60,9 +50,6 @@ export default class Navbar extends Component {
             <div>
               {/* The navbar will show these links after you log in */}
               <Link to="/home">Home</Link>
-              <a href="#" /* onClick={handleClick} */ >
-                Logout
-              </a>
               <Link onClick={this.logout} to="/login">Logout</Link>
             </div>
           ) : (
@@ -81,30 +68,3 @@ export default class Navbar extends Component {
     );
   }
 }
-
-/**
- * CONTAINER
- */
-// const mapState = (state) => {
-//   return {
-//     isLoggedIn: !!state.user.id,
-//   };
-// };
-
-// const mapDispatch = (dispatch) => {
-//   return {
-//     handleClick() {
-//       dispatch(logout());
-//     },
-//   };
-// };
-
-// export default connect(mapState, mapDispatch)(Navbar)
-
-/**
- * PROP TYPES
- */
-// Navbar.propTypes = {
-//   handleClick: PropTypes.func.isRequired,
-//   isLoggedIn: PropTypes.bool.isRequired,
-// };

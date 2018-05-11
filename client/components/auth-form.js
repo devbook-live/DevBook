@@ -63,7 +63,6 @@ class AuthForm extends Component {
 
   render() {
     const { formName, email, password } = this.state;
-    console.log('USER: ', auth.currentUser);
     return (
       <div className="authPage" >
         <Card className="authForm" >
