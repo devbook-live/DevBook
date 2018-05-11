@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
+import { Card } from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
 
 const { auth } = require('../../firebase/initFirebase');
 
@@ -63,25 +65,26 @@ class AuthForm extends Component {
     const { formName, email, password } = this.state;
     console.log('USER: ', auth.currentUser);
     return (
-      <div>
-        <form onSubmit={this.handleSubmit} name={this.name}>
-          <TextField
-            name="email"
-            floatingLabelText="Email"
-            onChange={this.handleChange}
-            value={email}
-          />
-          <br />
-          <TextField
-            name="password"
-            floatingLabelText="Password"
-            type="password"
-            onChange={this.handleChange}
-            value={password}
-          />
-          <RaisedButton label={formName} type="submit" primary />
-          {this.state.error && this.state.error.response && <div> {this.state.error.response.data} </div>}
-        </form>
+      <div className="authPage" >
+        <Card className="authForm" >
+          <form className="authForm" onSubmit={this.handleSubmit} name={this.name}>
+            <TextField
+              name="email"
+              floatingLabelText="Email"
+              onChange={this.handleChange}
+              value={email}
+            />
+            <TextField
+              name="password"
+              floatingLabelText="Password"
+              type="password"
+              onChange={this.handleChange}
+              value={password}
+            />
+            <FlatButton primary id="submitButton" label={formName} type="submit" />
+            {this.state.error && this.state.error.response && <div> {this.state.error.response.data} </div>}
+          </form>
+        </Card>
         {/* styled what the broken button in the form should look like
         <RaisedButton
           onClick={this.handleSubmit}
@@ -89,22 +92,27 @@ class AuthForm extends Component {
           type="submit"
           primary
         /> */}
-        <RaisedButton
-          href="/auth/google"
-          label="Login with Google"
-          style={{ margin: 12 }}
-          icon={<FontIcon className="muidocs-icon-custom-github" />}
-          backgroundColor="#0D47A1"
-          labelColor="#ffffff"
-        />
-        <RaisedButton
-          href="/auth/github"
-          label="Login with GitHub"
-          style={{ margin: 12 }}
-          icon={<FontIcon className="muidocs-icon-custom-github" />}
-          backgroundColor="#EF6C00"
-          labelColor="#ffffff"
-        />
+        <Card className="OAuth">
+          <RaisedButton
+            href="/auth/google"
+            label="Login with Google"
+            style={{ margin: 12 }}
+            icon={<FontIcon className="muidocs-icon-custom-github" />}
+            backgroundColor="#0D47A1"
+            labelColor="#ffffff"
+            className="OAuth-button"
+          />
+          <br />
+          <RaisedButton
+            href="/auth/github"
+            label="Login with GitHub"
+            style={{ margin: 12 }}
+            icon={<FontIcon className="muidocs-icon-custom-github" />}
+            backgroundColor="#EF6C00"
+            labelColor="#ffffff"
+            className="OAuth-button"
+          />
+        </Card>
       </div>
     );
   }
