@@ -5,7 +5,7 @@ import {
   addClient, removeClient, removeAllClients,
 } from '../crud/notebook';
 import { auth } from '../../firebase/initFirebase';
-import { CodeSnippet, CodeOutput, NotebookFooter } from '../components';
+import { CodeSnippet, CodeOutput, NotebookMetadata, NotebookFooter } from '../components';
 
 
 // id of this notebook = this.props.match.params.id
@@ -16,6 +16,7 @@ export default class SingleNotebook extends Component {
     super();
     this.state = {
       users: { '2HrJnNSzOebAy2XihlU944ZpWts2': true }, // [auth.currentUser], --for now dummy data
+      clients: { },
       groups: { },
       snippets: { },
     };
@@ -33,6 +34,7 @@ export default class SingleNotebook extends Component {
         loadedNotebook = loadedNotebook.data();
         this.setState({
           users: loadedNotebook.users,
+          clients: Object.assign(loadedNotebook.clients, { '2HrJnNSzOebAy2XihlU944ZpWts2': true }),
           groups: loadedNotebook.groups,
           snippets: loadedNotebook.snippets,
         });
@@ -46,16 +48,12 @@ export default class SingleNotebook extends Component {
   render() {
     return (
       <div>
-
-        <div className="single-notebook-metadata-container">
-          <div className="single-notebook-contributors">
-          contributors
-          </div>
-          <div className="single-notebook-groups">
-          groups
-          </div>
-        </div>
-
+        <NotebookMetadata
+          notebookId={this.props.match.params.notebookId}
+          users={this.state.users}
+          clients={this.state.clients}
+          groups={this.state.groups}
+        />
         {
           Object.keys(this.state.snippets).map(snippetId => (
             <div className="single-notebook-code-container">
