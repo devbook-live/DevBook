@@ -17,7 +17,7 @@ CRUD Utils
   garbageCollectEntityField
 */
 
-import db from '../../firebase/initFirebase';
+import { db } from '../../firebase/initFirebase';
 
 // Create ops:
 // returns the created entity (or error)
