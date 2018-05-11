@@ -23,6 +23,7 @@ const Routes = () => (
     <Switch>
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
+      <Route path="/singleUser" component={SingleUser} />
     </Switch>
 
     <Switch>

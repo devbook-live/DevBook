@@ -52,4 +52,26 @@ form div {
   width: 200px
 }
 
+/* USER FORM */
+.userPage {
+  display: flex;
+  flex-direction: row;
+}
+
+.userPic {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+  width: 300px;
+  align-items: center;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+  width: 500px;
+}
 /* END AUTH FORM */
