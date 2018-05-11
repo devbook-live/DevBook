@@ -61,7 +61,7 @@ class AuthForm extends Component {
 
   render() {
     const { formName, email, password } = this.state;
-
+    console.log('USER: ', auth.currentUser);
     return (
       <div>
         <form onSubmit={this.handleSubmit} name={this.name}>
