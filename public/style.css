@@ -19,3 +19,37 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+/* AUTH FORM */
+
+.authPage {
+  display: flex;
+  flex-direction: row;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+  height: 400px;
+
+}
+
+.OAuth {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+  height: 400px;
+}
+
+.OAuth-button {
+  width: 200px;
+}
+
+#submitButton {
+  width: 200px
+}
+
+/* END AUTH FORM */
