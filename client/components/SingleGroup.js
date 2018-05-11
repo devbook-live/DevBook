@@ -32,10 +32,8 @@ const styles = theme => ({
 class SingleGroup extends Component {
   render() {
     const { groupId } = this.props.match.params;
-    console.log(groupId)
     return (
       <div>
-        <h1> aaaaaa </h1>
         <Paper className={styles.paper}>
           <UsersList groupId={groupId}/>
         </Paper>
