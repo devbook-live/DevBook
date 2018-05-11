@@ -25,11 +25,11 @@ const Routes = () => (
       <Route path="/signup" component={Signup} />
 
 
+      <Route exact path="/groups/new" component={CreateGroup} />
       <Route exact path="/groups" component={AllGroups} /> {/* all groups ever */}
       <Route exact path="/groups/:groupId" component={SingleGroup} /> {/* this group */}
       <Route path="/groups/:groupId/users" component={AllUsers} /> {/* filtered by who's in this group */}
       <Route path="/groups/:groupId/notebooks" component={AllNotebooks} /> {/* all notebooks for this group */}
-      <Route path="/groups/new" component={CreateGroup} />
 
       <Route exact path="/users" component={AllUsers} /> {/* all users ever */}
       <Route exact path="/users/:userId" component={SingleUser} /> {/* this user */}
