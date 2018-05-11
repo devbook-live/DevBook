@@ -60,7 +60,8 @@ export default class Navbar extends Component {
               <Link to="/login">Login</Link>
               <Link to="/signup">Sign Up</Link>
               <Link to="/testSnippet">Example Snippet</Link>
-              <Link to="/CreateGroup">CreateGroup</Link>
+              <Link to="/groups/new">CreateGroup</Link>
+              <Link to="/groups/Group 2">Show SingleGroup (Just for demonstrational purpose!!)</Link>
             </div>
           )}
         </nav>
