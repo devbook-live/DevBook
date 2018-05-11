@@ -52,4 +52,25 @@ form div {
   width: 200px
 }
 
+
+/* SINGLE GROUP FORM */
+
+.singleGroupPage{
+  display: flex;
+  flex-direction: row;
+}
+.usersList {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+}
+
+.docsList {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+}
+
 /* END AUTH FORM */
