@@ -6,6 +6,7 @@ import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
 import { Card } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import history from '../history';
 
 const { auth } = require('../../firebase/initFirebase');
 
@@ -72,7 +73,11 @@ class AuthForm extends Component {
       // The signed-in user info.
       var user = result.user;
       // ...
-    }).catch(function(error) {
+    })
+    // .then(() => {
+    //   history.push('/singleUser')
+    // })
+    .catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;

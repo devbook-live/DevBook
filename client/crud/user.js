@@ -1,11 +1,11 @@
 const { db } = require('../../firebase/initFirebase');
 
 // Add a user to the database
-export const addUserFunction = (userObj) => {
-  db.collection('users').add(userObj)
-    .then((userRef) => {
-      console.log('User written with ID: ', userRef.id);
-      return userRef;
+export const addUserFunction = (id, userObj) => {
+  db.collection('users').doc(id).set(userObj)
+    .then(() => {
+      console.log('User written with ID: ', id);
+      return userObj;
     })
     .catch((error) => {
       console.error('Error adding document: ', error);
@@ -43,6 +43,7 @@ export const fetchUserFunction = (id) => {
     .get()
     .then((user) => {
       console.log(user.data());
+      return user.data();
     })
     .catch((error) => {
       console.error(error);
