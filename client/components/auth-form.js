@@ -9,6 +9,10 @@ import FlatButton from 'material-ui/FlatButton';
 
 const { auth } = require('../../firebase/initFirebase');
 
+const firebase = require('firebase/app');
+require('firebase/firestore');
+require('firebase/auth');
+
 /**
  * COMPONENT
  */
@@ -60,6 +64,46 @@ class AuthForm extends Component {
     loginFunc(email, password).catch(err => console.error(err));
   }
 
+  signInWithGoogle = () => {
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(googleProvider).then(result => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = result.credential.accessToken;
+      // The signed-in user info.
+      var user = result.user;
+      // ...
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
+  }
+
+  signInWithGithub = () => {
+    const githubProvider = new firebase.auth.GithubAuthProvider();
+    firebase.auth().signInWithPopup(githubProvider).then(result => {
+      // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+      var token = result.credential.accessToken;
+      // The signed-in user info.
+      var user = result.user;
+      // ...
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
+  }
+
 
   render() {
     const { formName, email, password } = this.state;
@@ -93,23 +137,25 @@ class AuthForm extends Component {
         /> */}
         <Card className="OAuth">
           <RaisedButton
-            href="/auth/google"
+            // href="/auth/google"
             label="Login with Google"
             style={{ margin: 12 }}
             icon={<FontIcon className="muidocs-icon-custom-github" />}
             backgroundColor="#0D47A1"
             labelColor="#ffffff"
             className="OAuth-button"
+            onClick={this.signInWithGoogle}
           />
           <br />
           <RaisedButton
-            href="/auth/github"
+            // href="/auth/github"
             label="Login with GitHub"
             style={{ margin: 12 }}
             icon={<FontIcon className="muidocs-icon-custom-github" />}
             backgroundColor="#EF6C00"
             labelColor="#ffffff"
             className="OAuth-button"
+            onClick={this.signInWithGithub}
           />
         </Card>
       </div>

@@ -5,11 +5,16 @@ import { logout } from '../store';
 
 const { auth } = require('../../firebase/initFirebase');
 
+const firebase = require('firebase/app');
+require('firebase/firestore');
+require('firebase/auth');
+
 export default class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoggedIn: false, // boolean, able to access user off auth.currentUser
+      displayName: 'guest',
     };
   }
 
@@ -17,7 +22,8 @@ export default class Navbar extends Component {
     auth.onAuthStateChanged((user) => {
       if (user) {
         // if there is a user logged in, change state of isLoggedIn to true
-        this.setState({ isLoggedIn: true });
+        this.setState({ isLoggedIn: true, displayName: firebase.auth().currentUser.displayName});
+        console.log(user)
       } else {
         // no user, set state of isLoggedIn to false
         this.setState({ isLoggedIn: false });
@@ -55,6 +61,7 @@ export default class Navbar extends Component {
               <Link to="/groups/new">CreateGroup</Link>
               <Link to="/groups/Group 2">Show SingleGroup (DEMO)</Link>
               <Link to="/singleUser">Show SingleUser (DEMO)</Link>
+              <h3>Welcome, {this.state.displayName}</h3>
               <Link onClick={this.logout} to="/login">Logout</Link>
             </div>
           ) : (
