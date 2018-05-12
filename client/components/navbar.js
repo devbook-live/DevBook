@@ -11,6 +11,8 @@ export default class Navbar extends Component {
     this.state = {
       isLoggedIn: false, // boolean, able to access user off auth.currentUser
     };
+    // Bind functions
+    this.logout.bind(this);
   }
 
   componentDidMount() {
@@ -29,16 +31,6 @@ export default class Navbar extends Component {
     // auth.onAuthStateChanged returns the unsubscribe function for the listener
     const unsubscribe = auth.onAuthStateChanged(() => {});
     unsubscribe(); // invoke the returned unsubscribe function
-  }
-
-  logout() {
-    auth.signOut().then(() => {
-      // Sign-out successful
-      console.log('Sign-out successful: ', auth.currentUser);
-    }, (error) => {
-      // Log the error
-      console.error(error);
-    });
   }
 
   render() {
@@ -70,3 +62,13 @@ export default class Navbar extends Component {
     );
   }
 }
+
+Navbar.prototype.logout = () => {
+  auth.signOut().then(() => {
+    // Sign-out successful
+    console.log('Sign-out successful: ', auth.currentUser);
+  }, (error) => {
+    // Log the error
+    console.error(error);
+  });
+};
