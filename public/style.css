@@ -19,3 +19,11 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+
+/* ---- Single Notebook ---- */
+.single-notebook-footer {
+  position: fixed;
+  bottom: 0;
+  z-index: 3;
+}
