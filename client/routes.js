@@ -13,6 +13,7 @@ import {
   SingleNotebook,
   CreateGroup,
 } from './components';
+import Snippet from './components/Snippet';
 
 /**
  * COMPONENT
@@ -23,6 +24,7 @@ const Routes = () => (
     <Switch>
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
+      <Route path="/singleUser" component={SingleUser} />
 
 
       <Route exact path="/groups/new" component={CreateGroup} />
@@ -40,6 +42,8 @@ const Routes = () => (
       <Route path="/notebooks/:notebookId" component={SingleNotebook} /> {/* this notebook */}
     </Switch>
 
+    <Route exact path="/notebooks" component={AllNotebooks} /> {/* created by anyone, ever */}
+    <Route path="/notebooks/:notebookId" component={SingleNotebook} /> {/* this notebook */}
 
     {
       /*
