@@ -22,8 +22,10 @@ export default class Navbar extends Component {
     auth.onAuthStateChanged((user) => {
       if (user) {
         // if there is a user logged in, change state of isLoggedIn to true
-        this.setState({ isLoggedIn: true, displayName: firebase.auth().currentUser.displayName});
-        console.log(user)
+        this.setState({
+          isLoggedIn: true,
+          displayName: firebase.auth().currentUser.displayName,
+        });
       } else {
         // no user, set state of isLoggedIn to false
         this.setState({ isLoggedIn: false });
