@@ -1,6 +1,8 @@
-import React, {Component} from 'react';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import {Tabs, Tab} from 'material-ui/Tabs';
+/* eslint-disable react/no-unused-state */
+
+import React, { Component } from 'react';
+import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
 import { DocsListByUserId, GroupsListByUserId } from './';
 import { fetchUserFunction } from '../crud/user';
@@ -14,16 +16,13 @@ class SingleUser extends Component {
       userId: this.props.match.params.userId,
       value: 'a',
     };
-    // this.fetchUser = this.fetchUser.bind(this);
   }
 
   componentDidMount() {
     const { userId } = this.props.match.params;
     this.unsubscribe = db.collection('users').doc(userId)
       .onSnapshot((doc) => {
-        this.setState({userInfo: doc.data()})
-        // this.onSnapshotCallback(doc).catch(err =>
-        // console.error(err));
+        this.setState({ userInfo: doc.data() });
       });
   }
 
@@ -31,78 +30,26 @@ class SingleUser extends Component {
     this.unsubscribe();
   }
 
-  async onSnapshotCallback(doc) {
-    // const docIds = Object.keys(doc.data().documents);
-    // const docsInfo = (await Promise.all(docIds.map(docId => db.collection('documents').doc(docId).get()))).map(curDoc => curDoc.data());
-    // this.setState({ docsInfo });
-
-
-    // console.log("doc", doc);
-
-
-
-
-    const userInfo = doc.data();
-    // const userInfo = (await Promise.all())
-
-    this.setState({ userInfo });
+  handleChange(value) {
+    this.setState({ value });
   }
-
-
-  // fetchUser() {
-  //   const { userId } = this.props.match.params;
-  //   const user = fetchUserFunction(userId);
-  //   console.log('user: ', user);
-  //   this.setState({
-  //     user,
-  //     userId,
-  //   })
-  // }
-
-
-
-
-
-
-
-
-  handleChange = (value) => {
-    this.setState({
-      value: value,
-    })
-  }
-
-
-
 
   render() {
-    // const { userId } = this.props.match.params;
-
-    setTimeout(() => {
-      console.log("state", this.state)
-
-    }, 2500)
-
     const { userId } = this.state;
 
-    // const userId = this.state.userInfo.id;
-
-
-    return(
+    return (
       <div>
-
         <div className="userPage">
           <div className="userPic">
             <CardMedia
-            className="userPic"
+              className="userPic"
               overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
             >
-              <img
-              src="https://i0.wp.com/www.thisblogrules.com/wp-content/uploads/2010/02/batman-for-facebook.jpg?resize=250%2C280" alt="" />
+              <img src="https://i0.wp.com/www.thisblogrules.com/wp-content/uploads/2010/02/batman-for-facebook.jpg?resize=250%2C280" alt="" />
             </CardMedia>
           </div>
           <div className="userInfo">
-            <CardTitle title={"Name: "}  subtitle="Card subtitle" />
+            <CardTitle title="Name: " subtitle="Card subtitle" />
             <CardText>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
@@ -133,15 +80,15 @@ class SingleUser extends Component {
               </div>
             </Tab>
 
-          <Tab label="Notes" value="b">
-            <div>
-              <DocsListByUserId userId={userId} />
-            </div>
-          </Tab>
-        </Tabs>
+            <Tab label="Notes" value="b">
+              <div>
+                <DocsListByUserId userId={userId} />
+              </div>
+            </Tab>
+          </Tabs>
         </div>
       </div>
-    )
+    );
   }
 }
 

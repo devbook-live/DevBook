@@ -1,4 +1,5 @@
 /* eslint-disable no-shadow */
+/* eslint-disable max-len */
 
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -67,46 +68,30 @@ class AuthForm extends Component {
 
   signInWithGoogle = () => {
     const googleProvider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(googleProvider).then(result => {
+    firebase.auth().signInWithPopup(googleProvider).then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
-      var token = result.credential.accessToken;
+      const { accessToken } = result.credential;
       // The signed-in user info.
-      var user = result.user;
+      const { user } = result;
       // ...
     })
-    // .then(() => {
-    //   history.push('/singleUser')
-    // })
-    .catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
-    });
+      .catch((error) => {
+        const { errorCode, errorMessage, email, credential } = error;
+      });
   }
 
   signInWithGithub = () => {
     const githubProvider = new firebase.auth.GithubAuthProvider();
-    firebase.auth().signInWithPopup(githubProvider).then(result => {
+    firebase.auth().signInWithPopup(githubProvider).then((result) => {
       // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-      var token = result.credential.accessToken;
+      const { accessToken } = result.credential;
       // The signed-in user info.
-      var user = result.user;
+      const { user } = result;
       // ...
-    }).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
-    });
+    })
+      .catch((error) => {
+        const { errorCode, errorMessage, email, credential } = error;
+      });
   }
 
 
@@ -130,7 +115,7 @@ class AuthForm extends Component {
               value={password}
             />
             <FlatButton primary id="submitButton" label={formName} type="submit" />
-            {this.state.error && this.state.error.response && <div> {this.state.error.response.data} </div>}
+            {this.state.error && this.state.error.response && <div>{this.state.error.response.data}</div>}
           </form>
         </Card>
         {/* styled what the broken button in the form should look like
@@ -142,7 +127,6 @@ class AuthForm extends Component {
         /> */}
         <Card className="OAuth">
           <RaisedButton
-            // href="/auth/google"
             label="Login with Google"
             style={{ margin: 12 }}
             icon={<FontIcon className="muidocs-icon-custom-github" />}
@@ -153,7 +137,6 @@ class AuthForm extends Component {
           />
           <br />
           <RaisedButton
-            // href="/auth/github"
             label="Login with GitHub"
             style={{ margin: 12 }}
             icon={<FontIcon className="muidocs-icon-custom-github" />}

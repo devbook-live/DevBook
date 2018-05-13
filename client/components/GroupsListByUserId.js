@@ -32,7 +32,6 @@ class GroupsListByUserId extends Component {
   }
 
   async onSnapshotCallback(doc) {
-    console.log("length???", doc.data().groups.hasOwnProperty());
     if (doc.data().groups.length) {
       const groupIds = Object.keys(doc.data().groups);
       const groupsInfo = (await Promise.all(groupIds.map(groupId => db.collection('groups').doc(groupId).get()))).map(curGroup => curGroup.data());

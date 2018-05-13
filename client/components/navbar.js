@@ -1,13 +1,13 @@
+/* eslint-disable class-methods-use-this */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../store';
 import history from '../history';
 import { fetchUserFunction, addUserFunction } from '../crud/user';
-const { db } = require('../../firebase/initFirebase');
 
-const { auth } = require('../../firebase/initFirebase');
-
+const { db, auth } = require('../../firebase/initFirebase');
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
@@ -32,19 +32,19 @@ export default class Navbar extends Component {
 
         const { uid } = user;
         db.collection('users').doc(uid).get()
-        .then(userExists => {
-          if (!userExists.data()) {
-            const { email, displayName } = user;
-            const userInfo = {
-              displayName,
-              email,
-              id: uid,
-              documents: {},
-              groups: {},
-            };
-            addUserFunction(uid, userInfo);
-          }
-        })
+          .then((userExists) => {
+            if (!userExists.data()) {
+              const { email, displayName } = user;
+              const userInfo = {
+                displayName,
+                email,
+                id: uid,
+                documents: {},
+                groups: {},
+              };
+              addUserFunction(uid, userInfo);
+            }
+          });
         history.push(`/users/${uid}`);
       } else {
         // no user, set state of isLoggedIn to false
