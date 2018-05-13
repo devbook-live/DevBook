@@ -20,10 +20,89 @@ form div {
   display: inline-block;
 }
 
-
 /* ---- Single Notebook ---- */
 .single-notebook-footer {
   position: fixed;
   bottom: 0;
   z-index: 3;
 }
+
+/* AUTH FORM */
+
+.authPage {
+  display: flex;
+  flex-direction: row;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+  height: 400px;
+
+}
+
+.OAuth {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+  height: 400px;
+}
+
+.OAuth-button {
+  width: 200px;
+}
+
+#submitButton {
+  width: 200px
+}
+
+
+
+/* SINGLE GROUP FORM */
+
+.singleGroupPage{
+  display: flex;
+  flex-direction: row;
+}
+
+.usersList {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+}
+
+.docsList {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+}
+
+
+/* USER FORM */
+.userPage {
+  display: flex;
+  flex-direction: row;
+}
+
+.userPic {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+  width: 300px;
+  align-items: center;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 15px;
+  width: 500px;
+}
+/* END AUTH FORM */

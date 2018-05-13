@@ -1,11 +1,19 @@
 /* eslint-disable no-shadow */
+/* eslint-disable max-len */
 
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
+import { Card } from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+import history from '../history';
 
 const { auth } = require('../../firebase/initFirebase');
+
+const firebase = require('firebase/app');
+require('firebase/firestore');
+require('firebase/auth');
 
 /**
  * COMPONENT
@@ -58,30 +66,58 @@ class AuthForm extends Component {
     loginFunc(email, password).catch(err => console.error(err));
   }
 
+  signInWithGoogle = () => {
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(googleProvider).then((result) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const { accessToken } = result.credential;
+      // The signed-in user info.
+      const { user } = result;
+      // ...
+    })
+      .catch((error) => {
+        const { errorCode, errorMessage, email, credential } = error;
+      });
+  }
+
+  signInWithGithub = () => {
+    const githubProvider = new firebase.auth.GithubAuthProvider();
+    firebase.auth().signInWithPopup(githubProvider).then((result) => {
+      // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+      const { accessToken } = result.credential;
+      // The signed-in user info.
+      const { user } = result;
+      // ...
+    })
+      .catch((error) => {
+        const { errorCode, errorMessage, email, credential } = error;
+      });
+  }
+
 
   render() {
     const { formName, email, password } = this.state;
-
     return (
-      <div>
-        <form onSubmit={this.handleSubmit} name={this.name}>
-          <TextField
-            name="email"
-            floatingLabelText="Email"
-            onChange={this.handleChange}
-            value={email}
-          />
-          <br />
-          <TextField
-            name="password"
-            floatingLabelText="Password"
-            type="password"
-            onChange={this.handleChange}
-            value={password}
-          />
-          <RaisedButton label={formName} type="submit" primary />
-          {this.state.error && this.state.error.response && <div> {this.state.error.response.data} </div>}
-        </form>
+      <div className="authPage" >
+        <Card className="authForm" >
+          <form className="authForm" onSubmit={this.handleSubmit} name={this.name}>
+            <TextField
+              name="email"
+              floatingLabelText="Email"
+              onChange={this.handleChange}
+              value={email}
+            />
+            <TextField
+              name="password"
+              floatingLabelText="Password"
+              type="password"
+              onChange={this.handleChange}
+              value={password}
+            />
+            <FlatButton primary id="submitButton" label={formName} type="submit" />
+            {this.state.error && this.state.error.response && <div>{this.state.error.response.data}</div>}
+          </form>
+        </Card>
         {/* styled what the broken button in the form should look like
         <RaisedButton
           onClick={this.handleSubmit}
@@ -89,22 +125,27 @@ class AuthForm extends Component {
           type="submit"
           primary
         /> */}
-        <RaisedButton
-          href="/auth/google"
-          label="Login with Google"
-          style={{ margin: 12 }}
-          icon={<FontIcon className="muidocs-icon-custom-github" />}
-          backgroundColor="#0D47A1"
-          labelColor="#ffffff"
-        />
-        <RaisedButton
-          href="/auth/github"
-          label="Login with GitHub"
-          style={{ margin: 12 }}
-          icon={<FontIcon className="muidocs-icon-custom-github" />}
-          backgroundColor="#EF6C00"
-          labelColor="#ffffff"
-        />
+        <Card className="OAuth">
+          <RaisedButton
+            label="Login with Google"
+            style={{ margin: 12 }}
+            icon={<FontIcon className="muidocs-icon-custom-github" />}
+            backgroundColor="#0D47A1"
+            labelColor="#ffffff"
+            className="OAuth-button"
+            onClick={this.signInWithGoogle}
+          />
+          <br />
+          <RaisedButton
+            label="Login with GitHub"
+            style={{ margin: 12 }}
+            icon={<FontIcon className="muidocs-icon-custom-github" />}
+            backgroundColor="#EF6C00"
+            labelColor="#ffffff"
+            className="OAuth-button"
+            onClick={this.signInWithGithub}
+          />
+        </Card>
       </div>
     );
   }
