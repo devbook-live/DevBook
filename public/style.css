@@ -20,6 +20,13 @@ form div {
   display: inline-block;
 }
 
+/* ---- Single Notebook ---- */
+.single-notebook-footer {
+  position: fixed;
+  bottom: 0;
+  z-index: 3;
+}
+
 /* AUTH FORM */
 
 .authPage {

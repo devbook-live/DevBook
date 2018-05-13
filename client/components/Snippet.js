@@ -1,21 +1,21 @@
 /* eslint-disable react/no-unused-state */
-/* eslint-disable no-else-return */
 
+import * as firebase from 'firebase';
+import Remove from 'material-ui/svg-icons/content/remove';
 import React, { Component } from 'react';
-import { Card, CardText, CardActions } from 'material-ui/Card';
+import { Card, CardHeader, CardText, CardActions } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Controlled as CodeMirror } from 'react-codemirror2';
+import { PlayPauseDelete } from '../components';
 import { db } from '../../firebase/initFirebase';
 
 class Snippet extends Component {
   constructor() {
     super();
     this.state = {
-      id: '',
-      notebook: '',
-      language: 'javascript',
       value: 'console.log(\'Hello World!\');',
       output: '',
+      snippetVisible: true,
     };
 
     this.id = undefined;
@@ -92,56 +92,43 @@ class Snippet extends Component {
     }
   }
 
+  toggleSnippetVisibility = (evt) => {
+    evt.preventDefault();
+    this.setState({ snippetVisible: !this.state.snippetVisible });
+  };
+
   render() {
     return (
       <Card>
-        <CodeMirror
-          value={this.state.value}
-          options={{
-            mode: 'javascript',
-            theme: 'material',
-            lineNumbers: true,
-          }}
-          onBeforeChange={(editor, data, value) => {
-            this.setState({ value });
-          }}
-          onChange={(editor, data, value) => {
-             console.log('state changed: ', value);
-             console.log('editor: ', editor);
-             console.log('data: ', data);
-          }}
-        />
-
-        <CardActions>
-          <RaisedButton
-            label="Run Code"
-            primary
-            disabled={this.running}
-            onClick={(event) => {
-              event.preventDefault();
-              this.runCode();
-            }}
-          />
-          <RaisedButton
-            label="Stop Code"
-            primary
-            disabled={!this.running}
-            onClick={(event) => {
-              event.preventDefault();
-              this.stopCode();
-            }}
-          />
-          <RaisedButton
-            label="Save"
-            primary
-            onClick={(event) => {
-              event.preventDefault();
-              this.saveCode();
-            }}
-          />
-        </CardActions>
+        <div className="snippet-header">
+          <Remove onClick={this.toggleSnippetVisibility} />
+        </div>
+        { this.state.snippetVisible &&
+          <div className="snippet-body">
+            <CodeMirror
+              value={this.state.output}
+              options={{
+                mode: 'javascript',
+                theme: 'material',
+                lineNumbers: true,
+              }}
+              onBeforeChange={(editor, data, output) => {
+                this.setState({ output });
+              }}
+              onChange={(editor, data, output) => {
+                console.log('state changed: ', output);
+                console.log('editor: ', editor);
+                console.log('data: ', data);
+              }}
+            />
+            <CardActions>
+              <PlayPauseDelete scope="snippet" />
+            </CardActions>
+          </div>
+        }
         <h1>{this.state.output}</h1>
-      </Card>);
+      </Card>
+    );
   }
 }
 
