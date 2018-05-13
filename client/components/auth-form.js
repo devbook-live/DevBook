@@ -1,4 +1,5 @@
 /* eslint-disable no-shadow */
+/* eslint-disable max-len */
 
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -6,8 +7,13 @@ import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
 import { Card } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import history from '../history';
 
 const { auth } = require('../../firebase/initFirebase');
+
+const firebase = require('firebase/app');
+require('firebase/firestore');
+require('firebase/auth');
 
 /**
  * COMPONENT
@@ -60,6 +66,34 @@ class AuthForm extends Component {
     loginFunc(email, password).catch(err => console.error(err));
   }
 
+  signInWithGoogle = () => {
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(googleProvider).then((result) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const { accessToken } = result.credential;
+      // The signed-in user info.
+      const { user } = result;
+      // ...
+    })
+      .catch((error) => {
+        const { errorCode, errorMessage, email, credential } = error;
+      });
+  }
+
+  signInWithGithub = () => {
+    const githubProvider = new firebase.auth.GithubAuthProvider();
+    firebase.auth().signInWithPopup(githubProvider).then((result) => {
+      // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+      const { accessToken } = result.credential;
+      // The signed-in user info.
+      const { user } = result;
+      // ...
+    })
+      .catch((error) => {
+        const { errorCode, errorMessage, email, credential } = error;
+      });
+  }
+
 
   render() {
     const { formName, email, password } = this.state;
@@ -81,7 +115,7 @@ class AuthForm extends Component {
               value={password}
             />
             <FlatButton primary id="submitButton" label={formName} type="submit" />
-            {this.state.error && this.state.error.response && <div> {this.state.error.response.data} </div>}
+            {this.state.error && this.state.error.response && <div>{this.state.error.response.data}</div>}
           </form>
         </Card>
         {/* styled what the broken button in the form should look like
@@ -93,23 +127,23 @@ class AuthForm extends Component {
         /> */}
         <Card className="OAuth">
           <RaisedButton
-            href="/auth/google"
             label="Login with Google"
             style={{ margin: 12 }}
             icon={<FontIcon className="muidocs-icon-custom-github" />}
             backgroundColor="#0D47A1"
             labelColor="#ffffff"
             className="OAuth-button"
+            onClick={this.signInWithGoogle}
           />
           <br />
           <RaisedButton
-            href="/auth/github"
             label="Login with GitHub"
             style={{ margin: 12 }}
             icon={<FontIcon className="muidocs-icon-custom-github" />}
             backgroundColor="#EF6C00"
             labelColor="#ffffff"
             className="OAuth-button"
+            onClick={this.signInWithGithub}
           />
         </Card>
       </div>

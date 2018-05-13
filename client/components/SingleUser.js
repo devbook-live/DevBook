@@ -1,38 +1,51 @@
-import React, {Component} from 'react';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import {Tabs, Tab} from 'material-ui/Tabs';
+/* eslint-disable react/no-unused-state */
+
+import React, { Component } from 'react';
+import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
 import { DocsListByUserId, GroupsListByUserId } from './';
+import { fetchUserFunction } from '../crud/user';
+import { db } from '../../firebase/initFirebase';
 
 class SingleUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userInfo: {},
+      userId: this.props.match.params.userId,
       value: 'a',
     };
   }
 
-  handleChange = (value) => {
-    this.setState({
-      value: value,
-    })
+  componentDidMount() {
+    const { userId } = this.props.match.params;
+    this.unsubscribe = db.collection('users').doc(userId)
+      .onSnapshot((doc) => {
+        this.setState({ userInfo: doc.data() });
+      });
   }
 
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
-
+  handleChange(value) {
+    this.setState({ value });
+  }
 
   render() {
-    return(
-      <div>
+    const { userId } = this.state;
 
+    return (
+      <div>
         <div className="userPage">
           <div className="userPic">
             <CardMedia
-            className="userPic"
+              className="userPic"
               overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
             >
-              <img
-              src="https://i0.wp.com/www.thisblogrules.com/wp-content/uploads/2010/02/batman-for-facebook.jpg?resize=250%2C280" alt="" />
+              <img src="https://i0.wp.com/www.thisblogrules.com/wp-content/uploads/2010/02/batman-for-facebook.jpg?resize=250%2C280" alt="" />
             </CardMedia>
           </div>
           <div className="userInfo">
@@ -63,19 +76,19 @@ class SingleUser extends Component {
                   This allows for more functionality in Tabs such as not
                   having any Tab selected or assigning them different values.
                 </p> */}
-                <GroupsListByUserId userId={"1"} />
+                <GroupsListByUserId userId={userId} />
               </div>
             </Tab>
 
-          <Tab label="Notes" value="b">
-            <div>
-              <DocsListByUserId userId={"1"} />
-            </div>
-          </Tab>
-        </Tabs>
+            <Tab label="Notes" value="b">
+              <div>
+                <DocsListByUserId userId={userId} />
+              </div>
+            </Tab>
+          </Tabs>
         </div>
       </div>
-    )
+    );
   }
 }
 
