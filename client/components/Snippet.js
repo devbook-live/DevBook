@@ -1,5 +1,4 @@
 /* eslint-disable react/no-unused-state */
-/* eslint-disable no-else-return */
 
 import * as firebase from 'firebase';
 import Remove from 'material-ui/svg-icons/content/remove';

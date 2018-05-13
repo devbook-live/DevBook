@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 /*
 CRUD for Snippets
 
@@ -291,7 +293,6 @@ const deleteSnippet = (snippetId) => {
     .then(() => console.log('Snippet successfully deleted!'))
     .catch(error => console.error('Error removing snippet: ', error));
 };
-
 
 module.exports = {
   // C

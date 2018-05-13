@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 /*
 CRUD for Docs (**now called "notebooks"**)
 

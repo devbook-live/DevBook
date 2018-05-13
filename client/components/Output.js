@@ -1,3 +1,5 @@
+/* eslint-disable react/prefer-stateless-function */
+
 import React, { Component } from 'react';
 import { Card, CardText } from 'material-ui/Card';
 
@@ -6,7 +8,7 @@ import { Card, CardText } from 'material-ui/Card';
 
 export default class Output extends Component {
   render() {
-    return(
+    return (
       <Card>
         Test output
       </Card>

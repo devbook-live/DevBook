@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 /*
 CRUD Utils
 
@@ -84,8 +86,8 @@ const updateEntityField = (collectionName, entityId, field, value, isObjField = 
   //   .doc(entityId)
   //   .update(condition);
   // db.collection('coll').doc('doc').collection('subcoll').doc('subdoc')
-  console.log('COLLECTION: ', db.collection(collectionName))
-    return isObjField
+  console.log('COLLECTION: ', db.collection(collectionName));
+  return isObjField
     ? db.collection(collectionName + '/' + entityId + '/' + field)
       .add({ [value]: addEntry })
     : db.collection(collectionName).doc(entityId)
@@ -102,9 +104,8 @@ const updateEntityField = (collectionName, entityId, field, value, isObjField = 
   //     .set({ [field]: value }, { merge: true });
 
 
-    // return db.doc([collectionName, entityId, field].join('/'))
-    // .set(condition, { merge: true });
-
+  // return db.doc([collectionName, entityId, field].join('/'))
+  // .set(condition, { merge: true });
 };
 
 // Delete ops:

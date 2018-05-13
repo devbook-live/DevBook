@@ -1,3 +1,5 @@
+/* eslint-disable react/prefer-stateless-function */
+
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import AutoComplete from 'material-ui/AutoComplete';
@@ -74,34 +76,31 @@ export default class NotebookMetadata extends Component {
 //   }
 
 
-
-
-
 // }
 
   render() {
     return (
       <div className="single-notebook-metadata-container">
-      <div className="single-notebook-contributors">
-        <h2>Contributors</h2>
-        {
-          this.props.users.map((userId) => {
-            if (userId in this.props.clients) {
-              return <p className="notebook-active-contributor">{userId}</p>;
-            }
-            return <p className="notebook-inactive-contributor">{userId}</p>;
-          })
-        }
+        <div className="single-notebook-contributors">
+          <h2>Contributors</h2>
+          {
+            this.props.users.map((userId) => {
+              if (userId in this.props.clients) {
+                return <p className="notebook-active-contributor">{userId}</p>;
+              }
+              return <p className="notebook-inactive-contributor">{userId}</p>;
+            })
+          }
+        </div>
+        <div className="single-notebook-groups">
+          <h2>Groups</h2>
+          {
+            this.props.groups.map((groupId) => {
+              return <p className="notebook-group">{groupId}</p>;
+            })
+          }
+        </div>
       </div>
-      <div className="single-notebook-groups">
-        <h2>Groups</h2>
-        {
-          this.props.groups.map((groupId) => {
-            return <p className="notebook-group">{groupId}</p>;
-          })
-        }
-      </div>
-    </div>
     );
   }
 }
