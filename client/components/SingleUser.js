@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unused-state */
+
 import React, { Component } from 'react';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -30,11 +32,6 @@ class SingleUser extends Component {
     this.unsubscribe();
   }
 
-  async onSnapshotCallback(doc) {
-    const userInfo = doc.data();
-    this.setState({ userInfo });
-  }
-
   handleChange(value) {
     this.setState({ value });
   }
@@ -42,6 +39,7 @@ class SingleUser extends Component {
   render() {
     const { userId } = this.state;
     const { userInfo } = this.state;
+    
     return (
       <div>
         <div className="userPage">
@@ -52,7 +50,6 @@ class SingleUser extends Component {
             >
               <img src="https://i0.wp.com/www.thisblogrules.com/wp-content/uploads/2010/02/batman-for-facebook.jpg?resize=250%2C280" alt="" />
             </CardMedia>
-
             <CardTitle
               title={`Name: ${userInfo.displayName}`}
               subtitle="Card subtitle"
