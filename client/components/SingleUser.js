@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import { DocsListByUserId, GroupsListByUserId } from './';
 import { fetchUserFunction } from '../crud/user';
 import { db } from '../../firebase/initFirebase';
@@ -12,9 +14,8 @@ class SingleUser extends Component {
     this.state = {
       userInfo: {},
       userId: this.props.match.params.userId,
-      value: 'a',
+      value: '',
     };
-    // this.fetchUser = this.fetchUser.bind(this);
   }
 
   componentDidMount() {
@@ -22,8 +23,6 @@ class SingleUser extends Component {
     this.unsubscribe = db.collection('users').doc(userId)
       .onSnapshot((doc) => {
         this.setState({userInfo: doc.data()})
-        // this.onSnapshotCallback(doc).catch(err =>
-        // console.error(err));
       });
   }
 
@@ -32,39 +31,9 @@ class SingleUser extends Component {
   }
 
   async onSnapshotCallback(doc) {
-    // const docIds = Object.keys(doc.data().documents);
-    // const docsInfo = (await Promise.all(docIds.map(docId => db.collection('documents').doc(docId).get()))).map(curDoc => curDoc.data());
-    // this.setState({ docsInfo });
-
-
-    // console.log("doc", doc);
-
-
-
-
     const userInfo = doc.data();
-    // const userInfo = (await Promise.all())
-
     this.setState({ userInfo });
   }
-
-
-  // fetchUser() {
-  //   const { userId } = this.props.match.params;
-  //   const user = fetchUserFunction(userId);
-  //   console.log('user: ', user);
-  //   this.setState({
-  //     user,
-  //     userId,
-  //   })
-  // }
-
-
-
-
-
-
-
 
   handleChange = (value) => {
     this.setState({
@@ -72,25 +41,11 @@ class SingleUser extends Component {
     })
   }
 
-
-
-
   render() {
-    // const { userId } = this.props.match.params;
-
-    setTimeout(() => {
-      console.log("state", this.state)
-
-    }, 2500)
-
     const { userId } = this.state;
-
-    // const userId = this.state.userInfo.id;
-
-
+    const { userInfo } = this.state;
     return(
       <div>
-
         <div className="userPage">
           <div className="userPic">
             <CardMedia
@@ -100,9 +55,10 @@ class SingleUser extends Component {
               <img
               src="https://i0.wp.com/www.thisblogrules.com/wp-content/uploads/2010/02/batman-for-facebook.jpg?resize=250%2C280" alt="" />
             </CardMedia>
-          </div>
-          <div className="userInfo">
-            <CardTitle title={"Name: "}  subtitle="Card subtitle" />
+
+            <CardTitle
+            title={ `Name: ${userInfo.displayName}` }
+            subtitle="Card subtitle" />
             <CardText>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
@@ -114,31 +70,29 @@ class SingleUser extends Component {
               <FlatButton label="Action2" />
             </CardActions>
           </div>
-        </div>
-
-        <div>
+          <div className="userInfo">
           <Tabs
             value={this.state.value}
             onChange={this.handleChange}
           >
             <Tab label="Groups" value="a">
               <div>
-                {/* <h2>Controllable Tab A</h2>
-                <p>
-                  Tabs are also controllable if you want to programmatically pass them their values.
-                  This allows for more functionality in Tabs such as not
-                  having any Tab selected or assigning them different values.
-                </p> */}
                 <GroupsListByUserId userId={userId} />
+                <FloatingActionButton mini={true} secondary={true} >
+                  <ContentAdd />
+                </FloatingActionButton>
               </div>
             </Tab>
-
-          <Tab label="Notes" value="b">
+          <Tab label="Notebooks" value="b">
             <div>
               <DocsListByUserId userId={userId} />
+              <FloatingActionButton mini={true} secondary={true} >
+                  <ContentAdd />
+                </FloatingActionButton>
             </div>
           </Tab>
         </Tabs>
+          </div>
         </div>
       </div>
     )

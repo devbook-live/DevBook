@@ -22,7 +22,6 @@ class GroupsListByUserId extends Component {
     const { userId } = this.props;
     this.unsubscribe = db.collection('users').doc(userId)
       .onSnapshot((doc) => {
-        console.log('doc::::: ', doc.data());
         this.onSnapshotCallback(doc).catch(err => console.error(err));
       });
   }
@@ -32,8 +31,7 @@ class GroupsListByUserId extends Component {
   }
 
   async onSnapshotCallback(doc) {
-    console.log("length???", doc.data().groups.hasOwnProperty());
-    if (doc.data().groups.length) {
+    if (doc.data().groups) {
       const groupIds = Object.keys(doc.data().groups);
       const groupsInfo = (await Promise.all(groupIds.map(groupId => db.collection('groups').doc(groupId).get()))).map(curGroup => curGroup.data());
       this.setState({ groupsInfo });
