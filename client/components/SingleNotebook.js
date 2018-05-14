@@ -115,7 +115,7 @@ export default class SingleNotebook extends Component {
           Object.keys(this.state.snippets).map(snippetId => (
             <div className="single-notebook-code-container" key={snippetId}>
               <CodeSnippet snippet={snippetId} />
-              <CodeOutput visible={false} />
+              <CodeOutput visible={false} output="output!!!" />
             </div>
           ))
         }
