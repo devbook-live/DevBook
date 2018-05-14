@@ -129,8 +129,11 @@ const allSnippets = () => {
 const snippetOutputListener = (snippetId) => {
   return db.collection('snippets')
     .doc(snippetId)
-    .onSnapshot(doc => doc.data().output); // output will be null, or...an obj?
+    .onSnapshot(doc => doc.data()); // can check 'running', 'output', etc.
 };
+
+// const snippetRunningListener = (notebookId, callback) =>
+//   db.collection('notebooks/' + notebookId + '/snippets').onSnapshot(callback);
 
 // "update snippet" helper function:
 const updateSnippet = (snippetId, fieldToUpdate, updatedValue) => {

@@ -102,10 +102,11 @@ export default class SingleNotebook extends Component {
     });
 
   render() {
+    const { notebookId } = this.props.match.params;
     return (
       <div>
         <NotebookMetadata
-          notebookId={this.props.match.params.notebookId}
+          notebookId={notebookId}
           users={this.state.users}
           clients={this.state.clients}
           groups={this.state.groups}
@@ -114,7 +115,7 @@ export default class SingleNotebook extends Component {
         {
           Object.keys(this.state.snippets).map(snippetId => (
             <div className="single-notebook-code-container" key={snippetId}>
-              <CodeSnippet snippet={snippetId} />
+              <CodeSnippet snippetId={snippetId} notebookId={notebookId} />
               <CodeOutput visible={false} />
             </div>
           ))

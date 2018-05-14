@@ -8,18 +8,25 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { PlayPauseDelete } from '../components';
 import { db } from '../../firebase/initFirebase';
+import { snippetOutputListener } from '../crud/snippet';
+
+/* props passed down from SingleNotebook:
+ - `snippetId`: the id for this snippet
+ - `notebookId`: the id for this snippet's currently viewable notebook
+*/
 
 class Snippet extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    // relatedly, what fields do we want for the `snippets` collection?
     this.state = {
       value: 'console.log(\'Hello World!\');',
       output: '',
       snippetVisible: true,
     };
 
-    this.id = undefined;
-    this.unsubscribe = undefined;
+    this.id = props.snippetId;
+    this.unsubscribe = null;
     this.running = false;
 
     this.runCode = this.runCode.bind(this);
@@ -27,7 +34,7 @@ class Snippet extends Component {
   }
 
   componentDidMount() {
-    console.log('Test');
+    this.unsubscribe = snippetOutputListener(this.id);
   }
 
   componentWillUnmount() {
@@ -98,6 +105,7 @@ class Snippet extends Component {
   };
 
   render() {
+    const { snippetId, notebookId } = this.props;
     return (
       <Card>
         <div className="snippet-header">
@@ -122,7 +130,11 @@ class Snippet extends Component {
               }}
             />
             <CardActions>
-              <PlayPauseDelete scope="snippet" />
+              <PlayPauseDelete
+                scope="snippet"
+                notebookId={notebookId}
+                snippetId={snippetId}
+              />
             </CardActions>
           </div>
         }

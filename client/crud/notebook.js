@@ -30,6 +30,7 @@ import { createEntity, entityById, entityByField, entityByIdListener, allEntitie
   updateEntityField,
   addDocToSubcollection, removeDocFromSubcollection, getDocsInSubcollection,
   deleteEntity, garbageCollectEntityField } from './utils';
+import { markSnippetAsRunning, markSnippetAsDormant } from './snippet';
 
 // Create ops:
 const createNotebook = (users, groups = {}, snippets = {}) =>
@@ -102,11 +103,22 @@ const removeDocAuthor = (docId, userId) =>
   updateEntityField('notebooks', docId, 'users', userId, true, false);
 const removeDocGroup = (docId, groupId) =>
   updateEntityField('notebooks', docId, 'groups', groupId, true, false);
-const removeDocSnippet = (docId, snippetId) =>
-  updateEntityField('notebooks', docId, 'snippets', snippetId, true, false);
+const removeNotebookSnippet = (docId, snippetId) =>
+  removeDocFromSubcollection('notebooks', docId, 'snippets', snippetId);
+
+const toggleAllSnippetsInNotebook = (notebookId, status) =>
+  notebookSnippets(notebookId)
+    .then((snippetIds) => {
+      const runSnippets = status === 'running'
+        ? snippetIds.map(id => markSnippetAsRunning(id))
+        : snippetIds.map(id => markSnippetAsDormant(id));
+      return Promise.all(runSnippets);
+    });
+const runAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, 'running');
+const pauseAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, 'dormant');
 
 // Delete ops:
-const deleteDoc = id => deleteEntity('notebooks', id);
+const deleteNotebook = id => deleteEntity('notebooks', id);
 
 module.exports = {
   createNotebook,
@@ -136,7 +148,9 @@ module.exports = {
   removeAllClients,
   removeDocAuthor,
   removeDocGroup,
-  removeDocSnippet,
+  removeNotebookSnippet,
+  runAllSnippetsInNotebook,
+  pauseAllSnippetsInNotebook,
 
-  deleteDoc,
+  deleteNotebook,
 };
