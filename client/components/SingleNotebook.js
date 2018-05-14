@@ -7,7 +7,7 @@ import {
   addClient, removeClient, removeAllClients,
 } from '../crud/notebook';
 import { auth } from '../../firebase/initFirebase';
-import { CodeSnippet, CodeOutput, NotebookMetadata, NotebookFooter } from '../components';
+import { CodeSnippet, NotebookMetadata, NotebookFooter } from '../components';
 
 
 // id of this notebook = this.props.match.params.id
@@ -113,10 +113,9 @@ export default class SingleNotebook extends Component {
           snippets={this.state.snippets}
         />
         {
-          Object.keys(this.state.snippets).map(snippetId => (
+          this.state.snippets.map(snippetId => (
             <div className="single-notebook-code-container" key={snippetId}>
               <CodeSnippet snippetId={snippetId} notebookId={notebookId} />
-              <CodeOutput visible={false} />
             </div>
           ))
         }
