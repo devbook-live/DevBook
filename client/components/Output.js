@@ -6,12 +6,13 @@ import { Card, CardText } from 'material-ui/Card';
 
 // this component should render out results of running code.
 
-export default class Output extends Component {
-  render() {
-    return (
-      <Card>
-        Test output
-      </Card>
-    );
-  }
-}
+const Output = ({ output }) => {
+  return (
+    <Card className="output">
+      <h3>Output: </h3>
+      <p> {output} </p>
+
+    </Card>
+  );
+};
+export default Output;

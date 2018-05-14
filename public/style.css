@@ -26,6 +26,19 @@ form div {
   bottom: 0;
   z-index: 3;
 }
+.output {
+  width: 100% !important;
+  margin: 0 auto !important;
+  border: 2px solid rgb(0, 188, 212) !important;
+  background-color: rgb(203, 239, 248) !important;
+  font-family: courier, monospace !important;
+  padding-left: 20px;
+}
+.single-notebook-code-container {
+  padding-bottom: 20px;
+  /* font-family: tahoma, arial, sans-serif; */
+
+}
 
 /* AUTH FORM */
 
