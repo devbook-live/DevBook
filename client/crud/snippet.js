@@ -12,6 +12,7 @@ snippetsByGroup
 snippetsByDoc
 snippetsByLang
 allSnippets
+snippetListener
 snippetOutputListener
 checkSnippetRunningStatus
 // Update ops:
@@ -31,7 +32,7 @@ import { db } from '../../firebase/initFirebase';
 
 // create a snippet
 const createSnippet = (
-  input,
+  text,
   language,
   doc, // foreign key for the document that includes this snippet
   authors, // user or users who have authored this snippet: { user1: true, user5: true, ... }
@@ -39,13 +40,12 @@ const createSnippet = (
 ) =>
   db.collection('snippets')
     .add({
-      input,
+      text,
       language,
       notebook: doc,
       users: authors,
       groups: authorGroups,
       running: false,
-      output: null,
     });
 
 // find a single snippet (by id)
@@ -126,31 +126,36 @@ const allSnippets = () => {
     });
 };
 
-const snippetOutputListener = (snippetId) => {
-  return db.collection('snippets')
-    .doc(snippetId)
-    .onSnapshot(doc => doc.data()); // can check 'running', 'output', etc.
-};
+const snippetListener = (snippetId, callback) =>
+  db.collection('snippets').doc(snippetId).onSnapshot(callback);
+
+const snippetOutputListener = (snippetId, callback) =>
+  db.collection('snippetOutputs').doc(snippetId).onSnapshot(callback);
 
 // const snippetRunningListener = (notebookId, callback) =>
 //   db.collection('notebooks/' + notebookId + '/snippets').onSnapshot(callback);
 
 // "update snippet" helper function:
-const updateSnippet = (snippetId, fieldToUpdate, updatedValue) => {
-  const snippetRef = db.collection('snippets').doc(snippetId);
-  return db.runTransaction((transaction) => {
-    // This code may get re-run multiple times if there are conflicts.
-    return transaction.get(snippetRef).then((snippet) => {
-      if (!snippet.exists) throw new ReferenceError('Snippet does not exist.');
-      return transaction.update(snippetRef, { [fieldToUpdate]: updatedValue });
-    });
-  })
-    .then((transactionRecord) => {
-      console.log('Transaction successfully committed!', transactionRecord);
-      return transactionRecord;
-    })
-    .catch(error => console.log('Transaction failed: ', error));
-};
+// const updateSnippet = (snippetId, fieldToUpdate, updatedValue) => {
+//   const snippetRef = db.collection('snippets').doc(snippetId);
+//   return db.runTransaction((transaction) => {
+//     // This code may get re-run multiple times if there are conflicts.
+//     return transaction.get(snippetRef).then((snippet) => {
+//       if (!snippet.exists) throw new ReferenceError('Snippet does not exist.');
+//       return transaction.update(snippetRef, { [fieldToUpdate]: updatedValue });
+//     });
+//   })
+//     .then((transactionRecord) => {
+//       console.log('Transaction successfully committed!', transactionRecord);
+//       return transactionRecord;
+//     })
+//     .catch(error => console.log('Transaction failed: ', error));
+// };
+
+const updateSnippet = (snippetId, fieldToUpdate, updatedValue) =>
+  db.collection('snippets')
+    .doc(snippetId)
+    .set({ [fieldToUpdate]: updatedValue }, { merge: true });
 
 // update snippet text
 const updateSnippetText = (id, text) => updateSnippet(id, 'text', text);
@@ -307,6 +312,7 @@ module.exports = {
   snippetsByDoc,
   snippetsByLang,
   allSnippets,
+  snippetListener,
   snippetOutputListener,
   // U
   updateSnippetText,
