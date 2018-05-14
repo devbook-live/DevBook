@@ -4,12 +4,13 @@ import PlayArrow from 'material-ui/svg-icons/av/play-arrow';
 import Pause from 'material-ui/svg-icons/av/pause';
 import Delete from 'material-ui/svg-icons/action/delete';
 
-const PlayPauseDeleteBtns = () => (
+const PlayPauseDeleteBtns = (props) => (
   <React.Fragment>
     <FloatingActionButton>
       <PlayArrow
         onClick={(evt) => {
           evt.preventDefault();
+          console.log(props);
           // run all snippets in this notebook, in sequence.
           console.log('running all snippets in this notebook');
         }}
