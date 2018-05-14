@@ -35,6 +35,7 @@ const Footer = ({ notebookId, users, groups }) => (
       <PlayPauseDelete
         className="footer-right"
         scope="notebook"
+        notebookId={notebookId}
       />{/* note "notebook" vs "snippet" scope */}
 
     </BottomNavigation>

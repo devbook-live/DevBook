@@ -14,6 +14,5 @@ const Output = ({ output }) => {
 
     </Card>
   );
-
-}
+};
 export default Output;
