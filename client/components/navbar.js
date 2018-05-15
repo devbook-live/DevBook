@@ -1,9 +1,7 @@
 /* eslint-disable class-methods-use-this */
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logout } from '../store';
 import history from '../history';
 import { fetchUserFunction, addUserFunction } from '../crud/user';
 
@@ -70,6 +68,7 @@ export default class Navbar extends Component {
   render() {
     return (
       <div>
+<<<<<<< HEAD
         <AppBar
           title="DevBook( )"
           showMenuIconButton={false}
@@ -79,6 +78,32 @@ export default class Navbar extends Component {
             fontFamily: 'Lucida Grande',
           }}
         />
+=======
+        <h1>DevBook()</h1>
+        <nav>
+          {this.state.isLoggedIn ? (
+            <div>
+              {/* The navbar will show these links after you log in */}
+              <Link to="/home">Home</Link>
+              <Link to="/groups">Groups</Link>
+              <Link to="/testSnippet">Notebooks</Link>
+              <Link to="/groups/new">CreateGroup</Link>
+              <Link to="/groups/Group 2">Show SingleGroup (DEMO)</Link>
+              {/* <Link to="/singleUser">Show SingleUser (DEMO)</Link> */}
+              <h3>Welcome, {this.state.displayName}</h3>
+              <Link onClick={this.logout} to="/login">Logout</Link>
+            </div>
+          ) : (
+            <div>
+              {/* The navbar will show these links before you log in */}
+              <Link to="/login">Login</Link>
+              <Link to="/signup">Sign Up</Link>
+              <Link to="/testSnippet">Example Snippet</Link>
+            </div>
+          )}
+        </nav>
+        <hr />
+>>>>>>> master
       </div>
     );
   }

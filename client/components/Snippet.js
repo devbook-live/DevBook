@@ -6,9 +6,9 @@ import React, { Component } from 'react';
 import { Card, CardHeader, CardText, CardActions } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Controlled as CodeMirror } from 'react-codemirror2';
-import { PlayPauseDelete } from '../components';
+import { PlayPauseDelete, CodeOutput } from '../components';
 import { db } from '../../firebase/initFirebase';
-import { snippetOutputListener } from '../crud/snippet';
+import { snippetListener, snippetOutputListener, updateSnippetText, snippetById } from '../crud/snippet';
 
 /* props passed down from SingleNotebook:
  - `snippetId`: the id for this snippet
@@ -18,86 +18,49 @@ import { snippetOutputListener } from '../crud/snippet';
 class Snippet extends Component {
   constructor(props) {
     super(props);
-    // relatedly, what fields do we want for the `snippets` collection?
     this.state = {
-      value: 'console.log(\'Hello World!\');',
-      output: '',
+      text: 'console.log(\'Hello World!\');',
+      output: '', // Docker client output, via firestore "snippetOutputs" collection
       snippetVisible: true,
+      running: false,
     };
-
     this.id = props.snippetId;
-    this.unsubscribe = null;
-    this.running = false;
-
-    this.runCode = this.runCode.bind(this);
-    this.saveCode = this.saveCode.bind(this);
+    this.listeners = [];
   }
 
   componentDidMount() {
-    this.unsubscribe = snippetOutputListener(this.id);
-  }
-
-  componentWillUnmount() {
-    if (this.unsubscribe) this.unsubscribe();
-  }
-
-  doSubscribe() {
-    console.log(`Subscribing to ${this.id}...`);
-    this.unsubscribe = db.collection('snippetOutputs').doc(this.id)
-      .onSnapshot((doc) => {
-        console.log('Got doc: ', doc);
-        console.log('doc data: ', doc.data());
-
-        if (doc.data()) {
-          this.setState({ output: doc.data().output });
-        } else {
-          this.setState({ output: 'Loading...' });
-        }
-
-        db.collection('snippets').doc(this.id).set({ running: false }, { merge: true })
-          .then(() => this.setState({ running: false }));
+    // this.listeners.push(snippetListener(this.id, this.setText));
+    // this.listeners.push(snippetListener(this.id, this.setRunning));
+    this.listeners.push(snippetOutputListener(this.id, this.setOutput));
+    snippetById(this.id)
+      .then((data) => {
+        const { text } = data.data();
+        console.log('text: ', text);
+        if (text) this.setState({ text });
       });
   }
 
-  async runCodeHelper() {
-    if (!this.id) {
-      console.log('Saving');
-      await this.saveCode();
-    }
-
-    console.log('Set running to true');
-    await db.collection('snippets').doc(this.id).set({ running: true }, { merge: true });
+  componentWillUnmount() {
+    this.listeners.forEach(unsubscribeListener => unsubscribeListener());
   }
 
-  runCode() {
-    this.runCodeHelper()
-      .then(() => console.log('Reached before'))
-      .then(() => { console.log('Reached before doSubscribe call'); this.doSubscribe(); })
-      .then(() => console.log('Reached after'))
-      .catch(err => console.error(`${err} : Error running snippet.`));
-  }
+  setStateFieldFromSnapshot = (snapshot, field) => {
+    const data = snapshot.data();
+    if (data && data[field]) {
+      console.log("==================================")
+      console.log("STATE BEFORE:", this.state);
+      console.log("field:", field);
+      console.log("data", data);
+      console.log("data[field]", data[field] )
+      this.setState({ [field]: data[field] });
+      console.log("STATE AFTER:", this.state);
+      console.log("==================================")
 
-  stopCode() {
-    db.collection('snippets').doc(this.id).set({ running: false }, { merge: true })
-      .catch(() => console.error('Error stopping snippet.'));
-  }
-
-  saveCode() {
-    const { notebook, language, value } = this.state;
-    const docBody = { notebook, language, text: value };
-
-    if (!this.id) {
-      console.log('A');
-      return db.collection('snippets')
-        .add(docBody)
-        .then((ref) => { this.id = ref.id; });
-    } else {
-      console.log('B');
-      return db.collection('snippets').doc(this.id)
-        .set(docBody, { merge: true })
-        .then(() => {});
     }
   }
+  // setText = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'text');
+  // setRunning = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'running');
+  setOutput = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'output');
 
   toggleSnippetVisibility = (evt) => {
     evt.preventDefault();
@@ -114,19 +77,21 @@ class Snippet extends Component {
         { this.state.snippetVisible &&
           <div className="snippet-body">
             <CodeMirror
-              value={this.state.output}
+              value={this.state.text}
               options={{
                 mode: 'javascript',
                 theme: 'material',
                 lineNumbers: true,
               }}
-              onBeforeChange={(editor, data, output) => {
-                this.setState({ output });
+              onBeforeChange={(editor, data, text) => {
+                this.setState({ text });
               }}
-              onChange={(editor, data, output) => {
-                console.log('state changed: ', output);
-                console.log('editor: ', editor);
-                console.log('data: ', data);
+              onChange={(editor, data, text) => {
+                updateSnippetText(this.id, text);
+                // In case you need to know what these params include:
+                // console.log('state changed: ', text);
+                // console.log('editor: ', editor);
+                // console.log('data: ', data);
               }}
             />
             <CardActions>
@@ -138,7 +103,10 @@ class Snippet extends Component {
             </CardActions>
           </div>
         }
-        <h1>{this.state.output}</h1>
+        {
+          this.state.output &&
+          <CodeOutput output={this.state.output} />
+        }
       </Card>
     );
   }
