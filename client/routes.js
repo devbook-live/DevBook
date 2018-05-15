@@ -53,7 +53,7 @@ const Routes = () => (
         */
       }
 
-      {/* Displays our Login component as a fallback */}
+      {/* Displays our Notebook component as a fallback */}
       <Route component={SingleNotebook} /> {/* empty notebook */}
     </Switch>
   </BrowserRouter>

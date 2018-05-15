@@ -37,26 +37,34 @@ form div {
 .authForm {
   display: flex;
   flex-direction: column;
+  align-items: center;
   flex-grow: 1;
   margin: 15px;
   height: 400px;
 
 }
 
-.OAuth {
+/* .OAuth {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   flex-grow: 1;
   margin: 15px;
   height: 400px;
-}
+} */
 
-.OAuth-button {
-  width: 200px;
+#OAuth-button {
+  margin: '30px';
+  width: '200px';
 }
 
 #submitButton {
-  width: 200px
+  width: 200px;
+  margin-top: 16px;
+  /* padding-bottom: 40px !important; */
+  display: flex;
+  align-content: center !important;
 }
 
 

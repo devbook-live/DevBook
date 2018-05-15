@@ -114,7 +114,7 @@ class AuthForm extends Component {
               onChange={this.handleChange}
               value={password}
             />
-            <FlatButton primary id="submitButton" label={formName} type="submit" />
+            <FlatButton primary id="submitButton" label={formName} labelStyle={{ marginBottom: '100px' }} type="submit" />
             {this.state.error && this.state.error.response && <div>{this.state.error.response.data}</div>}
           </form>
         </Card>
@@ -125,10 +125,25 @@ class AuthForm extends Component {
           type="submit"
           primary
         /> */}
-        <Card className="OAuth">
+        <Card
+          className="OAuth"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexGrow: 1,
+            margin: '15px',
+            height: '400px',
+            width: '25px',
+          }}
+        >
           <RaisedButton
             label="Login with Google"
-            style={{ margin: 12 }}
+            style={{
+              margin: '30px',
+              width: '200px',
+            }}
             icon={<FontIcon className="muidocs-icon-custom-github" />}
             backgroundColor="#0D47A1"
             labelColor="#ffffff"
@@ -138,7 +153,10 @@ class AuthForm extends Component {
           <br />
           <RaisedButton
             label="Login with GitHub"
-            style={{ margin: 12 }}
+            style={{
+              margin: '30px',
+              width: '200px',
+            }}
             icon={<FontIcon className="muidocs-icon-custom-github" />}
             backgroundColor="#EF6C00"
             labelColor="#ffffff"
