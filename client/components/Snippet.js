@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { PlayPauseDelete, CodeOutput } from '../components';
 import { db } from '../../firebase/initFirebase';
-import { snippetListener, snippetOutputListener, updateSnippetText } from '../crud/snippet';
+import { snippetListener, snippetOutputListener, updateSnippetText, snippetById } from '../crud/snippet';
 
 /* props passed down from SingleNotebook:
  - `snippetId`: the id for this snippet
@@ -22,14 +22,22 @@ class Snippet extends Component {
       text: 'console.log(\'Hello World!\');',
       output: '', // Docker client output, via firestore "snippetOutputs" collection
       snippetVisible: true,
+      running: false,
     };
     this.id = props.snippetId;
     this.listeners = [];
   }
 
   componentDidMount() {
-    this.listeners.push(snippetListener(this.id, this.setText));
+    // this.listeners.push(snippetListener(this.id, this.setText));
+    // this.listeners.push(snippetListener(this.id, this.setRunning));
     this.listeners.push(snippetOutputListener(this.id, this.setOutput));
+    snippetById(this.id)
+      .then((data) => {
+        const { text } = data.data();
+        console.log('text: ', text);
+        if (text) this.setState({ text });
+      });
   }
 
   componentWillUnmount() {
@@ -38,9 +46,20 @@ class Snippet extends Component {
 
   setStateFieldFromSnapshot = (snapshot, field) => {
     const data = snapshot.data();
-    if (data) this.setState({ [field]: data[field] });
+    if (data && data[field]) {
+      console.log("==================================")
+      console.log("STATE BEFORE:", this.state);
+      console.log("field:", field);
+      console.log("data", data);
+      console.log("data[field]", data[field] )
+      this.setState({ [field]: data[field] });
+      console.log("STATE AFTER:", this.state);
+      console.log("==================================")
+
+    }
   }
-  setText = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'text');
+  // setText = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'text');
+  // setRunning = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'running');
   setOutput = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'output');
 
   toggleSnippetVisibility = (evt) => {
@@ -58,19 +77,19 @@ class Snippet extends Component {
         { this.state.snippetVisible &&
           <div className="snippet-body">
             <CodeMirror
-              value={this.state.output}
+              value={this.state.text}
               options={{
                 mode: 'javascript',
                 theme: 'material',
                 lineNumbers: true,
               }}
-              onBeforeChange={(editor, data, output) => {
-                this.setState({ output });
+              onBeforeChange={(editor, data, text) => {
+                this.setState({ text });
               }}
-              onChange={(editor, data, output) => {
-                updateSnippetText(this.id, output);
+              onChange={(editor, data, text) => {
+                updateSnippetText(this.id, text);
                 // In case you need to know what these params include:
-                // console.log('state changed: ', output);
+                // console.log('state changed: ', text);
                 // console.log('editor: ', editor);
                 // console.log('data: ', data);
               }}

@@ -26,7 +26,10 @@ const Footer = ({ notebookId, users, groups }) => (
               evt.preventDefault();
               createSnippet('', 'javascript', notebookId, users, groups)
               // then, add this snippet to the current notebook
-                .then(newSnippet => addSnippet(notebookId, newSnippet.id));
+                .then(newSnippet => {
+                  console.log("new snippet", newSnippet)
+                  addSnippet(notebookId, newSnippet.id)
+                });
             }}
           />
         </FloatingActionButton>

@@ -21,7 +21,7 @@ export default class SingleNotebook extends Component {
       users: ['2HrJnNSzOebAy2XihlU944ZpWts2'], // [auth.currentUser], --for now dummy data
       clients: [],
       groups: [],
-      snippets: [],
+      snippets: {},
       listeners: {
         users: null,
         clients: null,
@@ -42,7 +42,8 @@ export default class SingleNotebook extends Component {
           notebookSnippets(notebookId),
         ]);
       })
-      .then(([users, clients, groups, snippets]) => {
+      .then(([users, clients, groups, snippetsSnapshot]) => {
+        const snippets = this.orderSnippets(snippetsSnapshot);
         this.setState({ users, clients, groups, snippets });
         this.addListeners();
       });
@@ -87,7 +88,7 @@ export default class SingleNotebook extends Component {
         users: notebookUserListener(notebookId, snapshot => this.populateNotebook('users', snapshot)),
         clients: notebookClientListener(notebookId, snapshot => this.populateNotebook('clients', snapshot)),
         groups: notebookGroupListener(notebookId, snapshot => this.populateNotebook('groups', snapshot)),
-        snippets: notebookSnippetListener(notebookId, snapshot => this.populateNotebook('snippets', snapshot)),
+        snippets: notebookSnippetListener(notebookId, snapshot => this.orderSnippets(snapshot)),
       },
     });
   }
@@ -101,6 +102,25 @@ export default class SingleNotebook extends Component {
       [stateField]: fieldSnapshot.docs.filter(d => d.data().exists).map(d => d.id),
     });
 
+  orderSnippets = (snapshot) => {
+    // const ordered = snapshot.docs
+    //   // .sort((a,b) => +a.id > +b.id)
+    //   .map(doc => doc.data());
+    // const snippets = Object.keys(ordered).reduce((snippetState, nextSnippetIdx) => {
+    //   snippetState[nextSnippetIdx] = Object.keys(ordered[nextSnippetIdx])[0];
+    //   return snippetState;
+    // }, {});
+
+    const snippets = snapshot.docs.reduce((snippetState, nextDoc) => {
+      const idx = nextDoc.id;
+      const snippetId = Object.keys(nextDoc.data())[0];
+      snippetState[idx] = snippetId;
+      return snippetState;
+    }, {});
+
+    this.setState({ snippets });
+  }
+
   render() {
     const { notebookId } = this.props.match.params;
     return (
@@ -113,11 +133,21 @@ export default class SingleNotebook extends Component {
           snippets={this.state.snippets}
         />
         {
-          this.state.snippets.map(snippetId => (
-            <div className="single-notebook-code-container" key={snippetId}>
-              <CodeSnippet snippetId={snippetId} notebookId={notebookId} />
-            </div>
-          ))
+          this.state.snippets && Object.keys(this.state.snippets)
+            .sort((a, b) => a > b)
+            .map(index => {
+              const snippetId = this.state.snippets[index];
+              return (
+                <div className="single-notebook-code-container" key={snippetId}>
+                  <CodeSnippet snippetId={snippetId} notebookId={notebookId} />
+                </div>
+              )
+            })
+          // this.state.snippets.map(snippetId => (
+          //   <div className="single-notebook-code-container" key={snippetId}>
+          //     <CodeSnippet snippetId={snippetId} notebookId={notebookId} />
+          //   </div>
+          // ))
         }
 
         <NotebookFooter
