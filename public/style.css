@@ -21,6 +21,28 @@ form div {
 }
 
 /* ---- Single Notebook ---- */
+
+.single-notebook-snippets-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: '20px';
+}
+
+/* .snippet-header {
+  border-bottom: 1px solid grey;
+} */
+
+.snippet-body {
+  display: flex;
+  justify-content: center;
+}
+
+.snippet-code-body {
+  box-shadow: -1px 4px 6px -1px grey;
+  width: 80%;
+  margin-bottom: 10px;
+}
+
 .single-notebook-footer {
   position: fixed;
   bottom: 0;

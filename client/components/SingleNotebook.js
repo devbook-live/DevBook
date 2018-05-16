@@ -132,23 +132,25 @@ export default class SingleNotebook extends Component {
           groups={this.state.groups}
           snippets={this.state.snippets}
         />
-        {
-          this.state.snippets && Object.keys(this.state.snippets)
-            .sort((a, b) => a > b)
-            .map(index => {
-              const snippetId = this.state.snippets[index];
-              return (
-                <div className="single-notebook-code-container" key={snippetId}>
-                  <CodeSnippet snippetId={snippetId} notebookId={notebookId} />
-                </div>
-              )
-            })
-          // this.state.snippets.map(snippetId => (
-          //   <div className="single-notebook-code-container" key={snippetId}>
-          //     <CodeSnippet snippetId={snippetId} notebookId={notebookId} />
-          //   </div>
-          // ))
-        }
+        <div className="single-notebook-snippets-container">
+          {
+            this.state.snippets && Object.keys(this.state.snippets)
+              .sort((a, b) => a > b)
+              .map(index => {
+                const snippetId = this.state.snippets[index];
+                return (
+                  <div className="single-notebook-code-container" key={snippetId}>
+                    <CodeSnippet snippetId={snippetId} notebookId={notebookId} />
+                  </div>
+                )
+              })
+            // this.state.snippets.map(snippetId => (
+            //   <div className="single-notebook-code-container" key={snippetId}>
+            //     <CodeSnippet snippetId={snippetId} notebookId={notebookId} />
+            //   </div>
+            // ))
+          }
+        </div>
 
         <NotebookFooter
           notebookId={this.props.match.params.notebookId}

@@ -3,6 +3,7 @@
 import * as firebase from 'firebase';
 import Remove from 'material-ui/svg-icons/content/remove';
 import React, { Component } from 'react';
+import Paper from 'material-ui/Paper';
 import { Card, CardHeader, CardText, CardActions } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Controlled as CodeMirror } from 'react-codemirror2';
@@ -14,6 +15,12 @@ import { snippetListener, snippetOutputListener, updateSnippetText, snippetById 
  - `snippetId`: the id for this snippet
  - `notebookId`: the id for this snippet's currently viewable notebook
 */
+
+/* ----- STYLES ----- */
+const snippetStyle = {
+  margin: '0px 100px 0px 100px',
+};
+/* ----- END STYLES ----- */
 
 class Snippet extends Component {
   constructor(props) {
@@ -70,13 +77,14 @@ class Snippet extends Component {
   render() {
     const { snippetId, notebookId } = this.props;
     return (
-      <Card>
+      <Card style={snippetStyle}>
         <div className="snippet-header">
           <Remove onClick={this.toggleSnippetVisibility} />
         </div>
         { this.state.snippetVisible &&
           <div className="snippet-body">
             <CodeMirror
+              className="snippet-code-body"
               value={this.state.text}
               options={{
                 mode: 'javascript',
