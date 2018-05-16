@@ -25,7 +25,36 @@ form div {
   position: fixed;
   bottom: 0;
   z-index: 3;
+  width: 100%;
+  display: flex;
+  margin: 8px;
+  padding: 10px 0px 10px 0px;
 }
+
+.footer-right {
+  margin-right: 10px;
+}
+
+.footer-add-btn {
+  margin-left: 10px;
+}
+
+.footer-play-btn, .footer-pause-btn, .footer-delete-btn {
+  margin-right: 10px;
+}
+
+.footer-play-btn > button {
+  width: 25px;
+  height: 25px;
+}
+
+/* ---- play/pause/delete ---- */
+.snippet-play-pause-delete-btns {
+  display: flex;
+  justify-content: flex-end;
+  height: 30px;
+}
+
 
 /* AUTH FORM */
 

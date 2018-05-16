@@ -89,8 +89,17 @@ const addAuthor = (docId, userId) =>
   addDocToSubcollection('notebooks', docId, 'users', userId);
 const addGroup = (docId, groupId) =>
   addDocToSubcollection('notebooks', docId, 'groups', groupId);
-const addSnippet = (docId, snippetId) =>
-  addDocToSubcollection('notebooks', docId, 'snippets', snippetId);
+// const addSnippet = (docId, snippetId) =>
+//   addDocToSubcollection('notebooks', docId, 'snippets', snippetId);
+
+
+
+const addSnippet = (notebookId, snippetId) => {
+  const snippetIdx = db.collection('notebooks' + '/' + notebookId + '/' + 'snippets').get();
+  console.log('SNIPPET INDICES: ', snippetIdx);
+
+  //db.doc('notebooks' + '/' + notebookId + '/' + 'snippets' + '/' + counter).set({ [snippetId]: true });
+};
 // the addl "false" arg refers to the fact that want to remove (rather than add) this entry.
 const removeClient = (docId, clientId) =>
   removeDocFromSubcollection('notebooks', docId, 'clients', clientId);
@@ -106,14 +115,30 @@ const removeDocGroup = (docId, groupId) =>
 const removeNotebookSnippet = (docId, snippetId) =>
   removeDocFromSubcollection('notebooks', docId, 'snippets', snippetId);
 
+
+// The following are helper functions for running all snippets in a notebook. The strategy is to take a slight pause (1ms? 10?) after setting the `running` field to `true` for each snippet in a notebook, to avoid concurrency issues with actually running snippets.
+// Resource on `sleep`: https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+const sleep = ms => () => new Promise(resolve => setTimeout(resolve, ms));
+
+const oneMsSleep = sleep(1);
+const tenMsSleep = sleep(10);
+
 const toggleAllSnippetsInNotebook = (notebookId, status) =>
   notebookSnippets(notebookId)
     .then((snippetIds) => {
-      const runSnippets = status === 'running'
-        ? snippetIds.map(id => markSnippetAsRunning(id))
-        : snippetIds.map(id => markSnippetAsDormant(id));
-      return Promise.all(runSnippets);
+      if (status === 'running') {
+        snippetIds.forEach(async (id) => {
+          markSnippetAsRunning(id);
+          await tenMsSleep();
+        });
+      } else {
+        snippetIds.forEach(async (id) => {
+          markSnippetAsDormant(id);
+          await oneMsSleep();
+        });
+      }
     });
+
 const runAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, 'running');
 const pauseAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, 'dormant');
 
