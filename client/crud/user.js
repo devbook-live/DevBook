@@ -1,4 +1,9 @@
-const { db } = require('../../firebase/initFirebase');
+import { db } from '../../firebase/initFirebase';
+import { allEntities } from './utils';
+
+// Read ops:
+export const allUsers = () => allEntities('users');
+
 
 // Add a user to the database
 export const addUserFunction = (id, userObj) => {
@@ -50,6 +55,7 @@ export const fetchUserFunction = (id) => {
     });
 };
 
+// DEPRECATED
 // fetch all users
 export const fetchAllUsersFunction = () => {
   db.collection('users')

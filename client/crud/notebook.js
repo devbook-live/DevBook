@@ -11,6 +11,7 @@ docsByUser
 docsByGroup
 docsBySnippet
 allDocs
+allNotebooks
 // Update ops:
 addDocClient // note this is a client *currently looking at* this doc
 addDocAuthor
@@ -37,6 +38,8 @@ const createNotebook = (users, groups = {}, snippets = {}) =>
   createEntity('notebooks', { users, groups, snippets });
 
 // Read ops:
+const allNotebooks = () => {};
+
 const notebookById = id => entityById('notebooks', id);
 
 const notebookUserListener = (notebookId, callback) =>
@@ -176,6 +179,7 @@ module.exports = {
   docsByGroup,
   docsBySnippet,
   allDocs,
+  allNotebooks,
 
   notebookUsers,
   notebookGroups,
