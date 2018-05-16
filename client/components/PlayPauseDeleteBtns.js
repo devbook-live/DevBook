@@ -35,8 +35,8 @@ This helper component declares an interface to start ("play") executing code, st
 
 
 const PlayPauseDeleteBtns = ({ scope, notebookId, snippetId }) => (
-  <React.Fragment>
-    <FloatingActionButton>
+  <div className="footer-right">
+    <FloatingActionButton className="footer-play-btn">
       <PlayArrow
         onClick={(evt) => {
           evt.preventDefault();
@@ -46,7 +46,7 @@ const PlayPauseDeleteBtns = ({ scope, notebookId, snippetId }) => (
       />
     </FloatingActionButton>
 
-    <FloatingActionButton>
+    <FloatingActionButton className="footer-pause-btn">
       <Pause
         onClick={(evt) => {
           evt.preventDefault();
@@ -56,7 +56,7 @@ const PlayPauseDeleteBtns = ({ scope, notebookId, snippetId }) => (
       />
     </FloatingActionButton>
 
-    <FloatingActionButton>
+    <FloatingActionButton className="footer-delete-btn">
       <Delete
         onClick={(evt) => {
           evt.preventDefault();
@@ -69,7 +69,7 @@ const PlayPauseDeleteBtns = ({ scope, notebookId, snippetId }) => (
         }}
       />
     </FloatingActionButton>
-  </React.Fragment>
+  </div>
 );
 
 export default PlayPauseDeleteBtns;

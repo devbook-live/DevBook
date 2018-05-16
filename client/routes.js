@@ -12,6 +12,7 @@ import {
   AllNotebooks,
   SingleNotebook,
   CreateGroup,
+  CreateNotebook,
 } from './components';
 import Snippet from './components/Snippet';
 
@@ -53,7 +54,7 @@ const Routes = () => (
     }
 
     {/* Displays our Notebook component as a fallback */}
-    <Route component={SingleNotebook} /> {/* empty notebook */}
+    <Route component={CreateNotebook} /> {/* empty notebook */}
   </Switch>
 );
 
