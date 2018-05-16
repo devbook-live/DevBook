@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { Navbar } from './components';
 import Routes from './routes';
 
 const { auth, db } = require('../firebase/initFirebase');
 
-const App = () => {
-  return (
-    <div>
-      <Navbar />
-      <Routes />
-    </div>
-  );
-};
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-export default App;
+  render() {
+    return (
+      <div>
+        <Navbar />
+        <Routes />
+      </div>
+    );
+  }
+}

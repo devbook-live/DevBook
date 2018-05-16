@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // Material UI imports
 import FlatButton from 'material-ui/FlatButton';
@@ -9,24 +10,14 @@ const LogIn = () => (
     <FlatButton
       style={{ color: white }}
       label="Sign Up"
-      href="/signup"
+      containerElement={<Link to="/signup" />}
     />
     <FlatButton
       style={{ color: white }}
       label="Login"
-      href="/login"
+      containerElement={<Link to="/login" />}
     />
   </div>
 );
 
 export default LogIn;
-
-// class Login extends Component {
-//   static muiName = 'FlatButton';
-
-//   render() {
-//     return (
-//       <FlatButton {...this.props} label="Login" />
-//     );
-//   }
-// }

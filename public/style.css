@@ -80,6 +80,10 @@ form div {
   align-content: center !important;
 }
 
+#submitButton div {
+  margin: 0;
+}
+
 
 
 /* SINGLE GROUP FORM */

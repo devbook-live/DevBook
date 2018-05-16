@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 
 // Material UI imports
 import IconMenu from 'material-ui/IconMenu';
@@ -6,44 +7,36 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import Avatar from 'material-ui/Avatar';
 
-const LoggedIn = ({ logout, user }) => {
-  console.log("LOGOUT::::: ", logout);
-  console.log("USER::::: ", user);
+const loggedIn = ({ user, logout }) => {
   return (
-    <IconMenu
-      iconButtonElement={
-        <IconButton>
-          <Avatar
-            style={{ paddingBottom: '10000 !important' }}
-            src={
-              user.photoURL
-              ? user.photoURL
-              : 'https://i0.wp.com/www.thisblogrules.com/wp-content/uploads/2010/02/batman-for-facebook.jpg?resize=250%2C280'
-            }
-          />
-        </IconButton>
-      }
-      targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-      anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-    >
-      <MenuItem primaryText="Profile" />
-      <MenuItem primaryText="Notebooks" />
-      <MenuItem primaryText="Sign out" onClick={() => logout()} />
-    </IconMenu>
+    <div style={{ display: 'flex', paddingRight: '20px' }}>
+      <h5 style={{ color: 'white', paddingRight: '20px' }}>Welcome, {user.displayName ? user.displayName : user.email}</h5>
+      <IconMenu
+        iconButtonElement={
+          <IconButton>
+            <Avatar
+              style={{ paddingBottom: '10000 !important' }}
+              src={
+                user.photoURL
+                ? user.photoURL
+                : 'https://i0.wp.com/www.thisblogrules.com/wp-content/uploads/2010/02/batman-for-facebook.jpg?resize=250%2C280'
+              }
+            />
+          </IconButton>
+        }
+        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <Link to={`/users/${user.uid}`} >
+          <MenuItem primaryText="Profile" />
+        </Link>
+        <Link to={`/users/${user.uid}/notebooks`} >
+          <MenuItem primaryText="Notebooks" />
+        </Link>
+        <MenuItem primaryText="Sign out" onClick={() => logout()} />
+      </IconMenu>
+    </div>
   );
 };
 
-export default LoggedIn;
-
-
-//  <div>
-//   {/* The navbar will show these links after you log in */}
-//   <Link to="/home">Home</Link>
-//   <Link to="/groups">Groups</Link>
-//   <Link to="/testSnippet">Notebooks</Link>
-//   <Link to="/groups/new">CreateGroup</Link>
-//   <Link to="/groups/Group 2">Show SingleGroup (DEMO)</Link>
-//   <Link to="/singleUser">Show SingleUser (DEMO)</Link>
-//   <h3>Welcome, {this.state.displayName}</h3>
-//   <Link onClick={this.logout} to="/login">Logout</Link>
-// </div>
+export default loggedIn;

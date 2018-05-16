@@ -39,30 +39,40 @@ class SingleUser extends Component {
   render() {
     const { userId } = this.state;
     const { userInfo } = this.state;
-    
+    console.log('INFOOOO: ', userInfo);
+
     return (
       <div>
         <div className="userPage">
           <div className="userPic">
-            <CardMedia
-              className="userPic"
-              overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-            >
+            <CardMedia className="userPic">
               <img src="https://i0.wp.com/www.thisblogrules.com/wp-content/uploads/2010/02/batman-for-facebook.jpg?resize=250%2C280" alt="" />
             </CardMedia>
             <CardTitle
-              title={`Name: ${userInfo.displayName}`}
-              subtitle="Card subtitle"
+              title={userInfo.displayName || userInfo.name || userInfo.email}
+              subtitle='About me:'
             />
             <CardText>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-              Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-              Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+              { userInfo.aboutMe || 'Update profile with a short bio!'}
             </CardText>
             <CardActions>
-              <FlatButton label="Action1" />
-              <FlatButton label="Action2" />
+              <FlatButton
+                label="Edit Profile"
+                backgroundColor="#a4c639"
+                hoverColor="#8AA62F"
+                style={{
+                  marginRight: '15px',
+                  width: '150.25px',
+                }}
+              />
+              <FlatButton
+                label="Delete Profile"
+                backgroundColor="red"
+                hoverColor="#bf0000"
+                style={{
+                  width: '150.25px',
+                }}
+              />
             </CardActions>
           </div>
           <div className="userInfo">
@@ -95,3 +105,5 @@ class SingleUser extends Component {
 }
 
 export default SingleUser;
+
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi. Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque. Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.

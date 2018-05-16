@@ -31,10 +31,10 @@ export default class Navbar extends Component {
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        // if there is a user logged in, change state of loggedInUser to true
+        // if there is a user logged in, change state of loggedInUser to user obj.
         this.setState({
           loggedInUser: user,
-          displayName: auth.currentUser.displayName,
+          displayName: auth.currentUser.displayName || auth.currentUser.email,
         });
 
         const { uid } = user;
@@ -68,73 +68,19 @@ export default class Navbar extends Component {
   render() {
     return (
       <div>
-<<<<<<< HEAD
         <AppBar
           title="DevBook( )"
           showMenuIconButton={false}
           iconElementRight={this.state.loggedInUser ? <LoggedIn logout={this.logout} user={this.state.loggedInUser} /> : <Login />}
           style={{
             color: (0, 188, 212),
-            fontFamily: 'Lucida Grande',
+            fontFamily: 'sans-serif',
           }}
         />
-=======
-        <h1>DevBook()</h1>
-        <nav>
-          {this.state.isLoggedIn ? (
-            <div>
-              {/* The navbar will show these links after you log in */}
-              <Link to="/home">Home</Link>
-              <Link to="/groups">Groups</Link>
-              <Link to="/testSnippet">Notebooks</Link>
-              <Link to="/groups/new">CreateGroup</Link>
-              <Link to="/groups/Group 2">Show SingleGroup (DEMO)</Link>
-              {/* <Link to="/singleUser">Show SingleUser (DEMO)</Link> */}
-              <h3>Welcome, {this.state.displayName}</h3>
-              <Link onClick={this.logout} to="/login">Logout</Link>
-            </div>
-          ) : (
-            <div>
-              {/* The navbar will show these links before you log in */}
-              <Link to="/login">Login</Link>
-              <Link to="/signup">Sign Up</Link>
-              <Link to="/testSnippet">Example Snippet</Link>
-            </div>
-          )}
-        </nav>
-        <hr />
->>>>>>> master
       </div>
     );
   }
 }
-
-//        <div>
-//         <h1>DevBook()</h1>
-//         <nav>
-//           {this.state.loggedInUser ? (
-//             <div>
-//               {/* The navbar will show these links after you log in */}
-//               <Link to="/home">Home</Link>
-//               <Link to="/groups">Groups</Link>
-//               <Link to="/testSnippet">Notebooks</Link>
-//               <Link to="/groups/new">CreateGroup</Link>
-//               <Link to="/groups/Group 2">Show SingleGroup (DEMO)</Link>
-//               <Link to="/singleUser">Show SingleUser (DEMO)</Link>
-//               <h3>Welcome, {this.state.displayName}</h3>
-//               <Link onClick={this.logout} to="/login">Logout</Link>
-//             </div>
-//           ) : (
-//             <div>
-//               {/* The navbar will show these links before you log in */}
-//               <Link to="/login">Login</Link>
-//               <Link to="/signup">Sign Up</Link>
-//               <Link to="/testSnippet">Example Snippet</Link>
-//             </div>
-//           )}
-//         </nav>
-//         <hr />
-//       </div>
 
 Navbar.prototype.logout = () => {
   auth.signOut().then(() => {

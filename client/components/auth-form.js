@@ -114,17 +114,10 @@ class AuthForm extends Component {
               onChange={this.handleChange}
               value={password}
             />
-            <FlatButton primary id="submitButton" label={formName} labelStyle={{ marginBottom: '100px' }} type="submit" />
+            <RaisedButton primary id="submitButton" label={formName} type="submit" />
             {this.state.error && this.state.error.response && <div>{this.state.error.response.data}</div>}
           </form>
         </Card>
-        {/* styled what the broken button in the form should look like
-        <RaisedButton
-          onClick={this.handleSubmit}
-          label={formName}
-          type="submit"
-          primary
-        /> */}
         <Card
           className="OAuth"
           style={{
