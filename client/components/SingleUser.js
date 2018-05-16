@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unused-state */
 
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
@@ -8,61 +9,83 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { DocsListByUserId, GroupsListByUserId } from './';
 import { fetchUserFunction } from '../crud/user';
-import { db } from '../../firebase/initFirebase';
+
+// firebase imports
+import { db, auth } from '../../firebase/initFirebase';
 
 class SingleUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userInfo: {},
+      userInfo: {
+        displayName: auth.currentUser.displayName,
+        photoURL: auth.currentUser.photoURL,
+        created: this.creationHelper(auth.currentUser.metadata.creationTime),
+      },
       userId: this.props.match.params.userId,
       value: '',
     };
   }
 
   componentDidMount() {
-    const { userId } = this.props.match.params;
-    this.unsubscribe = db.collection('users').doc(userId)
-      .onSnapshot((doc) => {
-        this.setState({ userInfo: doc.data() });
-      });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  handleChange(value) {
-    this.setState({ value });
+    db.collection('users').doc(auth.currentUser.uid).get()
+      .then((user) => {
+        const state = { aboutMe: user.data().aboutMe };
+        this.setState(state);
+      })
+      .catch(err => console.error(err));
   }
 
   render() {
-    const { userId } = this.state;
-    const { userInfo } = this.state;
-    
+    const { userId, userInfo, aboutMe } = this.state;
+    console.log('INFOOOO: ', auth.currentUser);
+    console.log('USERRRR INFOOOO: ', this.state.aboutMe);
+    const user = auth.currentUser;
     return (
       <div>
         <div className="userPage">
           <div className="userPic">
-            <CardMedia
-              className="userPic"
-              overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-            >
-              <img src="https://i0.wp.com/www.thisblogrules.com/wp-content/uploads/2010/02/batman-for-facebook.jpg?resize=250%2C280" alt="" />
+            <CardMedia className="userPic">
+              <img
+                src={
+                user.photoURL
+                ? user.photoURL
+                : 'https://i0.wp.com/www.thisblogrules.com/wp-content/uploads/2010/02/batman-for-facebook.jpg?resize=250%2C280'}
+                alt=""
+              />
             </CardMedia>
             <CardTitle
-              title={`Name: ${userInfo.displayName}`}
-              subtitle="Card subtitle"
+              title={userInfo.displayName}
+              subtitle="About me:"
             />
             <CardText>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-              Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-              Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+              {`Joined ${userInfo.created}`}
+            </CardText>
+            <CardText>
+              { aboutMe || 'Update profile with a short bio!'}
             </CardText>
             <CardActions>
-              <FlatButton label="Action1" />
-              <FlatButton label="Action2" />
+              <Link to={`/users/${userId}/edit`} >
+                <FlatButton
+                  label="Edit Profile"
+                  backgroundColor="#a4c639"
+                  hoverColor="#8AA62F"
+                  style={{
+                    color: 'white',
+                    marginRight: '15px',
+                    width: '150.25px',
+                  }}
+                />
+              </Link>
+              <FlatButton
+                label="Delete Profile"
+                backgroundColor="red"
+                hoverColor="#bf0000"
+                style={{
+                  color: 'white',
+                  width: '150.25px',
+                }}
+              />
             </CardActions>
           </div>
           <div className="userInfo">
@@ -95,3 +118,19 @@ class SingleUser extends Component {
 }
 
 export default SingleUser;
+
+SingleUser.prototype.deleteUser = () => {
+  const user = auth.currentUser;
+
+  user.delete().then(() => {
+    // need to redirect to Login
+  }).catch((error) => {
+    console.error(error);
+  });
+};
+
+SingleUser.prototype.creationHelper = (str) => {
+  return str.slice(0, -13);
+};
+
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi. Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque. Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.

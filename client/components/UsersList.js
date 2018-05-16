@@ -54,12 +54,18 @@ class UsersList extends Component {
 
   render() {
     const { usersInfo } = this.state;
+    console.log('USERSSSSS INFO: ', usersInfo);
     return (
       <div>
         <List>
           <Subheader>Users</Subheader>
           {
-            usersInfo.map(user => <ListItem key={user.id} primaryText={user.name} />)
+            usersInfo[0] && usersInfo.map((user) => {
+              return (<ListItem
+                key={user.id}
+                primaryText={user.displayName || user.name || user.email}
+              />);
+            })
           }
         </List>
       </div>

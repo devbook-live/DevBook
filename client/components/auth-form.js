@@ -6,7 +6,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
 import { Card } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
 import history from '../history';
 
 const { auth } = require('../../firebase/initFirebase');
@@ -114,21 +113,29 @@ class AuthForm extends Component {
               onChange={this.handleChange}
               value={password}
             />
-            <FlatButton primary id="submitButton" label={formName} type="submit" />
+            <RaisedButton primary id="submitButton" label={formName} type="submit" />
             {this.state.error && this.state.error.response && <div>{this.state.error.response.data}</div>}
           </form>
         </Card>
-        {/* styled what the broken button in the form should look like
-        <RaisedButton
-          onClick={this.handleSubmit}
-          label={formName}
-          type="submit"
-          primary
-        /> */}
-        <Card className="OAuth">
+        <Card
+          className="OAuth"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexGrow: 1,
+            margin: '15px',
+            height: '400px',
+            width: '25px',
+          }}
+        >
           <RaisedButton
             label="Login with Google"
-            style={{ margin: 12 }}
+            style={{
+              margin: '30px',
+              width: '200px',
+            }}
             icon={<FontIcon className="muidocs-icon-custom-github" />}
             backgroundColor="#0D47A1"
             labelColor="#ffffff"
@@ -138,7 +145,10 @@ class AuthForm extends Component {
           <br />
           <RaisedButton
             label="Login with GitHub"
-            style={{ margin: 12 }}
+            style={{
+              margin: '30px',
+              width: '200px',
+            }}
             icon={<FontIcon className="muidocs-icon-custom-github" />}
             backgroundColor="#EF6C00"
             labelColor="#ffffff"

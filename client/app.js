@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { Navbar } from './components';
 import Routes from './routes';
 
-const { auth, db } = require('../firebase/initFirebase');
-
-const App = () => {
+const app = () => {
   return (
     <div>
       <Navbar />
@@ -14,4 +12,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default app;
