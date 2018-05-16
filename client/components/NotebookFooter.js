@@ -10,17 +10,13 @@ import { notebookGroups, addSnippet } from '../crud/notebook';
 import { auth } from '../../firebase/initFirebase';
 import { PlayPauseDelete } from '../components';
 
-const style = {
-  marginRight: 20,
-};
-
 // props: this.props.notebookId
 const Footer = ({ notebookId, users, groups }) => (
-  <Paper zDepth={1} className="single-notebook-footer">
-    <BottomNavigation>
+  <Paper zDepth={1}>
+    <BottomNavigation className="single-notebook-footer">
 
       <div className="footer-left">
-        <FloatingActionButton style={style}>
+        <FloatingActionButton className="footer-add-btn">
           <ContentAdd
             onClick={(evt) => {
               evt.preventDefault();
@@ -36,7 +32,6 @@ const Footer = ({ notebookId, users, groups }) => (
       </div>
 
       <PlayPauseDelete
-        className="footer-right"
         scope="notebook"
         notebookId={notebookId}
       />{/* note "notebook" vs "snippet" scope */}
