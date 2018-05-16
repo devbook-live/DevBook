@@ -18,6 +18,7 @@ export { default as AllGroups } from './AllGroups';
 export { default as SingleGroup } from './SingleGroup';
 export { default as AllUsers } from './AllUsers';
 export { default as SingleUser } from './SingleUser';
+export { default as EditProfile } from './SingleUser-EditProfile';
 export { default as AllNotebooks } from './AllNotebooks';
 export { default as SingleNotebook } from './SingleNotebook';
 export { default as CreateGroup } from './CreateGroup';

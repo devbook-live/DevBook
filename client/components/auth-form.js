@@ -6,7 +6,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
 import { Card } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
 import history from '../history';
 
 const { auth } = require('../../firebase/initFirebase');

@@ -13,6 +13,7 @@ import {
   SingleNotebook,
   CreateGroup,
   CreateNotebook,
+  EditProfile,
 } from './components';
 import Snippet from './components/Snippet';
 
@@ -37,6 +38,7 @@ const Routes = () => (
 
     <Route exact path="/users" component={AllUsers} /> {/* all users ever */}
     <Route exact path="/users/:userId" component={SingleUser} /> {/* this user */}
+    <Route exact path="/users/:userId/edit" component={EditProfile} /> {/* this user */}
     <Route exact path="/users/:userId/groups" component={AllGroups} /> {/* filtered by who's in this user */}
     <Route exact path="/users/:userId/notebooks" component={AllNotebooks} /> {/* all notebooks for this user */}
 
