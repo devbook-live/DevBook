@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+/* eslint-disable no-underscore-dangle */
 
 /*
 CRUD Utils
@@ -23,9 +24,40 @@ import { db } from '../../firebase/initFirebase';
 
 // Create ops:
 // returns the created entity (or error)
-const createEntity = (collectionName, collectionFieldsObj) =>
-  db.collection(collectionName)
-    .add(collectionFieldsObj);
+//
+// So this is what the params can look like
+// collectionName: notebooks
+// collectionFieldsObj: { users: { null : true } }
+//
+// So it creates a new document in the collection with collection name
+// it gets back a document
+// Now we map on the keys of collectionFieldsObj
+// this would be users in the example
+// and then we map on the keys in that subobject ("null" in this case)
+// if the suboject is not empty (otherwise we just add a document to create subcollection)
+// and so we get an array of arrays of promises
+// and then we use reduce to flatten the array to get an array of promises
+// then we use promise.all to carry out the operations
+// and then we return the document reference
+const createEntity = (collectionName, collectionFieldsObj) => {
+  let _docRef;
+  return db.collection(collectionName).add({})
+    .then((docRef) => {
+      _docRef = docRef;
+      return Object.keys(collectionFieldsObj)
+        .map((subcollection) => {
+          const subcollectionPromiseAry = Object.keys(collectionFieldsObj[subcollection]).length > 0 ?
+            Object.keys(collectionFieldsObj[subcollection])
+              .map(subDocId => db.collection(collectionName).doc(docRef.id).collection(subcollection).doc(subDocId)
+                .set({ exists: true })) :
+            [db.collection(collectionName).doc(docRef.id).collection(subcollection).add({ exists: false })];
+          return subcollectionPromiseAry;
+        })
+        .reduce((prev, curr) => prev.concat(curr), []);
+    })
+    .then(promises => Promise.all(promises))
+    .then(() => _docRef);
+};
 
 // Read ops:
 const entityById = (collectionName, entityId) => {

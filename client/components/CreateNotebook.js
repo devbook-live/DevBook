@@ -16,8 +16,9 @@ export default class CreateNotebook extends Component {
     const createNotebookPromise =
       currentUser ? createNotebook({ currentUser }) : createNotebook({ null: true });
 
+    console.log('creating promise');
     createNotebookPromise
-      .then(docRef => this.setState({ notebookId: docRef.id }));
+      .then((docRef) => { console.log('notebook id: ', docRef.id); this.setState({ notebookId: docRef.id }); });
   }
 
   render() {
