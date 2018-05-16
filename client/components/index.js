@@ -24,3 +24,4 @@ export { default as CreateGroup } from './CreateGroup';
 // export { default as GroupHome } from './GroupHome';
 export { default as DocsListByUserId } from './DocsListByUserId';
 export { default as GroupsListByUserId } from './GroupsListByUserId';
+export { default as CreateNotebook } from './CreateNotebook';
