@@ -74,7 +74,23 @@ const allDocs = () => allEntities('notebooks');
 
 const notebookUsers = notebookId => getDocsInSubcollection('notebooks', notebookId, 'users');
 const notebookGroups = notebookId => getDocsInSubcollection('notebooks', notebookId, 'groups');
-const notebookSnippets = notebookId => getDocsInSubcollection('notebooks', notebookId, 'snippets');
+const notebookSnippets = (notebookId) => {
+  // getDocsInSubcollection('notebooks', notebookId, 'snippets')
+  return db.collection('notebooks' + '/' + notebookId + '/' + 'snippets').get()
+    // .then((result) => {
+    //   const ordered = result.docs
+    //   return ordered;
+      //   .sort((a,b) => +a.id > +b.id)
+      //   .map(doc => doc.data());
+      // return Object.keys(ordered).reduce((snippetState, nextSnippetIdx) => {
+      //     snippetState[nextSnippetIdx] = Object.keys(ordered[nextSnippetIdx])[0];
+      //     return snippetState;
+      //   }, {});
+    };
+
+    // const counter = +result.docs.map(doc => doc.id).sort((a,b) => a>b)[result.docs.length-1] || 0;
+
+// };
 const notebookClients = notebookId => getDocsInSubcollection('notebooks', notebookId, 'clients');
 
 
@@ -92,14 +108,15 @@ const addGroup = (docId, groupId) =>
 // const addSnippet = (docId, snippetId) =>
 //   addDocToSubcollection('notebooks', docId, 'snippets', snippetId);
 
-
-
 const addSnippet = (notebookId, snippetId) => {
-  const snippetIdx = db.collection('notebooks' + '/' + notebookId + '/' + 'snippets').get();
-  console.log('SNIPPET INDICES: ', snippetIdx);
-
-  //db.doc('notebooks' + '/' + notebookId + '/' + 'snippets' + '/' + counter).set({ [snippetId]: true });
+  db.collection('notebooks' + '/' + notebookId + '/' + 'snippets').get()
+    .then(result => {
+      const counter = +result.docs.map(doc => doc.id).sort((a,b) => a>b)[result.docs.length-1] || 0;
+      console.log('counter: ', counter);
+      db.doc('notebooks' + '/' + notebookId + '/' + 'snippets' + '/' + String(counter+1)).set({ [snippetId]: true });
+    })
 };
+
 // the addl "false" arg refers to the fact that want to remove (rather than add) this entry.
 const removeClient = (docId, clientId) =>
   removeDocFromSubcollection('notebooks', docId, 'clients', clientId);

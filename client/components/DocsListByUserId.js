@@ -20,7 +20,6 @@ class DocsListByUserId extends Component {
 
   componentDidMount() {
     const { userId } = this.props;
-    console.log('userId: ', userId);
     this.unsubscribe = db.collection('users').doc(userId)
       .onSnapshot((doc) => {
         this.onSnapshotCallback(doc).catch(err => console.error(err));
@@ -32,9 +31,9 @@ class DocsListByUserId extends Component {
   }
 
   async onSnapshotCallback(doc) {
-    if (doc.data().documents.length) {
+    if (doc.data().documents) {
       const docIds = Object.keys(doc.data().documents);
-      const docsInfo = (await Promise.all(docIds.map(docId => db.collection('documents').doc(docId).get()))).map(curDoc => curDoc.data());
+      const docsInfo = (await Promise.all(docIds.map(docId => db.collection('notebooks').doc(docId).get()))).map(curDoc => curDoc.data());
       this.setState({ docsInfo });
     }
   }

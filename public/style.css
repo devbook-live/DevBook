@@ -42,6 +42,19 @@ form div {
 .footer-play-btn, .footer-pause-btn, .footer-delete-btn {
   margin-right: 10px;
 }
+.output {
+  width: 100% !important;
+  margin: 0 auto !important;
+  border: 2px solid rgb(0, 188, 212) !important;
+  background-color: rgb(203, 239, 248) !important;
+  font-family: courier, monospace !important;
+  padding-left: 20px;
+}
+.single-notebook-code-container {
+  padding-bottom: 20px;
+  /* font-family: tahoma, arial, sans-serif; */
+
+}
 
 .footer-play-btn > button {
   width: 25px;

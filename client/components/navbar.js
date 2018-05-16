@@ -1,9 +1,7 @@
 /* eslint-disable class-methods-use-this */
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logout } from '../store';
 import history from '../history';
 import { fetchUserFunction, addUserFunction } from '../crud/user';
 
@@ -82,7 +80,7 @@ export default class Navbar extends Component {
               <Link to="/testSnippet">Notebooks</Link>
               <Link to="/groups/new">CreateGroup</Link>
               <Link to="/groups/Group 2">Show SingleGroup (DEMO)</Link>
-              <Link to="/singleUser">Show SingleUser (DEMO)</Link>
+              {/* <Link to="/singleUser">Show SingleUser (DEMO)</Link> */}
               <h3>Welcome, {this.state.displayName}</h3>
               <Link onClick={this.logout} to="/login">Logout</Link>
             </div>

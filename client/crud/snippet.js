@@ -55,7 +55,6 @@ const snippetById = (id) => {
     .get()
     .then((snippet) => {
       if (snippet.exists) {
-        console.log('Snippet data:', snippet.data());
         return snippet;
       }
       // else, snippet.data() will be undefined
