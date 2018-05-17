@@ -13,9 +13,8 @@ const loggedIn = ({ user, logout }) => {
       <h5 style={{ color: 'white', paddingRight: '20px' }}>Welcome, {user.displayName ? user.displayName : user.email}</h5>
       <IconMenu
         iconButtonElement={
-          <IconButton>
+          <IconButton className="AVATAR" style={{ padding: '0px' }}>
             <Avatar
-              style={{ paddingBottom: '10000 !important' }}
               src={
                 user.photoURL
                 ? user.photoURL
