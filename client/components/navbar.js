@@ -2,8 +2,9 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { addUserFunction } from '../crud/user';
 import history from '../history';
-import { fetchUserFunction, addUserFunction } from '../crud/user';
+
 
 // changes based on state.loggedInUser
 import LoggedIn from './navbar-loggedIn';
@@ -69,7 +70,11 @@ export default class Navbar extends Component {
     return (
       <div>
         <AppBar
-          title="DevBook( )"
+          title={<Link style={{ color: 'white', textDecoration: 'none' }}to="/">DevBook( )</Link>}
+          titleStyle={{
+            color: 'white',
+            textDecoration: 'none',
+          }}
           showMenuIconButton={false}
           iconElementRight={this.state.loggedInUser ? <LoggedIn logout={this.logout} user={this.state.loggedInUser} /> : <Login />}
           style={{
@@ -85,7 +90,8 @@ export default class Navbar extends Component {
 Navbar.prototype.logout = () => {
   auth.signOut().then(() => {
     // Sign-out successful
-    console.log('Sign-out successful: ', auth.currentUser);
+    history.push('/login');
+    console.log('Sign-out successful!');
   }, (error) => {
     // Log the error
     console.error(error);
