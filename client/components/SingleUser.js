@@ -38,8 +38,6 @@ class SingleUser extends Component {
 
   render() {
     const { userId, userInfo, aboutMe } = this.state;
-    console.log('INFOOOO: ', auth.currentUser);
-    console.log('USERRRR INFOOOO: ', this.state.aboutMe);
     const user = auth.currentUser;
     return (
       <div>

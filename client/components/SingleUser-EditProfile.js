@@ -54,8 +54,6 @@ export default class EditProfile extends Component {
 
   render() {
     const { displayName, aboutMe, photoURL } = this.state;
-    console.log(this.state);
-    console.log('CURRENNNTTTT USERRRR: ', auth.currentUser);
     return (
       <div>
         <Card>
