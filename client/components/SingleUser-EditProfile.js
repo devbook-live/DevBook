@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import history from '../history';
 
 // material-ui imports
 import { Card } from 'material-ui/Card';
@@ -9,12 +10,13 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { updateUserFunction } from '../crud/user';
 
 // firebase imports
-const { db, auth } = require('../../firebase/initFirebase');
+const { auth } = require('../../firebase/initFirebase');
 
 export default class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: auth.currentUser,
       displayName: '',
       aboutMe: '',
       photoURL: '',
@@ -36,7 +38,7 @@ export default class EditProfile extends Component {
   // With login, can access current user with auth.currentUser (currentUser.uid = user id)
   handleSubmit = (evt) => {
     evt.preventDefault();
-    const user = auth.currentUser;
+    const { user } = this.state;
     const displayName = evt.target.displayName.value;
     const aboutMe = evt.target.aboutMe.value;
     const photoURL = evt.target.photoURL.value;
@@ -49,11 +51,13 @@ export default class EditProfile extends Component {
       // we store 'aboutMe' in a user table with a ref to
       // the users id
       updateUserFunction(user.uid, { aboutMe });
+    }).then(() => {
+      history.push(`/users/${user.uid}`);
     }).catch(err => console.error(err));
   }
 
   render() {
-    const { displayName, aboutMe, photoURL } = this.state;
+    const { user, displayName, aboutMe, photoURL } = this.state;
     return (
       <div>
         <Card>
@@ -76,7 +80,12 @@ export default class EditProfile extends Component {
               onChange={this.handleChange}
               value={photoURL}
             />
-            <RaisedButton primary id="submitButton" label="Save Changes" type="submit" />
+            <RaisedButton
+              primary
+              id="submitButton"
+              label="Save Changes"
+              type="submit"
+            />
           </form>
         </Card>
       </div>

@@ -62,7 +62,11 @@ class AuthForm extends Component {
       // always runs sign in on either login or signup form
       await auth.signInWithEmailAndPassword(email, password);
     };
-    loginFunc(email, password).catch(err => console.error(err));
+    loginFunc(email, password)
+      .then(() => {
+        history.push(`/users/${auth.currentUser.uid}`);
+      })
+      .catch(err => console.error(err));
   }
 
   signInWithGoogle = () => {
