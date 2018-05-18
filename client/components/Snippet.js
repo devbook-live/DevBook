@@ -36,8 +36,8 @@ class Snippet extends Component {
   }
 
   componentDidMount() {
-    // this.listeners.push(snippetListener(this.id, this.setText));
-    // this.listeners.push(snippetListener(this.id, this.setRunning));
+    this.listeners.push(snippetListener(this.id, this.setText));
+    this.listeners.push(snippetListener(this.id, this.setRunning));
     this.listeners.push(snippetOutputListener(this.id, this.setOutput));
     snippetById(this.id)
       .then((data) => {
@@ -65,8 +65,8 @@ class Snippet extends Component {
 
     }
   }
-  // setText = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'text');
-  // setRunning = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'running');
+  setText = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'text');
+  setRunning = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'running');
   setOutput = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'output');
 
   toggleSnippetVisibility = (evt) => {
