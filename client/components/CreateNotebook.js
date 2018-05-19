@@ -1,7 +1,8 @@
 /* eslint-disable new-cap */
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
-import { createNotebook } from '../crud/notebook';
+import { createNotebook, addSnippet } from '../crud/notebook';
+import { createSnippet } from '../crud/snippet';
 
 const { auth } = require('../../firebase/initFirebase');
 
@@ -11,13 +12,22 @@ export default class CreateNotebook extends Component {
     this.state = { notebookId: '' };
   }
 
-  componentDidMount() {
-    const { currentUser } = auth;
-    const createNotebookPromise =
-      currentUser ? createNotebook({ currentUser }) : createNotebook({ null: true });
-
-    createNotebookPromise
-      .then(docRef => this.setState({ notebookId: docRef.id }));
+  async componentDidMount() {
+    // 1. Find a logged-in user, or create an anonymous one.
+    let { currentUser } = auth;
+    if (!currentUser) currentUser = await auth.signInAnonymously();
+    // 2. Create a new notebook.
+    const docRef = await createNotebook({ [currentUser.uid]: true });
+    const notebookId = docRef.id;
+    // 3. Create a new snippet.
+    const notebookSnippet = await createSnippet(
+      '', 'javascript', { [notebookId]: true }, { [currentUser.uid]: true },
+    );
+    // 4. Add new snippet to new notebook.
+    const snippetId = notebookSnippet.id;
+    await addSnippet(notebookId, snippetId);
+    // 5. Finally, update state to make this component redirect to the new notebook.
+    this.setState({ notebookId });
   }
 
   render() {

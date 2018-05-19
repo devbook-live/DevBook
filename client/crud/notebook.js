@@ -45,8 +45,10 @@ const notebookClientListener = (notebookId, callback) =>
   db.collection('notebooks/' + notebookId + '/clients').onSnapshot(callback);
 const notebookGroupListener = (notebookId, callback) =>
   db.collection('notebooks/' + notebookId + '/groups').onSnapshot(callback);
-const notebookSnippetListener = (notebookId, callback) =>
+const notebookSnippetListener = (notebookId, callback) => {
+  console.log('GOT TO notebookSnippetListener');
   db.collection('notebooks/' + notebookId + '/snippets').onSnapshot(callback);
+}
 
   // .then(({ docs }) => docs.filter(d => d.data().exists).map(d => d.id));
   // db.collection(collectionName)
@@ -129,8 +131,9 @@ const removeDocAuthor = (docId, userId) =>
   updateEntityField('notebooks', docId, 'users', userId, true, false);
 const removeDocGroup = (docId, groupId) =>
   updateEntityField('notebooks', docId, 'groups', groupId, true, false);
-const removeNotebookSnippet = (docId, snippetId) =>
+const removeNotebookSnippet = (docId, snippetId) => {
   removeDocFromSubcollection('notebooks', docId, 'snippets', snippetId);
+};
 
 
 // The following are helper functions for running all snippets in a notebook. The strategy is to take a slight pause (1ms? 10?) after setting the `running` field to `true` for each snippet in a notebook, to avoid concurrency issues with actually running snippets.

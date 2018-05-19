@@ -117,6 +117,7 @@ export default class SingleNotebook extends Component {
       snippetState[idx] = snippetId;
       return snippetState;
     }, {});
+    console.log('NEW SNIPPETS: ', snippets);
 
     this.setState({ snippets });
   }

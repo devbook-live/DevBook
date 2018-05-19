@@ -27,7 +27,7 @@ import { db } from '../../firebase/initFirebase';
 //
 // So this is what the params can look like
 // collectionName: notebooks
-// collectionFieldsObj: { users: { null : true } }
+// collectionFieldsObj: { users: { null : true }, groups: {}, snippets: {} }
 //
 // So it creates a new document in the collection with collection name
 // it gets back a document
@@ -39,18 +39,33 @@ import { db } from '../../firebase/initFirebase';
 // and then we use reduce to flatten the array to get an array of promises
 // then we use promise.all to carry out the operations
 // and then we return the document reference
+
+/* For a notebook, `collectionFieldsObj`s should be arranged in the following way:
+users, groups = {
+  vnuBBVbvybEycvFy: { exists: true },
+  dnyBKCEBjahvrvju: { exists: true },
+}
+snippets = {
+  1: { vhUbrfbFYEubiITuberi: true },
+  2: { dsybfuIBEvafCGsfnhjs: true },
+}
+*/
+
 const createEntity = (collectionName, collectionFieldsObj) => {
   let _docRef;
-  return db.collection(collectionName).add({})
+  return db.collection(collectionName).add({}) // initializing notebooks collection, in case it didn't already exist.
     .then((docRef) => {
       _docRef = docRef;
       return Object.keys(collectionFieldsObj)
-        .map((subcollection) => {
-          const subcollectionPromiseAry = Object.keys(collectionFieldsObj[subcollection]).length > 0 ?
-            Object.keys(collectionFieldsObj[subcollection])
+      // for a notebook, this means:
+      // users, groups, and snippets objs.
+        .map((subcollection) => { // e.g. "snippets"
+          const subcollectionPromiseAry = Object.keys(collectionFieldsObj[subcollection]).length > 0
+            ? Object.keys(collectionFieldsObj[subcollection])
               .map(subDocId => db.collection(collectionName).doc(docRef.id).collection(subcollection).doc(subDocId)
-                .set({ exists: true })) :
-            [db.collection(collectionName).doc(docRef.id).collection(subcollection).add({ exists: false })];
+                .set({ exists: true }))
+            : [];
+            // : [db.collection(collectionName).doc(docRef.id).collection(subcollection).add({ exists: false })];
           return subcollectionPromiseAry;
         })
         .reduce((prev, curr) => prev.concat(curr), []);
