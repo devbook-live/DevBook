@@ -150,24 +150,17 @@ const sleep = ms => () => new Promise(resolve => setTimeout(resolve, ms));
 const oneMsSleep = sleep(1);
 const tenMsSleep = sleep(10);
 
-const toggleAllSnippetsInNotebook = (notebookId, status) =>
-  notebookSnippets(notebookId)
-    .then((snippetIds) => {
-      if (status === 'running') {
-        snippetIds.forEach(async (id) => {
-          markSnippetAsRunning(id);
-          await tenMsSleep();
-        });
-      } else {
-        snippetIds.forEach(async (id) => {
-          markSnippetAsDormant(id);
-          await oneMsSleep();
-        });
-      }
-    });
+const toggleAllSnippetsInNotebook = async (notebookId, snippetToggleCallback) => {
+  const { docs } = await notebookSnippets(notebookId);
+  docs.forEach(async (doc) => {
+    const snippetId = Object.keys(doc.data())[0];
+    snippetToggleCallback(snippetId);
+    await oneMsSleep();
+  });
+};
 
-const runAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, 'running');
-const pauseAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, 'dormant');
+const runAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, markSnippetAsRunning);
+const pauseAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, markSnippetAsDormant);
 
 // Delete ops:
 const deleteNotebook = id => deleteEntity('notebooks', id);

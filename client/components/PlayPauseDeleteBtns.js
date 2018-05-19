@@ -46,6 +46,7 @@ const PlayPauseDeleteBtns = ({ scope, notebookId, snippetId }) => (
       />
     </FloatingActionButton>
 
+    {/*
     <FloatingActionButton className="footer-pause-btn">
       <Pause
         onClick={(evt) => {
@@ -55,6 +56,7 @@ const PlayPauseDeleteBtns = ({ scope, notebookId, snippetId }) => (
         }}
       />
     </FloatingActionButton>
+      */}
 
     <FloatingActionButton className="footer-delete-btn">
       <Delete
