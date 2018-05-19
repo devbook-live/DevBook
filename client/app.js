@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
-
 import { Navbar } from './components';
 import Routes from './routes';
+import { auth } from '../firebase/initFirebase';
 
-const app = () => {
-  return (
-    <div>
-      <Navbar />
-      <Routes />
-    </div>
-  );
-};
+class App extends Component {
+  componentDidMount() {
+    if (!auth.currentUser) auth.signInAnonymously();
+  }
+  render() {
+    return (
+      <div>
+        <Navbar />
+        <Routes />
+      </div>
+    );
+  }
+}
 
-export default app;
+export default App;

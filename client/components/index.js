@@ -11,6 +11,7 @@ export { default as CodeOutput } from './Output';
 export { default as NotebookFooter } from './NotebookFooter';
 export { default as NotebookMetadata } from './NotebookMetadata';
 export { default as PlayPauseDelete } from './PlayPauseDeleteBtns';
+export { default as AllEntities } from './AllEntities';
 
 // components for which there are routes:
 export { Login, Signup } from './auth-form';

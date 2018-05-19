@@ -1,6 +1,10 @@
 import { db } from '../../firebase/initFirebase';
+import { allEntities } from './utils';
 
 const groupsRef = db.collection('groups');
+
+// Read ops:
+const allGroups = () => allEntities('groups');
 
 const getGroupsByUserId = (userId) => {
   return groupsRef.where(`users.${userId}`, '==', true)
@@ -57,6 +61,7 @@ const deleteGroup = (name) => {
 };
 
 module.exports = {
+  allGroups,
   getGroupsByUserId,
   getGroupById,
   addGroup,

@@ -6,6 +6,7 @@ CRUD for Docs (**now called "notebooks"**)
 // Create ops:
 createDoc
 // Read ops:
+allNotebooks
 docById
 docsByUser
 docsByGroup
@@ -37,6 +38,7 @@ const createNotebook = (users, groups = {}, snippets = {}) =>
   createEntity('notebooks', { users, groups, snippets });
 
 // Read ops:
+const allNotebooks = () => allEntities('notebooks');
 const notebookById = id => entityById('notebooks', id);
 
 const notebookUserListener = (notebookId, callback) =>
@@ -45,15 +47,8 @@ const notebookClientListener = (notebookId, callback) =>
   db.collection('notebooks/' + notebookId + '/clients').onSnapshot(callback);
 const notebookGroupListener = (notebookId, callback) =>
   db.collection('notebooks/' + notebookId + '/groups').onSnapshot(callback);
-const notebookSnippetListener = (notebookId, callback) => {
-  console.log('GOT TO notebookSnippetListener');
+const notebookSnippetListener = (notebookId, callback) =>
   db.collection('notebooks/' + notebookId + '/snippets').onSnapshot(callback);
-}
-
-  // .then(({ docs }) => docs.filter(d => d.data().exists).map(d => d.id));
-  // db.collection(collectionName)
-  //   .get();
-  //   db.collection(collectionName).doc(entityId).onSnapshot(callback);
 
 // deprecated:
 const notebookListener = (id, callback) => entityByIdListener('notebooks', id, callback);
@@ -112,11 +107,10 @@ const addGroup = (docId, groupId) =>
 
 const addSnippet = (notebookId, snippetId) => {
   db.collection('notebooks' + '/' + notebookId + '/' + 'snippets').get()
-    .then(result => {
-      const counter = +result.docs.map(doc => doc.id).sort((a,b) => a>b)[result.docs.length-1] || 0;
-      console.log('counter: ', counter);
-      db.doc('notebooks' + '/' + notebookId + '/' + 'snippets' + '/' + String(counter+1)).set({ [snippetId]: true });
-    })
+    .then((result) => {
+      const counter = +result.docs.map(doc => doc.id).sort((a, b) => a > b)[result.docs.length - 1] || 0;
+      db.doc('notebooks' + '/' + notebookId + '/' + 'snippets' + '/' + String(counter + 1)).set({ [snippetId]: true });
+    });
 };
 
 // the addl "false" arg refers to the fact that want to remove (rather than add) this entry.
@@ -150,24 +144,17 @@ const sleep = ms => () => new Promise(resolve => setTimeout(resolve, ms));
 const oneMsSleep = sleep(1);
 const tenMsSleep = sleep(10);
 
-const toggleAllSnippetsInNotebook = (notebookId, status) =>
-  notebookSnippets(notebookId)
-    .then((snippetIds) => {
-      if (status === 'running') {
-        snippetIds.forEach(async (id) => {
-          markSnippetAsRunning(id);
-          await tenMsSleep();
-        });
-      } else {
-        snippetIds.forEach(async (id) => {
-          markSnippetAsDormant(id);
-          await oneMsSleep();
-        });
-      }
-    });
+const toggleAllSnippetsInNotebook = async (notebookId, snippetToggleCallback) => {
+  const { docs } = await notebookSnippets(notebookId);
+  docs.forEach(async (doc) => {
+    const snippetId = Object.keys(doc.data())[0];
+    snippetToggleCallback(snippetId);
+    await oneMsSleep();
+  });
+};
 
-const runAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, 'running');
-const pauseAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, 'dormant');
+const runAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, markSnippetAsRunning);
+const pauseAllSnippetsInNotebook = id => toggleAllSnippetsInNotebook(id, markSnippetAsDormant);
 
 // Delete ops:
 const deleteNotebook = id => deleteEntity('notebooks', id);
@@ -175,6 +162,7 @@ const deleteNotebook = id => deleteEntity('notebooks', id);
 module.exports = {
   createNotebook,
 
+  allNotebooks,
   notebookById,
 
   notebookUserListener,
