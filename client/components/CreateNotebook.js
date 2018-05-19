@@ -17,8 +17,8 @@ export default class CreateNotebook extends Component {
     let { currentUser } = auth;
     if (!currentUser) currentUser = await auth.signInAnonymously();
     // 2. Create a new notebook.
-    const docRef = await createNotebook({ [currentUser.uid]: true });
-    const notebookId = docRef.id;
+    const notebookId = await createNotebook({ [currentUser.uid]: true });
+    // const notebookId = docRef.id;
     // 3. Create a new snippet.
     const notebookSnippet = await createSnippet(
       '', 'javascript', { [notebookId]: true }, { [currentUser.uid]: true },

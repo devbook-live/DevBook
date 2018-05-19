@@ -29,6 +29,7 @@ deleteSnippet
 */
 
 import { db } from '../../firebase/initFirebase';
+import { allEntities } from './utils';
 
 // create a snippet
 const createSnippet = (
@@ -110,20 +111,21 @@ const snippetsByLang = (language) => {
 };
 
 // find all snippets ever
-const allSnippets = () => {
-  return db.collection('snippets')
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, ' => ', doc.data());
-      });
-      return querySnapshot;
-    })
-    .catch((error) => {
-      console.log('Error getting snippets:', error);
-    });
-};
+const allSnippets = () => allEntities('snippets');
+// const allSnippets = () => {
+//   return db.collection('snippets')
+//     .get()
+//     .then((querySnapshot) => {
+//       querySnapshot.forEach((doc) => {
+//         // doc.data() is never undefined for query doc snapshots
+//         console.log(doc.id, ' => ', doc.data());
+//       });
+//       return querySnapshot;
+//     })
+//     .catch((error) => {
+//       console.log('Error getting snippets:', error);
+//     });
+// };
 
 const snippetListener = (snippetId, callback) =>
   db.collection('snippets').doc(snippetId).onSnapshot(callback);
