@@ -23,6 +23,7 @@
     "axios": "^0.15.3",
     "codemirror": "5.37.0",
     "firebase": "^4.13.0",
+    "gfycat-style-urls": "1.0.2",
     "history": "^4.6.3",
     "material-ui": "^0.20.0",
     "prop-types": "^15.5.8",

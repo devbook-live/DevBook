@@ -1,4 +1,8 @@
-const { db } = require('../../firebase/initFirebase');
+import { db } from '../../firebase/initFirebase';
+import { allEntities } from './utils';
+
+// Read ops:
+export const allUsers = () => allEntities('users');
 
 // Add a user to the database
 export const addUserFunction = (id, userObj) => {

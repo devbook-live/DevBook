@@ -182,3 +182,42 @@ form div {
   width: 500px;
 }
 /* END AUTH FORM */
+
+
+/* ALL ENTITIES VIEWS */
+.all-entity-list-header {
+  animation: fadeIn 1.5s 1;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: .5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.entity-cards-container {
+  animation: xAxisAppear 1.2s 1 cubic-bezier(.32,.15,.51,1.21);
+}
+@keyframes xAxisAppear {
+  0% {
+    transform: translateX(-1500px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+/* END ALL ENTITIES VIEWS */
+
+
+/* SINGLE ENTITY CARD */
+.entity-card-profile-link,
+.entity-card-profile-link:visited {
+  color: rgba(238, 236, 236, 0.87);
+}
+/* END SINGLE ENTITY CARD */
+

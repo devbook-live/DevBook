@@ -42,7 +42,6 @@ class Snippet extends Component {
     snippetById(this.id)
       .then((data) => {
         const { text } = data.data();
-        console.log('text: ', text);
         if (text) this.setState({ text });
       });
   }
@@ -52,6 +51,7 @@ class Snippet extends Component {
   }
 
   setStateFieldFromSnapshot = (snapshot, field) => {
+    /* For logging/testing/debugging purposes:
     const data = snapshot.data();
     if (data && data[field]) {
       console.log("==================================")
@@ -62,8 +62,8 @@ class Snippet extends Component {
       this.setState({ [field]: data[field] });
       console.log("STATE AFTER:", this.state);
       console.log("==================================")
-
     }
+    */
   }
   setText = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'text');
   setRunning = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'running');

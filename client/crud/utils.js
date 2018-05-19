@@ -19,7 +19,7 @@ CRUD Utils
   deleteEntity
   garbageCollectEntityField
 */
-
+import { generateCombination } from 'gfycat-style-urls';
 import { db } from '../../firebase/initFirebase';
 
 // Create ops:
@@ -52,17 +52,19 @@ snippets = {
 */
 
 const createEntity = (collectionName, collectionFieldsObj) => {
-  let _docRef;
-  return db.collection(collectionName).add({}) // initializing notebooks collection, in case it didn't already exist.
-    .then((docRef) => {
-      _docRef = docRef;
+  const docId = generateCombination(0, '');
+  // return db.collection(collectionName).add({}) // initializing notebooks collection, in case it didn't already exist.
+
+  return db.collection(collectionName).doc(docId).set({})
+    .then(() => {
+      // _docRef = docRef;
       return Object.keys(collectionFieldsObj)
       // for a notebook, this means:
       // users, groups, and snippets objs.
         .map((subcollection) => { // e.g. "snippets"
           const subcollectionPromiseAry = Object.keys(collectionFieldsObj[subcollection]).length > 0
             ? Object.keys(collectionFieldsObj[subcollection])
-              .map(subDocId => db.collection(collectionName).doc(docRef.id).collection(subcollection).doc(subDocId)
+              .map(subDocId => db.collection(collectionName).doc(docId).collection(subcollection).doc(subDocId)
                 .set({ exists: true }))
             : [];
             // : [db.collection(collectionName).doc(docRef.id).collection(subcollection).add({ exists: false })];
@@ -71,7 +73,7 @@ const createEntity = (collectionName, collectionFieldsObj) => {
         .reduce((prev, curr) => prev.concat(curr), []);
     })
     .then(promises => Promise.all(promises))
-    .then(() => _docRef);
+    .then(() => docId);
 };
 
 // Read ops:
