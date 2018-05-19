@@ -51,11 +51,40 @@ snippets = {
 }
 */
 
-const createEntity = (collectionName, collectionFieldsObj) => {
-  const docId = generateCombination(0, '');
-  // return db.collection(collectionName).add({}) // initializing notebooks collection, in case it didn't already exist.
 
-  return db.collection(collectionName).doc(docId).set({})
+// Read ops:
+const entityById = (collectionName, entityId) => {
+  const entityName = collectionName.slice(0, collectionName.length - 1);
+  return db.collection(collectionName)
+    .doc(entityId)
+    .get()
+    .then((entity) => {
+      if (entity.exists) return entity;
+      return `No such ${entityName} exists.`;
+    })
+    .catch(error => `Error fetching ${entityName}: ${error}`);
+};
+
+// helper method for generating relatively (normatively) unique ids
+const generateRandomId = (collectionToAddTo, numTermsInId = 1) => {
+  const proposedId = generateCombination(numTermsInId - 1, '');
+  const entityName = collectionToAddTo.slice(0, collectionToAddTo.length - 1);
+  return entityById(collectionToAddTo, proposedId)
+    .then((existenceMarker) => {
+      if (existenceMarker === `No such ${entityName} exists.`) return proposedId;
+      return generateRandomId(collectionToAddTo, numTermsInId);
+    });
+};
+
+const createEntity = (collectionName, collectionFieldsObj) => {
+  // const docId = generateCombination(0, '');
+  // return db.collection(collectionName).add({}) // initializing notebooks collection, in case it didn't already exist.
+  let docId;
+  return generateRandomId(collectionName)
+    .then((randomId) => {
+      docId = randomId;
+      return db.collection(collectionName).doc(docId).set({});
+    })
     .then(() => {
       // _docRef = docRef;
       return Object.keys(collectionFieldsObj)
@@ -76,18 +105,6 @@ const createEntity = (collectionName, collectionFieldsObj) => {
     .then(() => docId);
 };
 
-// Read ops:
-const entityById = (collectionName, entityId) => {
-  const entityName = collectionName.slice(0, collectionName.length - 1);
-  return db.collection(collectionName)
-    .doc(entityId)
-    .get()
-    .then((entity) => {
-      if (entity.exists) return entity;
-      return `No such ${entityName} exists.`;
-    })
-    .catch(error => `Error fetching ${entityName}: ${error}`);
-};
 
 const entityByIdListener = (collectionName, entityId, callback) =>
   db.collection(collectionName).doc(entityId).onSnapshot(callback);
