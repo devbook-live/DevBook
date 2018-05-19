@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import {
   notebookUserListener, notebookClientListener, notebookGroupListener, notebookSnippetListener, notebookById,
   notebookUsers, notebookClients, notebookGroups, notebookSnippets,
-  addClient, removeAllClients,
+  addAuthor, addClient, removeAllClients,
 } from '../crud/notebook';
 import { auth } from '../../firebase/initFirebase';
 import { CodeSnippet, NotebookMetadata, NotebookFooter } from '../components';
@@ -13,7 +13,7 @@ export default class SingleNotebook extends Component {
   constructor() {
     super();
     this.state = {
-      users: [auth.currentUser.uid],
+      users: [],
       clients: [],
       groups: [],
       snippets: {},
@@ -22,8 +22,8 @@ export default class SingleNotebook extends Component {
   }
 
   async componentDidMount() {
+    this.authListener();
     const { notebookId } = this.props.match.params;
-    await addClient(notebookId, auth.currentUser.uid);
     const [users, clients, groups, snippetsSnapshot] = await Promise.all([
       notebookUsers(notebookId),
       notebookClients(notebookId),
@@ -32,15 +32,28 @@ export default class SingleNotebook extends Component {
     ]);
     const snippets = this.orderSnippets(snippetsSnapshot);
     this.setState({ users, clients, groups, snippets });
-    this.addListeners();
+    this.addContentListeners();
   }
 
   componentWillUnmount() {
     removeAllClients(this.props.match.params.notebookId);
-    this.removeListeners(); // unsubscribe this notebook from realtime updates
+    this.removeContentListeners(); // unsubscribe this notebook from realtime updates
+    this.removeAuthListener();
   }
 
-  addListeners = () => {
+  authListener = () => {
+    const { notebookId } = this.props.match.params;
+    this.removeAuthListener = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        return Promise.all([
+          addAuthor(notebookId, user.uid),
+          addClient(notebookId, user.uid),
+        ]);
+      } else return null;
+    });
+  }
+
+  addContentListeners = () => {
     const { notebookId } = this.props.match.params;
     this.setState({ listeners: [
       notebookUserListener(notebookId, snapshot => this.populateNotebook('users', snapshot)),
@@ -50,7 +63,7 @@ export default class SingleNotebook extends Component {
     ] });
   }
 
-  removeListeners = () => {
+  removeContentListeners = () => {
     this.state.listeners.forEach((listener) => {
       if (listener) listener();
     });
@@ -73,6 +86,7 @@ export default class SingleNotebook extends Component {
 
   render() {
     const { notebookId } = this.props.match.params;
+    if (!auth.currentUser || !this.state.users.includes(auth.currentUser.uid)) return <p>Loading...</p>;
     return (
       <div>
         <NotebookMetadata
