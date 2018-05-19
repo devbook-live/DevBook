@@ -293,13 +293,7 @@ const markSnippetAsRunning = id => changeSnippetRunningStatus(id, true);
 const markSnippetAsDormant = id => changeSnippetRunningStatus(id, false);
 
 // delete a snippet
-const deleteSnippet = (snippetId) => {
-  db.collection('snippets')
-    .doc(snippetId)
-    .delete()
-    .then(() => console.log('Snippet successfully deleted!'))
-    .catch(error => console.error('Error removing snippet: ', error));
-};
+const deleteSnippet = snippetId => db.collection('snippets').doc(snippetId).delete();
 
 module.exports = {
   // C

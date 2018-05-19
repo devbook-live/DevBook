@@ -127,14 +127,21 @@ const removeAllClients = notebookId =>
   db.collection('notebooks')
     .doc(notebookId)
     .set({ clients: {} }, { merge: true });
-const removeDocAuthor = (docId, userId) =>
-  updateEntityField('notebooks', docId, 'users', userId, true, false);
-const removeDocGroup = (docId, groupId) =>
-  updateEntityField('notebooks', docId, 'groups', groupId, true, false);
-const removeNotebookSnippet = (docId, snippetId) => {
-  removeDocFromSubcollection('notebooks', docId, 'snippets', snippetId);
-};
+const removeDocAuthor = (notebookId, userId) =>
+  updateEntityField('notebooks', notebookId, 'users', userId, true, false);
+const removeDocGroup = (notebookId, groupId) =>
+  updateEntityField('notebooks', notebookId, 'groups', groupId, true, false);
 
+const removeNotebookSnippet = (notebookId, snippetId) => {
+  db.collection('notebooks/' + notebookId + '/snippets')
+    .get()
+    .then((snippets) => {
+      const snippetToDelete = snippets.docs.find((doc) => {
+        return Object.keys(doc.data())[0] === snippetId;
+      });
+      removeDocFromSubcollection('notebooks', notebookId, 'snippets', snippetToDelete.id);
+    });
+};
 
 // The following are helper functions for running all snippets in a notebook. The strategy is to take a slight pause (1ms? 10?) after setting the `running` field to `true` for each snippet in a notebook, to avoid concurrency issues with actually running snippets.
 // Resource on `sleep`: https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa

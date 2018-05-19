@@ -20,13 +20,13 @@ import { snippetListener, snippetOutputListener, updateSnippetText, snippetById 
 const snippetStyle = {
   margin: '0px 100px 0px 100px',
 };
-/* ----- END STYLES ----- */
+
 
 class Snippet extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: 'console.log(\'Hello World!\');',
+      text: '',
       output: '', // Docker client output, via firestore "snippetOutputs" collection
       snippetVisible: true,
       running: false,
