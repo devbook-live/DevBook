@@ -12,6 +12,6 @@ ReactDOM.render(
     <MuiThemeProvider>
       <App />
     </MuiThemeProvider>
-  </Router>
+  </Router>,
   document.getElementById('app'),
 );
