@@ -139,13 +139,13 @@ export default class SingleNotebook extends Component {
           {
             this.state.snippets && Object.keys(this.state.snippets)
               .sort((a, b) => a > b)
-              .map(index => {
+              .map((index) => {
                 const snippetId = this.state.snippets[index];
                 return (
                   <div className="single-notebook-code-container" key={snippetId}>
                     <CodeSnippet snippetId={snippetId} notebookId={notebookId} />
                   </div>
-                )
+                );
               })
             // this.state.snippets.map(snippetId => (
             //   <div className="single-notebook-code-container" key={snippetId}>
