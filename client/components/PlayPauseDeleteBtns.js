@@ -3,6 +3,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import PlayArrow from 'material-ui/svg-icons/av/play-arrow';
 import Pause from 'material-ui/svg-icons/av/pause';
 import Delete from 'material-ui/svg-icons/action/delete';
+import history from '../history';
 import {
   markSnippetAsRunning,
   markSnippetAsDormant,
@@ -46,6 +47,7 @@ const PlayPauseDeleteBtns = ({ scope, notebookId, snippetId }) => (
       />
     </FloatingActionButton>
 
+    {/*
     <FloatingActionButton className="footer-pause-btn">
       <Pause
         onClick={(evt) => {
@@ -55,17 +57,21 @@ const PlayPauseDeleteBtns = ({ scope, notebookId, snippetId }) => (
         }}
       />
     </FloatingActionButton>
+      */}
 
     <FloatingActionButton className="footer-delete-btn">
       <Delete
-        onClick={(evt) => {
+        onClick={async (evt) => {
           evt.preventDefault();
           if (scope === 'snippet') {
             return Promise.all([
               deleteSnippet(snippetId),
               removeNotebookSnippet(notebookId, snippetId),
             ]);
-          } else return deleteNotebook(notebookId);
+          } else {
+            await deleteNotebook(notebookId);
+            history.push('/notebooks');
+          }
         }}
       />
     </FloatingActionButton>
