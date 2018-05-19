@@ -89,6 +89,8 @@ export default class SingleNotebook extends Component {
     if (!auth.currentUser || !this.state.users.includes(auth.currentUser.uid)) return <p>Loading...</p>;
     return (
       <div>
+        <h2>{ notebookId }</h2>
+
         <NotebookMetadata
           notebookId={notebookId}
           users={this.state.users}
