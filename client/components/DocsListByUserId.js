@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { List, ListItem } from 'material-ui/List';
+import FlatButton from 'material-ui/FlatButton';
 import ContentInbox from 'material-ui/svg-icons/content/inbox';
 import ActionGrade from 'material-ui/svg-icons/action/grade';
 import ContentSend from 'material-ui/svg-icons/content/send';
@@ -8,6 +9,7 @@ import Divider from 'material-ui/Divider';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 import Subheader from 'material-ui/Subheader';
 import { db } from '../../firebase/initFirebase';
+import history from '../history';
 
 
 class DocsListByUserId extends Component {
@@ -30,6 +32,10 @@ class DocsListByUserId extends Component {
     this.unsubscribe();
   }
 
+  handleClick(event, docName) {
+    history.push(`/notebooks/${docName}`)
+  }
+
   async onSnapshotCallback(doc) {
     if (doc.data().documents) {
       const docIds = Object.keys(doc.data().documents);
@@ -40,12 +46,13 @@ class DocsListByUserId extends Component {
 
   render() {
     const { docsInfo } = this.state;
+    console.log('docsInfo: ', docsInfo);
 
     return (
       <div>
         <List>
           {
-            docsInfo.map(doc => <ListItem key={doc.id} primaryText={doc.name} />)
+            docsInfo.map(doc => <ListItem key={doc.name} primaryText={doc.name} onClick={event => this.handleClick(event, doc.name)} value={doc.name} />)
           }
         </List>
       </div>

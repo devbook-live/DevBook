@@ -4,10 +4,53 @@ import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
+import { UsersListByNotebookId } from './';
+import {cyan500, pink200, indigo900} from 'material-ui/styles/colors';
+import Avatar from 'material-ui/Avatar';
+import { db } from '../../firebase/initFirebase';
+import { auth } from '../../firebase/initFirebase';
 
-// fetchUserFunction
+
 
 export default class NotebookMetadata extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      usersInfo: [],
+    };
+    this.styles = {
+      chip: {
+        margin: 4,
+      },
+      wrapper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+      },
+    };
+  }
+
+  componentDidMount() {
+    const { notebookId } = this.props;
+    this.unsubscribe = db.collection('notebooks').doc(notebookId)
+      .onSnapshot((doc) => {
+        this.onSnapshotCallback(doc).catch(err => console.error(err));
+      });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  async onSnapshotCallback(doc) {
+    if (doc.data().users) {
+      const userIds = Object.keys(doc.data().users);
+      const usersInfo = (await Promise.all(userIds.map(userId => db.collection('users').doc(userId).get()))).map(curUser => curUser.data());
+      this.setState({ usersInfo });
+    }
+  }
+
+
+
 //   constructor() {
 //     super();
 //     this.state = {
@@ -79,26 +122,50 @@ export default class NotebookMetadata extends Component {
 // }
 
   render() {
+    const { usersInfo } = this.state;
     return (
       <div className="single-notebook-metadata-container">
         <div className="single-notebook-contributors">
-          <h2>Contributors</h2>
-          {
-            this.props.users.map((userId) => {
-              if (userId in this.props.clients) {
-                return <p className="notebook-active-contributor">{userId}</p>;
+          <h3>Contributors</h3>
+          <div style={this.styles.wrapper}>
+            {usersInfo.map((user) => {
+              if (user.id === auth.currentUser.uid) {
+                return (
+                  <Chip
+                    backgroundColor={pink200}
+                    style={this.styles.chip}
+                  >
+                  me
+                  </Chip>
+                )
               }
-              return <p className="notebook-inactive-contributor">{userId}</p>;
-            })
-          }
+
+              else {
+                return (
+                  <div>
+                    <Chip
+                      backgroundColor={cyan500}
+                      style={this.styles.chip}
+                    >
+                    {/* <Avatar size={32} color={blue300} backgroundColor={indigo900}>
+                      MB
+                    </Avatar> */}
+                    {user.displayName}
+                    </Chip>
+                  </div>
+                )
+              }
+
+            })}
+          </div>
         </div>
         <div className="single-notebook-groups">
-          <h2>Groups</h2>
+          {/* <h2>Groups</h2>
           {
             this.props.groups.map((groupId) => {
               return <p className="notebook-group">{groupId}</p>;
             })
-          }
+          } */}
         </div>
       </div>
     );

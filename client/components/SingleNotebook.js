@@ -126,6 +126,8 @@ export default class SingleNotebook extends Component {
     const { notebookId } = this.props.match.params;
     return (
       <div>
+        <h2>{ notebookId }</h2>
+
         <NotebookMetadata
           notebookId={notebookId}
           users={this.state.users}
