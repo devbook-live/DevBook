@@ -36,6 +36,7 @@ class Snippet extends Component {
   }
 
   componentDidMount() {
+    db.doc(`snippetOutputs/${this.id}`).delete();
     this.listeners.push(snippetListener(this.id, this.setText));
     this.listeners.push(snippetListener(this.id, this.setRunning));
     this.listeners.push(snippetOutputListener(this.id, this.setOutput));
@@ -48,22 +49,22 @@ class Snippet extends Component {
 
   componentWillUnmount() {
     this.listeners.forEach(unsubscribeListener => unsubscribeListener());
+    db.doc(`snippetOutputs/${this.id}`).delete();
   }
 
   setStateFieldFromSnapshot = (snapshot, field) => {
-    /* For logging/testing/debugging purposes:
     const data = snapshot.data();
     if (data && data[field]) {
-      console.log("==================================")
-      console.log("STATE BEFORE:", this.state);
-      console.log("field:", field);
-      console.log("data", data);
-      console.log("data[field]", data[field] )
       this.setState({ [field]: data[field] });
-      console.log("STATE AFTER:", this.state);
-      console.log("==================================")
+      // For logging/testing/debugging purposes:
+      // console.log("==================================")
+      // console.log("STATE BEFORE:", this.state);
+      // console.log("field:", field);
+      // console.log("data", data);
+      // console.log("data[field]", data[field] )
+      // console.log("STATE AFTER:", this.state);
+      // console.log("==================================")
     }
-    */
   }
   setText = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'text');
   setRunning = snippetSnapshot => this.setStateFieldFromSnapshot(snippetSnapshot, 'running');

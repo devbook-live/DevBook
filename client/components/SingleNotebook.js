@@ -87,7 +87,11 @@ export default class SingleNotebook extends Component {
 
   render() {
     const { notebookId } = this.props.match.params;
-    if (!auth.currentUser || !this.state.users.includes(auth.currentUser.uid)) return <p className="loading">Loading...</p>;
+    if (
+      !auth.currentUser
+      || !this.state.users.includes(auth.currentUser.uid)
+      || !this.props.serverAwake
+    ) return <p className="loading">Loading...</p>;
     return (
       <div className="single-notebook">
         <div className="single-notebook-fix">
@@ -115,7 +119,10 @@ export default class SingleNotebook extends Component {
                 const snippetId = this.state.snippets[index];
                 return (
                   <div className="single-notebook-code-container" key={snippetId}>
-                    <CodeSnippet snippetId={snippetId} notebookId={notebookId} />
+                    <CodeSnippet
+                      snippetId={snippetId}
+                      notebookId={notebookId}
+                    />
                   </div>
                 );
               })
