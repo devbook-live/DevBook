@@ -88,16 +88,30 @@ export default class SingleNotebook extends Component {
     const { notebookId } = this.props.match.params;
     if (!auth.currentUser || !this.state.users.includes(auth.currentUser.uid)) return <p>Loading...</p>;
     return (
-      <div>
-        <h2>{ notebookId }</h2>
+      <div className="single-notebook">
 
-        <NotebookMetadata
-          notebookId={notebookId}
-          users={this.state.users}
-          clients={this.state.clients}
-          groups={this.state.groups}
-          snippets={this.state.snippets}
-        />
+
+        <div className="single-notebook-fix">
+
+          <h2 style={{ marginTop: '5px', marginBottom: '5px' }}>{ notebookId }</h2>
+
+          <NotebookMetadata
+            notebookId={notebookId}
+            users={this.state.users}
+            clients={this.state.clients}
+            groups={this.state.groups}
+            snippets={this.state.snippets}
+          />
+
+          <NotebookFooter
+            notebookId={this.props.match.params.notebookId}
+            users={this.state.users}
+            clients={this.state.clients}
+            groups={this.state.groups}
+            snippets={this.state.snippets}
+          />
+        </div>
+
         <div className="single-notebook-snippets-container">
           {
             this.state.snippets && Object.keys(this.state.snippets)
@@ -112,15 +126,6 @@ export default class SingleNotebook extends Component {
               })
           }
         </div>
-
-        <NotebookFooter
-          notebookId={this.props.match.params.notebookId}
-          users={this.state.users}
-          clients={this.state.clients}
-          groups={this.state.groups}
-          snippets={this.state.snippets}
-        />
-
       </div>
     );
   }

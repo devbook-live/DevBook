@@ -102,13 +102,15 @@ class Snippet extends Component {
                 // console.log('data: ', data);
               }}
             />
-            <CardActions>
-              <PlayPauseDelete
-                scope="snippet"
-                notebookId={notebookId}
-                snippetId={snippetId}
-              />
-            </CardActions>
+            <div className="snippet-btn-container">
+              <CardActions>
+                <PlayPauseDelete
+                  scope="snippet"
+                  notebookId={notebookId}
+                  snippetId={snippetId}
+                />
+              </CardActions>
+            </div>
           </div>
         }
         {

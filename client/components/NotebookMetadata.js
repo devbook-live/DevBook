@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField';
 import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
 import { cyan500, pink200, indigo900 } from 'material-ui/styles/colors';
+import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import { UsersListByNotebookId } from './';
 import { db, auth } from '../../firebase/initFirebase';
@@ -50,36 +51,34 @@ export default class NotebookMetadata extends Component {
   render() {
     const { usersInfo } = this.state;
     return (
-      <div className="single-notebook-metadata-container">
-        <div className="single-notebook-contributors">
-          <h3>Contributors</h3>
-          <div style={this.styles.wrapper}>
-            {usersInfo.map((user) => {
-              if (user.id === auth.currentUser.uid) {
-                return (
+      <div>
+        <h3 style={{ marginTop: '10px', marginBottom: '3px' }}>Contributors:</h3>
+        <div style={this.styles.wrapper} >
+          {usersInfo.map((user) => {
+            if (user.id === auth.currentUser.uid) {
+              return (
+                <Chip
+                  backgroundColor={pink200}
+                  style={this.styles.chip}
+                >
+                me
+                </Chip>
+              );
+            } else {
+              return (
+                <div>
                   <Chip
-                    backgroundColor={pink200}
+                    backgroundColor={cyan500}
                     style={this.styles.chip}
                   >
-                  me
+                    {user.displayName}
                   </Chip>
-                );
-              } else {
-                return (
-                  <div>
-                    <Chip
-                      backgroundColor={cyan500}
-                      style={this.styles.chip}
-                    >
-                      {user.displayName}
-                    </Chip>
-                  </div>
-                );
-              }
-            })}
-          </div>
+                </div>
+              );
+            }
+          })}
         </div>
-        <div className="single-notebook-groups" />
+        <Divider />
       </div>
     );
   }
