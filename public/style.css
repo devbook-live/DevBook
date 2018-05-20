@@ -142,6 +142,20 @@ form div {
 .singleGroupPage{
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+}
+
+.group-title {
+  display: flex;
+  justify-content: center;
+  animation: fadeIn 1.5s 1;
+}
+
+.group-members, .group-notebooks {
+  width: 38%;
+  margin-top: 20px;
+  padding: 15px;
+  animation: xAxisAppear 1s 1 cubic-bezier(.32,.15,.51,1.21);
 }
 
 .usersList {
@@ -223,6 +237,14 @@ form div {
 
 
 /* PROFILE PAGES */
+.userPage {
+  animation: fadeIn 1.5s 1;
+}
+
+.groupPage {
+  animation: fadeIn 2.5s 1;
+}
+
 .profile-content-add {
   margin: 10px;
 }
