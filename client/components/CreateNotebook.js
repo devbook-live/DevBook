@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { createNotebook, addSnippet } from '../crud/notebook';
 import { createSnippet } from '../crud/snippet';
+import { addNotebook } from '../crud/user';
 
 const { auth } = require('../../firebase/initFirebase');
 
@@ -21,9 +22,12 @@ export default class CreateNotebook extends Component {
         const notebookSnippet = await createSnippet(
           '', 'javascript', { [notebookId]: true }, { [currentUser.uid]: true },
         );
-        // 4. Add new snippet to new notebook.
+        // 4. Add new snippet to new notebook, and add notebook to user's notebooks.
         const snippetId = notebookSnippet.id;
-        await addSnippet(notebookId, snippetId);
+        await Promise.all([
+          addSnippet(notebookId, snippetId),
+          addNotebook(currentUser.uid, notebookId),
+        ]);
         // 5. Finally, update state to make this component redirect to the new notebook.
         this.setState({ notebookId });
       }
