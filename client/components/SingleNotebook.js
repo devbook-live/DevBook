@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 
 import React, { Component } from 'react';
+import Paper from 'material-ui/Paper';
 import {
   notebookUserListener, notebookClientListener, notebookGroupListener, notebookSnippetListener, notebookById,
   notebookUsers, notebookClients, notebookGroups, notebookSnippets,
@@ -89,8 +90,12 @@ export default class SingleNotebook extends Component {
     if (!auth.currentUser || !this.state.users.includes(auth.currentUser.uid)) return <p>Loading...</p>;
     return (
       <div>
-        <h2>{ notebookId }</h2>
-
+        {/*<Paper
+          zDepth={1}
+          className="group-title"
+        >
+          <h5>{ notebookId }</h5>
+        </Paper>*/}
         <NotebookMetadata
           notebookId={notebookId}
           users={this.state.users}

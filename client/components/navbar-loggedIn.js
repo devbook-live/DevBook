@@ -8,9 +8,13 @@ import IconButton from 'material-ui/IconButton';
 import Avatar from 'material-ui/Avatar';
 
 const loggedIn = ({ user, logout }) => {
+  let name;
+  if (user.displayName) name = user.displayName;
+  else if (user.email) name = user.email;
+  else name = 'developer!';
   return (
     <div style={{ display: 'flex', paddingRight: '20px' }}>
-      <h5 style={{ color: 'white', paddingRight: '20px' }}>Welcome, {user.displayName ? user.displayName : user.email}</h5>
+      <h5 style={{ color: 'white', paddingRight: '20px' }}>{`Welcome, ${name}`}</h5>
       <IconMenu
         iconButtonElement={
           <IconButton className="AVATAR" style={{ padding: '0px' }}>

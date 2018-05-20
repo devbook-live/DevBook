@@ -67,13 +67,21 @@ export default class Navbar extends Component {
   }
 
   render() {
+    let title = window.location.pathname.split('/');
+    if (title[1] === 'notebooks' && title.length === 3) {
+      title = `DevBook({ ${title[2]} })`;
+    } else {
+      title = 'DevBook( )';
+    }
     return (
       <div>
         <AppBar
-          title={<Link style={{ color: 'white', textDecoration: 'none' }}to="/">DevBook( )</Link>}
+          title={<Link style={{ color: 'white', textDecoration: 'none' }}to="/">{title}</Link>}
           titleStyle={{
             color: 'white',
             textDecoration: 'none',
+            fontSize: '35px',
+            textShadow: '2px 4px 3px rgba(0,0,0,0.3)',
           }}
           showMenuIconButton={false}
           iconElementRight={this.state.loggedInUser ? <LoggedIn logout={this.logout} user={this.state.loggedInUser} /> : <Login />}
