@@ -51,7 +51,7 @@ export default class NotebookMetadata extends Component {
   render() {
     const { usersInfo } = this.state;
     return (
-      <div>
+      <div className="single-notebook-contributors">
         <h3 style={{ marginTop: '10px', marginBottom: '3px' }}>Contributors:</h3>
         <div style={this.styles.wrapper} >
           {
