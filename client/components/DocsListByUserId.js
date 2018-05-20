@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+
 import React, { Component } from 'react';
 import { List, ListItem } from 'material-ui/List';
 import FlatButton from 'material-ui/FlatButton';
@@ -32,16 +34,16 @@ class DocsListByUserId extends Component {
     this.unsubscribe();
   }
 
-  handleClick(event, docName) {
-    history.push(`/notebooks/${docName}`)
-  }
-
   async onSnapshotCallback(doc) {
     if (doc.data().documents) {
       const docIds = Object.keys(doc.data().documents);
       const docsInfo = (await Promise.all(docIds.map(docId => db.collection('notebooks').doc(docId).get()))).map(curDoc => curDoc.data());
       this.setState({ docsInfo });
     }
+  }
+
+  handleClick(event, docName) {
+    history.push(`/notebooks/${docName}`);
   }
 
   render() {
@@ -52,7 +54,13 @@ class DocsListByUserId extends Component {
       <div>
         <List>
           {
-            docsInfo.map(doc => <ListItem key={doc.name} primaryText={doc.name} onClick={event => this.handleClick(event, doc.name)} value={doc.name} />)
+            docsInfo.map(doc =>
+              (<ListItem
+                key={doc.name}
+                primaryText={doc.name}
+                onClick={event => this.handleClick(event, doc.name)}
+                value={doc.name}
+              />))
           }
         </List>
       </div>

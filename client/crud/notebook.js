@@ -59,9 +59,9 @@ const clientsByDoc = (docId) => {
     .then(doc => doc.clients)
     .catch(err => `Trouble fetching clients for this doc: ${err}`);
 };
-const docsByUser = userId => entityByField('notebooks', 'users', userId, true);
-const docsByGroup = groupId => entityByField('notebooks', 'groups', groupId, true);
-const docsBySnippet = snippetId => entityByField('notebooks', 'snippets', snippetId, true);
+const notebooksByUser = userId => entityByField('notebooks', 'users', userId, true);
+const notebooksByGroup = groupId => entityByField('notebooks', 'groups', groupId, true);
+const notebooksBySnippet = snippetId => entityByField('notebooks', 'snippets', snippetId, true);
 const allDocs = () => allEntities('notebooks');
 
 // const notebookUsers = notebookId => entityByField('users', 'notebooks', notebookId, true);
@@ -121,9 +121,9 @@ const removeAllClients = notebookId =>
   db.collection('notebooks')
     .doc(notebookId)
     .set({ clients: {} }, { merge: true });
-const removeDocAuthor = (notebookId, userId) =>
+const removeNotebookAuthor = (notebookId, userId) =>
   updateEntityField('notebooks', notebookId, 'users', userId, true, false);
-const removeDocGroup = (notebookId, groupId) =>
+const removeNotebookGroup = (notebookId, groupId) =>
   updateEntityField('notebooks', notebookId, 'groups', groupId, true, false);
 
 const removeNotebookSnippet = (notebookId, snippetId) => {
@@ -170,9 +170,9 @@ module.exports = {
   notebookGroupListener,
   notebookSnippetListener,
   clientsByDoc,
-  docsByUser,
-  docsByGroup,
-  docsBySnippet,
+  notebooksByUser,
+  notebooksByGroup,
+  notebooksBySnippet,
   allDocs,
 
   notebookUsers,
@@ -186,8 +186,8 @@ module.exports = {
   addSnippet,
   removeClient,
   removeAllClients,
-  removeDocAuthor,
-  removeDocGroup,
+  removeNotebookAuthor,
+  removeNotebookGroup,
   removeNotebookSnippet,
   runAllSnippetsInNotebook,
   pauseAllSnippetsInNotebook,

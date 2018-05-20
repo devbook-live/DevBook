@@ -4,12 +4,15 @@ import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
+<<<<<<< HEAD
 import {cyan500, pink200, indigo900} from 'material-ui/styles/colors';
 import Divider from 'material-ui/Divider';
+=======
+import { cyan500, pink200, indigo900 } from 'material-ui/styles/colors';
+>>>>>>> master
 import Avatar from 'material-ui/Avatar';
-import { db } from '../../firebase/initFirebase';
-import { auth } from '../../firebase/initFirebase';
-
+import { UsersListByNotebookId } from './';
+import { db, auth } from '../../firebase/initFirebase';
 
 
 export default class NotebookMetadata extends Component {
@@ -49,78 +52,6 @@ export default class NotebookMetadata extends Component {
     }
   }
 
-
-
-//   constructor() {
-//     super();
-//     this.state = {
-//       userName: '',
-//       users: [],
-//       chosenUser: {},
-//       groupName: '',
-//       groups: [],
-//       chosenGroup: {},
-//     };
-//     this.styles = {
-//       chip: {
-//         margin: 4,
-//       },
-//       wrapper: {
-//         display: 'flex',
-//         flexWrap: 'wrap',
-//       },
-//     };
-//   }
-
-//   handleAdd = (type = 'user') => {
-//     const ids = [];
-//     this.state[type].forEach(entity => ids.push(entity.id));
-//     if (ids.includes(this.state[`chosen${type}`].id)) {
-//       alert(`${this.state[`chosen${type}`].name} is already selected!`);
-//     } else {
-//       this.setState({ [`${type}s`]: [...this.state[`${type}s`], this.state[`chosen${type}`]] });
-//     }
-//     this.refs.autocomplete.setState({ searchText: '' });
-//   }
-
-//   handleRequestDelete = (type = 'user', key) => {
-//     const entities = this.state[`${type}s`];
-//     const chipToDelete = entities.map(entity => entity.id).indexOf(key);
-//     entities.splice(chipToDelete, 1);
-//     this.setState({ [`${type}s`]: entities });
-//   }
-
-//   handleCreateGroup (event, type = 'user') {
-//     event.preventDefault();
-//     const name = this.state[`${type}Name`];
-//     const body = this.state[`${type}s`].reduce((bodyObj, entity) => {
-//       bodyObj[entity.id] = entity.name;
-//       return bodyObj;
-//     }, {});
-//     addGroup(name, { [`${type}s`]: body });
-//   }
-
-//   handleChange(event, type = '') {
-//     event.preventDefault();
-//     const name = event.target.value;
-//     this.setState({ name });
-//   }
-
-//   renderChip(data) {
-//     return (
-//       <Chip
-//         key={data.id}
-//         onRequestDelete={() => this.handleRequestDelete(data.id)}
-//         style={this.styles.chip}
-//       >
-//         {data.name}
-//       </Chip>
-//     );
-//   }
-
-
-// }
-
   render() {
     const { usersInfo } = this.state;
     return (
@@ -151,6 +82,7 @@ export default class NotebookMetadata extends Component {
                   </Avatar> */}
                   {user.displayName}
                   </Chip>
+<<<<<<< HEAD
                 </div>
               )
             }
@@ -158,6 +90,25 @@ export default class NotebookMetadata extends Component {
           })}
         </div>
         <Divider />
+=======
+                );
+              } else {
+                return (
+                  <div>
+                    <Chip
+                      backgroundColor={cyan500}
+                      style={this.styles.chip}
+                    >
+                      {user.displayName}
+                    </Chip>
+                  </div>
+                );
+              }
+            })}
+          </div>
+        </div>
+        <div className="single-notebook-groups" />
+>>>>>>> master
       </div>
     );
   }
