@@ -56,7 +56,8 @@ class SingleUser extends Component {
 
   render() {
     const { userId, userInfo, aboutMe } = this.state;
-    const user = this.props.match.params.userId;
+    // const user = this.props.match.params.userId;
+    const user = auth.currentUser;
     return (
       <div>
         <div className="userPage">
@@ -72,7 +73,7 @@ class SingleUser extends Component {
             </CardMedia>
             <CardTitle
               title={userInfo.displayName}
-              subtitle="About me:"
+              // subtitle="About me:"
             />
             <CardText>
               {`Joined ${userInfo.created}`}

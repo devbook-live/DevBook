@@ -40,7 +40,7 @@ class SingleGroup extends Component {
         <h1>{this.props.match.params.groupId}</h1>
       </Paper>
       {
-        this.state.users.length && this.state.notebooks.length
+        this.state.users.length || this.state.notebooks.length
         ? <div className="singleGroupPage">
             <Paper
               zDepth={1}
