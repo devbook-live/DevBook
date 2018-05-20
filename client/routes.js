@@ -20,7 +20,7 @@ import Snippet from './components/Snippet';
 /**
  * COMPONENT
  */
-const Routes = () => (
+const Routes = ({ serverAwake }) => (
   <Switch>
     {/* Routes placed here are available to all visitors */}
 
@@ -43,7 +43,13 @@ const Routes = () => (
     <Route exact path="/users/:userId/notebooks" component={AllNotebooks} /> {/* all notebooks for this user */}
 
     <Route exact path="/notebooks" component={AllNotebooks} /> {/* created by anyone, ever */}
-    <Route exact path="/notebooks/:notebookId" component={SingleNotebook} /> {/* this notebook */}
+    <Route
+      exact
+      path="/notebooks/:notebookId"
+      render={(routeProps) => {
+        return <SingleNotebook {...routeProps} serverAwake={serverAwake} />;
+      }}
+    /> {/* this notebook */}
 
     {
       /*
