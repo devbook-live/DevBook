@@ -68,7 +68,7 @@ export default class Navbar extends Component {
 
   render() {
     return (
-      <div>
+      <div className="navbar" >
         <AppBar
           title={<Link style={{ color: 'white', textDecoration: 'none' }}to="/">DevBook( )</Link>}
           titleStyle={{
@@ -81,6 +81,7 @@ export default class Navbar extends Component {
             color: (0, 188, 212),
             fontFamily: 'sans-serif',
           }}
+          className="navbar"
         />
       </div>
     );

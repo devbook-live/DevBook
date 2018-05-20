@@ -36,7 +36,7 @@ This helper component declares an interface to start ("play") executing code, st
 
 
 const PlayPauseDeleteBtns = ({ scope, notebookId, snippetId }) => (
-  <div className="footer-right">
+  <div className={scope === 'snippet' ? 'snippet-vertical' : 'footer-right'}>
     <FloatingActionButton className="footer-play-btn">
       <PlayArrow
         onClick={(evt) => {

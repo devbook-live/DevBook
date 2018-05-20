@@ -20,12 +20,45 @@ form div {
   display: inline-block;
 }
 
+
+/* ---- NavBar ---- */
+.navbar {
+  overflow: hidden;
+  z-index: 10;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+/* ---- Main ---- */
+.main {
+  margin-top: 70px;
+}
+
+/* ---- single-notebook-fix ---- */
+.single-notebook {
+  padding-left: 24px;
+  padding-right: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- single-notebook-fix ---- */
+.single-notebook-fix {
+  /* margin-top: 80px; */
+  position: fixed !important;
+  z-index: 10;
+  width: 93%;
+  background-color: white;
+}
+
+
 /* ---- Single Notebook ---- */
 
 .single-notebook-snippets-container {
   display: flex;
   flex-direction: column;
-  margin-top: '20px';
+  margin-top: 200px !important;
 }
 
 /* .snippet-header {
@@ -34,7 +67,7 @@ form div {
 
 .snippet-body {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 .snippet-code-body {
@@ -43,14 +76,27 @@ form div {
   margin-bottom: 10px;
 }
 
+.snippet-vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.snippet-btn-container {
+  display: flex;
+  /* align-self: center; */
+  margin-top: 17px;
+}
+
+.snippet-button-center {
+  display: flex !important;
+  align-self: center !important;
+}
+
 .single-notebook-footer {
-  position: fixed;
   bottom: 0;
   z-index: 3;
-  width: 100%;
-  display: flex;
-  margin: 8px;
-  padding: 10px 0px 10px 0px;
+  padding: 8px 0px 8px 0px;
+  margin-top: 5px;
 }
 
 .footer-right {
@@ -63,6 +109,7 @@ form div {
 
 .footer-play-btn, .footer-pause-btn, .footer-delete-btn {
   margin-right: 10px;
+  margin-bottom: 10px;
 }
 .output {
   width: 100% !important;
