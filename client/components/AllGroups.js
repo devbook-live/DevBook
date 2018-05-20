@@ -25,7 +25,7 @@ class AllGroups extends Component {
 
   render() {
     if (this.state.loading) {
-      return <p>Loading...</p>;
+      return <p className="loading">Loading...</p>;
     }
     return (
       <AllEntities
