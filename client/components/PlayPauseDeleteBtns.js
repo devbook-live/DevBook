@@ -72,6 +72,7 @@ const PlayPauseDeleteBtns = ({ scope, notebookId, snippetId }) => (
             await deleteNotebook(notebookId);
             history.push('/notebooks');
           }
+          return undefined;
         }}
       />
     </FloatingActionButton>

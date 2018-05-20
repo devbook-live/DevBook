@@ -93,7 +93,7 @@ export default class SingleNotebook extends Component {
 
         <div className="single-notebook-fix">
 
-          <h2 style={{marginTop: '5px', marginBottom: '5px'}}>{ notebookId }</h2>
+          <h2 style={{ marginTop: '5px', marginBottom: '5px' }}>{ notebookId }</h2>
 
           <NotebookMetadata
             notebookId={notebookId}

@@ -2,16 +2,15 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+// Material Ui imports
+import AppBar from 'material-ui/AppBar';
+
 import { addUserFunction } from '../crud/user';
 import history from '../history';
-
 
 // changes based on state.loggedInUser
 import LoggedIn from './navbar-loggedIn';
 import Login from './navbar-loggedOut';
-
-// Material Ui imports
-import AppBar from 'material-ui/AppBar';
 
 const { db, auth } = require('../../firebase/initFirebase');
 const firebase = require('firebase/app');
@@ -76,7 +75,9 @@ export default class Navbar extends Component {
             textDecoration: 'none',
           }}
           showMenuIconButton={false}
-          iconElementRight={this.state.loggedInUser ? <LoggedIn logout={this.logout} user={this.state.loggedInUser} /> : <Login />}
+          iconElementRight={this.state.loggedInUser
+            ? <LoggedIn logout={this.logout} user={this.state.loggedInUser} />
+            : <Login />}
           style={{
             color: (0, 188, 212),
             fontFamily: 'sans-serif',

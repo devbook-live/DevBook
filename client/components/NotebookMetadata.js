@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
-import {cyan500, pink200, indigo900} from 'material-ui/styles/colors';
+import { cyan500, pink200, indigo900 } from 'material-ui/styles/colors';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import { UsersListByNotebookId } from './';
@@ -63,25 +63,19 @@ export default class NotebookMetadata extends Component {
                 >
                 me
                 </Chip>
-              )
-            }
-
-            else {
+              );
+            } else {
               return (
                 <div>
                   <Chip
                     backgroundColor={cyan500}
                     style={this.styles.chip}
                   >
-                  {/* <Avatar size={32} color={blue300} backgroundColor={indigo900}>
-                    MB
-                  </Avatar> */}
-                  {user.displayName}
+                    {user.displayName}
                   </Chip>
                 </div>
-              )
+              );
             }
-
           })}
         </div>
         <Divider />
