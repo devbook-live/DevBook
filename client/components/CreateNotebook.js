@@ -42,7 +42,7 @@ export default class CreateNotebook extends Component {
     const { notebookId } = this.state;
     return (
       <div>
-        {notebookId && auth.currentUser ? <Redirect to={`notebooks/${notebookId}`} /> : <h1>Loading...</h1>};
+        {notebookId && auth.currentUser ? <Redirect to={`notebooks/${notebookId}`} /> : <p className="loading">Loading...</p>};
       </div>
     );
   }
