@@ -1,8 +1,29 @@
 import { db } from '../../firebase/initFirebase';
-import { allEntities } from './utils';
+import {
+  entityById, allEntities, getDocsInSubcollection,
+  addDocToSubcollection, removeDocFromSubcollection,
+} from './utils';
+import { notebookById } from './notebook';
+import { groupById } from './group';
 
 // Read ops:
+export const userById = userId => entityById('users', userId);
 export const allUsers = () => allEntities('users');
+export const userNotebooks = userId =>
+  getDocsInSubcollection('users', userId, 'notebooks')
+    .then((notebookIds) => {
+      return Promise.all(notebookIds.map(notebookId => notebookById(notebookId)));
+    });
+export const userGroups = userId =>
+  getDocsInSubcollection('users', userId, 'groups')
+    .then((groupIds) => {
+      return Promise.all(groupIds.map(groupId => groupById(groupId)));
+    });
+
+export const userNotebookIds = userId =>
+  getDocsInSubcollection('users', userId, 'notebooks');
+export const userGroupIds = userId =>
+  getDocsInSubcollection('users', userId, 'groups');
 
 // Add a user to the database
 export const addUserFunction = (id, userObj) => {
@@ -15,6 +36,17 @@ export const addUserFunction = (id, userObj) => {
       console.error('Error adding document: ', error);
     });
 };
+
+
+// Update ops:
+export const addNotebook = (userId, notebookId) =>
+  addDocToSubcollection('users', userId, 'notebooks', notebookId);
+export const addGroup = (userId, groupId) =>
+  addDocToSubcollection('users', userId, 'groups', groupId);
+export const removeNotebook = (userId, notebookId) =>
+  removeDocFromSubcollection('users', userId, 'notebooks', notebookId);
+export const removeGroup = (userId, groupId) =>
+  removeDocFromSubcollection('users', userId, 'groups', groupId);
 
 // Add a logged-in users data in the database
 export const updateUserFunction = (id, userObj) => {

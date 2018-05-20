@@ -7,11 +7,19 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { DocsListByUserId, GroupsListByUserId } from './';
-import { fetchUserFunction } from '../crud/user';
+import Edit from 'material-ui/svg-icons/image/edit';
+import Delete from 'material-ui/svg-icons/action/delete';
+import history from '../history';
 
-// firebase imports
-import { db, auth } from '../../firebase/initFirebase';
+// import { DocsListByUserId, GroupsListByUserId } from './';
+import { userById, userNotebooks, userGroups, deleteUserFunction, removeNotebook } from '../crud/user';
+import { removeNotebookAuthor } from '../crud/notebook';
+import { removeGroupMember } from '../crud/group';
+// import { getGroupsByUserId } from '../crud/group';
+// import { notebooksByUser } from '../crud/notebook';
+import { AllGroups, AllNotebooks, EditProfile, CreateGroup } from './';
+import { auth } from '../../firebase/initFirebase';
+
 
 class SingleUser extends Component {
   constructor(props) {
@@ -24,21 +32,31 @@ class SingleUser extends Component {
       },
       userId: this.props.match.params.userId,
       value: '',
+      notebooks: [],
+      groups: [],
+      showEditComponent: false,
+      showCreateGroupComponent: false,
     };
   }
 
   componentDidMount() {
-    db.collection('users').doc(auth.currentUser.uid).get()
-      .then((user) => {
-        const state = { aboutMe: user.data().aboutMe };
-        this.setState(state);
-      })
-      .catch(err => console.error(err));
+    Promise.all([
+      userById(this.props.match.params.userId),
+      userNotebooks(this.props.match.params.userId),
+      userGroups(this.props.match.params.userId),
+    ])
+      .then(([user, notebooks, groups]) => {
+        this.setState({
+          aboutMe: user.data().aboutMe,
+          notebooks,
+          groups,
+        });
+      });
   }
 
   render() {
     const { userId, userInfo, aboutMe } = this.state;
-    const user = auth.currentUser;
+    const user = this.props.match.params.userId;
     return (
       <div>
         <div className="userPage">
@@ -63,49 +81,80 @@ class SingleUser extends Component {
               { aboutMe || 'Update profile with a short bio!'}
             </CardText>
             <CardActions>
-              <Link to={`/users/${userId}/edit`} >
-                <FlatButton
-                  label="Edit Profile"
-                  backgroundColor="#a4c639"
-                  hoverColor="#8AA62F"
-                  style={{
-                    color: 'white',
-                    marginRight: '15px',
-                    width: '150.25px',
+              <FloatingActionButton>
+                <Edit
+                  onClick={(event) => {
+                    event.preventDefault();
+                    this.setState((prevState) => {
+                      return { showEditComponent: !prevState.showEditComponent };
+                    });
                   }}
                 />
-              </Link>
-              <FlatButton
-                label="Delete Profile"
-                backgroundColor="red"
-                hoverColor="#bf0000"
-                style={{
-                  color: 'white',
-                  width: '150.25px',
-                }}
-              />
+              </FloatingActionButton>
+              <FloatingActionButton>
+                <Delete
+                  onClick={(event) => {
+                    event.preventDefault();
+                    deleteUserFunction(this.state.userId);
+                    history.push('/notebooks');
+                  }}
+                />
+              </FloatingActionButton>
             </CardActions>
+            { this.state.showEditComponent && <EditProfile /> }
           </div>
+
           <div className="userInfo">
             <Tabs
               value={this.state.value}
               onChange={this.handleChange}
+              inkBarStyle={{
+                backgroundColor: '#FFFFFF',
+                opacity: '.60',
+              }}
             >
               <Tab label="Groups" value="a">
-                <div>
-                  <GroupsListByUserId userId={userId} />
-                  <FloatingActionButton mini secondary>
-                    <ContentAdd />
-                  </FloatingActionButton>
-                </div>
+                {
+                  this.state.groups.length
+                  ? <div>
+                      <AllGroups
+                        groups={this.state.groups}
+                        title="Your Groups"
+                      />
+                      <FloatingActionButton mini primary
+                        className="profile-content-add"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          history.push('/groups/new');
+                        }}
+                      >
+                        <ContentAdd />
+                      </FloatingActionButton>
+                    </div>
+                  : <p>Loading your groups...</p>
+                }
+
               </Tab>
               <Tab label="Notebooks" value="b">
-                <div>
-                  <DocsListByUserId userId={userId} />
-                  <FloatingActionButton mini secondary>
-                    <ContentAdd />
-                  </FloatingActionButton>
-                </div>
+                {
+                  this.state.notebooks.length
+                  ? <div>
+                      <AllNotebooks
+                        notebooks={this.state.notebooks}
+                        title="Your Notebooks"
+                      />
+                      <FloatingActionButton mini primary
+                        className="profile-content-add"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          history.push('/');
+                        }}
+                      >
+                        <ContentAdd />
+                      </FloatingActionButton>
+                    </div>
+                  : <p>Loading your notebooks...</p>
+                }
               </Tab>
             </Tabs>
           </div>
@@ -132,3 +181,31 @@ SingleUser.prototype.creationHelper = (str) => {
 };
 
 // Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi. Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque. Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+
+
+                                {/*label="Edit Profile"
+                  backgroundColor="#a4c639"
+                  hoverColor="#8AA62F"
+                  style={{
+                    color: 'white',
+                    marginRight: '15px',
+                    width: '150.25px',
+                  }}*/}
+                {/*label="Delete Profile"
+                backgroundColor="red"
+                hoverColor="#bf0000"
+                style={{
+                  color: 'white',
+                  width: '150.25px',
+                }}*/}
+
+
+              //   <FloatingActionButton className="footer-play-btn">
+              //   <PlayArrow
+              //     onClick={(evt) => {
+              //       evt.preventDefault();
+              //       if (scope === 'snippet') return markSnippetAsRunning(snippetId);
+              //       else return runAllSnippetsInNotebook(notebookId);
+              //     }}
+              //   />
+              // </FloatingActionButton>

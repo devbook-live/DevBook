@@ -1,18 +1,19 @@
 import { db } from '../../firebase/initFirebase';
-import { allEntities } from './utils';
+import { allEntities, entityById, updateEntityField } from './utils';
 
 const groupsRef = db.collection('groups');
 
 // Read ops:
 const allGroups = () => allEntities('groups');
+const groupById = groupId => entityById('groups', groupId);
 
 const getGroupsByUserId = (userId) => {
   return groupsRef.where(`users.${userId}`, '==', true)
     .get()
     .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data());
-      });
+      // querySnapshot.forEach((doc) => {
+      //   console.log(doc.id, ' => ', doc.data());
+      // });
       return querySnapshot;
     })
     .catch((err) => {
@@ -49,6 +50,9 @@ const updateGroup = (name, bodyObj) => {
     });
 };
 
+const removeGroupMember = (groupId, userId) =>
+  updateEntityField('groups', groupId, 'users', userId, true, false);
+
 // delete doc, need to provide doc name, not doc name
 const deleteGroup = (name) => {
   groupsRef.doc(name).delete()
@@ -61,10 +65,12 @@ const deleteGroup = (name) => {
 };
 
 module.exports = {
+  groupById,
   allGroups,
   getGroupsByUserId,
   getGroupById,
   addGroup,
   updateGroup,
+  removeGroupMember,
   deleteGroup,
 };
