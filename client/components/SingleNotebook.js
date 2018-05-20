@@ -87,15 +87,9 @@ export default class SingleNotebook extends Component {
 
   render() {
     const { notebookId } = this.props.match.params;
-    if (!auth.currentUser || !this.state.users.includes(auth.currentUser.uid)) return <p>Loading...</p>;
+    if (!auth.currentUser || !this.state.users.includes(auth.currentUser.uid)) return <p className="loading">Loading...</p>;
     return (
-      <div>
-        {/*<Paper
-          zDepth={1}
-          className="group-title"
-        >
-          <h5>{ notebookId }</h5>
-        </Paper>*/}
+      <div className="single-notebook-page">
         <NotebookMetadata
           notebookId={notebookId}
           users={this.state.users}
