@@ -133,7 +133,7 @@ const NotebookCard = ({ type, entityData, entityId, updatable, deletable }) => {
 
   let photoURL;
   if ('photoURL' in entityData) photoURL = entityData.photoURL; /* eslint-disable-line */
-  else photoURL = 'js-cube.png';
+  else photoURL = '/js-cube.png';
 
   let createdAt;
   if ('metadata' in entityData && 'creationTime' in entityData.metadata) {
