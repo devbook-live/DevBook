@@ -32,7 +32,7 @@ form div {
 
 /* ---- Main ---- */
 .main {
-  margin-top: 70px;
+  margin-top: 67px;
 }
 
 /* ---- single-notebook-fix ---- */
@@ -57,7 +57,7 @@ form div {
 .single-notebook-snippets-container {
   display: flex;
   flex-direction: column;
-  margin-top: '20px';
+  margin-top: 200px;
   animation: xAxisAppear 1.4s 1 cubic-bezier(.71,.23,.68,1.16);
 }
 
