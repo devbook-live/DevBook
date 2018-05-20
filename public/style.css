@@ -45,7 +45,7 @@ form div {
 
 /* ---- single-notebook-fix ---- */
 .single-notebook-fix {
-  margin-top: 20px;
+  padding-top: 20px;
   position: fixed !important;
   z-index: 10;
   width: 93%;
