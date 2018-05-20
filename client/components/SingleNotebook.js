@@ -95,7 +95,6 @@ export default class SingleNotebook extends Component {
     return (
       <div className="single-notebook">
         <div className="single-notebook-fix">
-          <h2 style={{ marginTop: '5px', marginBottom: '5px' }}>{ notebookId }</h2>
           <NotebookMetadata
             notebookId={notebookId}
             users={this.state.users}
