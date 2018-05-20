@@ -54,29 +54,42 @@ export default class NotebookMetadata extends Component {
       <div>
         <h3 style={{ marginTop: '10px', marginBottom: '3px' }}>Contributors:</h3>
         <div style={this.styles.wrapper} >
-          {usersInfo.map((user) => {
-            if (user.id === auth.currentUser.uid) {
-              return (
-                <Chip
-                  backgroundColor={pink200}
-                  style={this.styles.chip}
-                >
-                me
-                </Chip>
-              );
-            } else {
-              return (
-                <div>
+          {
+            (auth.currentUser.isAnonymous) ? (
+              <Chip
+                backgroundColor={pink200}
+                style={this.styles.chip}
+              >
+              me
+              </Chip>
+            ) : (
+              usersInfo.map((user) => {
+              console.log("curr user? ", auth.currentUser)
+              if (user.id === auth.currentUser.uid) {
+                return (
                   <Chip
-                    backgroundColor={cyan500}
+                    backgroundColor={pink200}
                     style={this.styles.chip}
                   >
-                    {user.displayName}
+                  me
                   </Chip>
-                </div>
-              );
-            }
-          })}
+                );
+              } else {
+                return (
+                  <div>
+                    <Chip
+                      backgroundColor={cyan500}
+                      style={this.styles.chip}
+                    >
+                      {user.displayName}
+                    </Chip>
+                  </div>
+                );
+              }
+            })
+            )
+
+        }
         </div>
         <Divider />
       </div>
