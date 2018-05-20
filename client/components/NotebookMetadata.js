@@ -4,12 +4,8 @@ import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import AutoComplete from 'material-ui/AutoComplete';
 import Chip from 'material-ui/Chip';
-<<<<<<< HEAD
 import {cyan500, pink200, indigo900} from 'material-ui/styles/colors';
 import Divider from 'material-ui/Divider';
-=======
-import { cyan500, pink200, indigo900 } from 'material-ui/styles/colors';
->>>>>>> master
 import Avatar from 'material-ui/Avatar';
 import { UsersListByNotebookId } from './';
 import { db, auth } from '../../firebase/initFirebase';
@@ -82,7 +78,6 @@ export default class NotebookMetadata extends Component {
                   </Avatar> */}
                   {user.displayName}
                   </Chip>
-<<<<<<< HEAD
                 </div>
               )
             }
@@ -90,25 +85,6 @@ export default class NotebookMetadata extends Component {
           })}
         </div>
         <Divider />
-=======
-                );
-              } else {
-                return (
-                  <div>
-                    <Chip
-                      backgroundColor={cyan500}
-                      style={this.styles.chip}
-                    >
-                      {user.displayName}
-                    </Chip>
-                  </div>
-                );
-              }
-            })}
-          </div>
-        </div>
-        <div className="single-notebook-groups" />
->>>>>>> master
       </div>
     );
   }
