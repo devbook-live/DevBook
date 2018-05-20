@@ -1,11 +1,25 @@
 import { db } from '../../firebase/initFirebase';
-import { allEntities, entityById, updateEntityField } from './utils';
+import { allEntities, entityById, updateEntityField, getDocsInSubcollection } from './utils';
+import { notebookById } from '../crud/notebook';
+import { userById } from '../crud/user';
 
 const groupsRef = db.collection('groups');
 
 // Read ops:
 const allGroups = () => allEntities('groups');
 const groupById = groupId => entityById('groups', groupId);
+const groupNotebooks = groupId =>
+  getDocsInSubcollection('groups', groupId, 'notebooks')
+    .then((notebookIds) => {
+      return Promise.all(notebookIds.map(notebookId => notebookById(notebookId)));
+    });
+const groupUsers = groupId =>
+  getDocsInSubcollection('groups', groupId, 'users')
+    .then((userIds) => {
+      return Promise.all(userIds.map(userId => userById(userId)));
+    });
+
+
 
 const getGroupsByUserId = (userId) => {
   return groupsRef.where(`users.${userId}`, '==', true)
@@ -69,6 +83,8 @@ module.exports = {
   allGroups,
   getGroupsByUserId,
   getGroupById,
+  groupNotebooks,
+  groupUsers,
   addGroup,
   updateGroup,
   removeGroupMember,

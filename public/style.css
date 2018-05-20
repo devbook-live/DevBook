@@ -54,16 +54,12 @@ form div {
 
 
 /* ---- Single Notebook ---- */
-
 .single-notebook-snippets-container {
   display: flex;
   flex-direction: column;
-  margin-top: 200px !important;
+  margin-top: '20px';
+  animation: xAxisAppear 1.4s 1 cubic-bezier(.71,.23,.68,1.16);
 }
-
-/* .snippet-header {
-  border-bottom: 1px solid grey;
-} */
 
 .snippet-body {
   display: flex;
@@ -118,7 +114,19 @@ form div {
   background-color: rgb(203, 239, 248) !important;
   font-family: courier, monospace !important;
   padding-left: 20px;
+  animation: yAxisAppear 1s 1 cubic-bezier(.32,.15,.51,1.21);
 }
+@keyframes yAxisAppear {
+  0% {
+    transform: translateY(-200px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
 .single-notebook-code-container {
   padding-bottom: 20px;
   /* font-family: tahoma, arial, sans-serif; */
@@ -189,6 +197,20 @@ form div {
 .singleGroupPage{
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+}
+
+.group-title {
+  display: flex;
+  justify-content: center;
+  animation: fadeIn 1.5s 1;
+}
+
+.group-members, .group-notebooks {
+  width: 38%;
+  margin-top: 20px;
+  padding: 15px;
+  animation: xAxisAppear 1s 1 cubic-bezier(.32,.15,.51,1.21);
 }
 
 .usersList {
@@ -270,6 +292,32 @@ form div {
 
 
 /* PROFILE PAGES */
+.userPage {
+  animation: fadeIn 1.5s 1;
+}
+
+.groupPage {
+  animation: fadeIn 2.5s 1;
+}
+
 .profile-content-add {
   margin: 10px;
+}
+
+
+/* "LOADING" MESSAGE */
+.loading {
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0% {
+    opacity: 0.2;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+
 }
