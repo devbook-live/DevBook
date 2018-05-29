@@ -21,7 +21,7 @@ git clone https://github.com/devbook-live/DevBook.git
 Now that you've got the code, follow these steps to get acclimated:
 
 * Update project name and description in `package.json` and `.travis.yml` files
-* `npm install`, or `yarn install` - whatever you're into
+* `npm install`, or `yarn install`
 * This file is `.gitignore`'d, and will *only* be required in your *development* environment
 
 Follow firebase instructions and add your own information into your config object: 
