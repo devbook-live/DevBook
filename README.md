@@ -49,18 +49,15 @@ All of this info can be found in your Firebase console.
 
 ## Start
 
-`npm run start-dev` will make great things happen!
-
-If you want to run the server and/or webpack separately, you can also `npm run start-server` and `npm run build-client`.
-
-From there, just follow your bliss.
+`npm run start-dev` will create the bundle and run the server.
 
 ## Usage
 
+The homepage will create a new notebook for you. If you log in, this notebook will be associated with your user and viewable from your profile. Be sure to wrap your results in a console.log!
 
 ## Credits
 
-[Connor Jessup]() - 
-[Jang Won Ko]() - 
-[Fred Ma]() - 
-[Ben Ellentuck]() -
+[Connor Jessup](https://www.linkedin.com/in/connor-jessup/) - [Jessupcn](https://github.com/Jessupcn)
+[Jang Won Ko](https://www.linkedin.com/in/jangwonko/) - [jangwon415](https://github.com/jangwon415)
+[Fred Ma](https://www.linkedin.com/in/fred-ma123/) - [Fma1](https://github.com/fma1)
+[Ben Ellentuck](https://www.linkedin.com/in/bellentuck/) - [bellentuck](https://github.com/bellentuck)
